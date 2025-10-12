@@ -1,0 +1,41 @@
+import { createBrowserRouter } from "react-router-dom";
+import React from "react";
+import MainAppRoute from "./MainAppRoute";
+import CarPage from "../pages/CarPage";
+import CarsRentalPage from "../pages/CarsRentalPage";
+import HomePage from "../pages/HomePage";
+import ContactUsPage from "../pages/ContactUsPage";
+import ServicesPage from "../pages/ServicesPage";
+import Error404 from "../pages/Error404";
+import { getAllCars, getCarById } from "../lib/getData";
+
+export const router = createBrowserRouter([
+  {
+    element: <MainAppRoute />,
+    children: [
+      { path: "/", element: <HomePage /> },
+      { path: "/Services", element: <ServicesPage /> },
+      { path: "/contact-us", element: <ContactUsPage /> },
+      {
+        path: "/cars",
+        children: [
+          {
+            index: true,
+            element: <CarsRentalPage />,
+            loader: ({ request: { signal } }) => {
+              return getAllCars(signal);
+            },
+          },
+          {
+            path: ":carId",
+            element: <CarPage />,
+            loader: ({ request: { signal }, params }) => {
+              return getCarById(params.carId, signal);
+            },
+          },
+        ],
+      },
+    ],
+  },
+  { path: "*", element: <Error404 /> },
+]);
