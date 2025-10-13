@@ -1,10 +1,11 @@
-import { Loader } from "lucide-react";
 import React from "react";
+import { Spinner } from "@/components/ui/spinner";
 
-function loader() {
+export function loader() {
   return (
-    <Loader className="animate-spin text-primary w-10 h-10 mx-auto my-20" />
+    <div className="flex items-center justify-center min-h-screen">
+      <Spinner className="size-8" />
+    </div>
   );
 }
-
 export default loader;
