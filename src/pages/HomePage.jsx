@@ -5,14 +5,17 @@ import Hero from "@/components/HomePageComp/Hero";
 import TrendingCars from "@/components/HomePageComp/TrendingCars";
 import Testimonials from "@/layouts/Testimonials";
 import React from "react";
+import { useLoaderData } from "react-router-dom";
 
 function HomePage() {
+  const allCars = useLoaderData();
+
   return (
     <>
       <Hero />
       <CarCategories />
-      <TrendingCars />
-      <ExploreCars />
+      <TrendingCars allCars={allCars} />
+      <ExploreCars allCars={allCars} />
       <Testimonials />
       <DealsShowcase />
     </>

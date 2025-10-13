@@ -13,7 +13,13 @@ export const router = createBrowserRouter([
   {
     element: <MainAppRoute />,
     children: [
-      { path: "/", element: <HomePage /> },
+      {
+        path: "/",
+        element: <HomePage />,
+        loader: ({ request: { signal } }) => {
+          return getAllCars(signal);
+        },
+      },
       { path: "/Services", element: <ServicesPage /> },
       { path: "/contact-us", element: <ContactUsPage /> },
       {
