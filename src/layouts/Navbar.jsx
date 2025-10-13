@@ -15,10 +15,13 @@ export default function Navbar() {
 
   return (
     <nav className="w-full flex items-center justify-between px-8 py-4 bg-white shadow-sm">
-      {/* Logo */}
       <div className="flex items-center gap-2 cursor-pointer">
         <Link to={"/"} className="font-semibold text-xl">
-          bydrive
+          <img
+            src="https://framerusercontent.com/images/Stt1PRb0lYWewDn53cHjNxvC9Q.png"
+            alt="Logo"
+            className="h-10 w-auto object-contain" // Tailwind styling for navbar fit
+          />
         </Link>
       </div>
 
