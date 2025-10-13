@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, Search } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React from "react";
 
@@ -8,13 +9,13 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "All Car", path: "/cars" },
+    { name: "All Cars", path: "/cars" },
     { name: "Contact Us", path: "/contact-us" },
     { name: "Services", path: "/Services" },
   ];
 
   return (
-    <nav className="w-full flex items-center justify-between px-8 py-4 bg-white shadow-sm">
+    <nav className="w-full relative flex items-center justify-between px-8 py-4 bg-white shadow-sm">
       <div className="flex items-center gap-2 cursor-pointer">
         <Link to={"/"} className="font-semibold text-xl">
           <img
@@ -25,29 +26,31 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Desktop Links */}
-      <ul className="hidden md:flex items-center gap-8">
+      {/* Desktop Links (centered) */}
+      <ul className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
         {navLinks.map((link, idx) => (
           <li key={idx}>
-            <Link
+            <NavLink
               to={link.path}
-              className={`text-sm font-semibold hover:text-gray-700 transition ${
-                link.name === "All Cars"
-                  ? "bg-gray-100 px-3 py-1 rounded-lg"
-                  : ""
-              }`}
+              className={({ isActive }) =>
+                `text-sm font-bold transition ${
+                  isActive
+                    ? "bg-[#f5f5f5] text-gray-900 rounded-full px-3 py-1 shadow-sm"
+                    : "text-gray-700 hover:text-gray-900 hover:bg-[#f5f5f5] px-3 py-1 rounded-full"
+                }`
+              }
             >
               {link.name}
-            </Link>
+            </NavLink>
           </li>
         ))}
       </ul>
 
       {/* Icons */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 z-10">
         <Search className="w-5 h-5 cursor-pointer" />
         <Menu
-          className="w-6 h-6 md:hidden cursor-pointer"
+          className="w-6 h-6 md:hidden cursor-pointer z-10"
           onClick={() => setMenuOpen(!menuOpen)}
         />
       </div>
@@ -58,13 +61,19 @@ export default function Navbar() {
           <ul className="flex flex-col items-start gap-4 p-4">
             {navLinks.map((link, idx) => (
               <li key={idx}>
-                <Link
+                <NavLink
                   to={link.path}
-                  className="block text-sm font-medium hover:text-gray-700"
+                  className={({ isActive }) =>
+                    `block text-sm font-bold transition ${
+                      isActive
+                        ? "bg-[#f5f5f5] text-gray-900 rounded-full px-3 py-1"
+                        : "text-gray-700 hover:text-gray-900 hover:bg-[#f5f5f5] px-3 py-1 rounded-full"
+                    }`
+                  }
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.name}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
