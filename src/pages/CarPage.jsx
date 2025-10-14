@@ -11,7 +11,12 @@ function CarPage() {
       </>
     );
   }
-  return <div>the is {car.make}</div>;
+  return (
+    <div>
+      this is {car.make}
+      <img src={car.images.main} alt={car.id} />
+    </div>
+  );
 }
 
 export default CarPage;
