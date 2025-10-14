@@ -12,7 +12,10 @@ import { getAllCars, getCarById } from "../lib/getData";
 export const router = createBrowserRouter([
   {
     element: <MainAppRoute />,
-    errorElement: <Error404 />,
+    loader: ({ request: { signal } }) => {
+      return getAllCars(signal);
+    },
+
     children: [
       {
         path: "/",
@@ -44,4 +47,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  { path: "*", element: <Error404 /> },
 ]);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CarCard from "./CarCard";
 import CarCategoriesTabs from "@/components/CarsRentalPageComp/CarCategoriesTabs";
 
-function CarsGrid({ car }) {
+function CarsGrid({ allCars }) {
   const [selectedCategory, setSelectedCategory] = useState("Economy Cars");
   const selectedCar = selectedCategory.split(" ")[0];
   return (
@@ -10,7 +10,7 @@ function CarsGrid({ car }) {
       <CarCategoriesTabs onSelect={setSelectedCategory} />
 
       <ul>
-        {car.map(
+        {allCars.map(
           (car) =>
             car.rental_class === selectedCar && (
               <CarCard

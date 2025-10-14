@@ -5,11 +5,11 @@ import React from "react";
 import { useLoaderData } from "react-router-dom";
 
 function CarsRentalPage() {
-  const car = useLoaderData();
+  const allCars = useLoaderData();
   return (
     <>
-      <CarSearch />
-      <CarsGrid car={car} />
+      <CarSearch allCars={allCars} />
+      <CarsGrid allCars={allCars} />
       <Testimonials />
     </>
   );
