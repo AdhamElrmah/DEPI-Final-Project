@@ -18,13 +18,13 @@ function CarCategories() {
       <h2>Check out car categories</h2>
       <div>
         {categories.map((categorie, i) => (
-          <>
+          <div key={i}>
             <Link to={"cars"}>
-              <img key={`car-a-${i}`} src={categorie.image} alt={`car-${i}`} />
+              <img src={categorie.image} alt={`car-${i}`} />
               <h3>{categorie.name}</h3>
               <span>{categorie.number}</span>
             </Link>
-          </>
+          </div>
         ))}
       </div>
     </section>

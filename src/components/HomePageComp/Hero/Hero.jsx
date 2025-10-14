@@ -4,6 +4,8 @@ import React from "react";
 import HeroImage from "../../../assets/HomePage/HeroImages/HeroMainImage.avif";
 import { Button } from "@/components/ui/button";
 import LogosSlider from "./LogosSlider";
+import { Nav } from "react-day-picker";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -41,7 +43,7 @@ const Hero = () => {
         </motion.p>
 
         <Button size="lg" className="bg-black text-white cursor-pointer">
-          Explore all cars
+          <Link to="/cars">Explore all cars</Link>
         </Button>
       </div>
       <LogosSlider />

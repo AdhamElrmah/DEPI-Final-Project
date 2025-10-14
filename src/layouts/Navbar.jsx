@@ -21,7 +21,7 @@ export default function Navbar() {
           <img
             src="https://framerusercontent.com/images/Stt1PRb0lYWewDn53cHjNxvC9Q.png"
             alt="Logo"
-            className="h-10 w-auto object-contain" // Tailwind styling for navbar fit
+            className="h-7 w-auto object-contain" // Tailwind styling for navbar fit
           />
         </Link>
       </div>
