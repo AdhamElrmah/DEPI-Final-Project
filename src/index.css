@@ -135,13 +135,23 @@
   align-items: center;
   white-space: nowrap;
   will-change: transform;
-  animation: marquee 40s linear infinite;
+  animation: marquee 50s linear infinite;
 }
 
 .marquee.reverse {
   animation-direction: reverse;
 }
 
+@media (max-width: 576px) {
+  .marquee {
+    animation-duration: 15s;
+  }
+}
+@media (max-width: 768px) {
+  .marquee {
+    animation-duration: 25s;
+  }
+}
 /* fade/mask at marquee edges to hide icons as they enter/leave */
 .marquee-mask {
   -webkit-mask-image: linear-gradient(

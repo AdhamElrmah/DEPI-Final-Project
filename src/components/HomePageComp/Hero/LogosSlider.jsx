@@ -29,14 +29,14 @@ function LogosSlider() {
   ];
 
   return (
-    <div className="absolute bottom-6 left-0 right-0 overflow-hidden px-6 marquee-mask mb-[25px]">
+    <div className="absolute bottom-6 left-0 right-0 overflow-hidden px-6 marquee-mask mb-[25px] ">
       <div className="marquee">
         {logos.map((logo, i) => (
           <img
             key={`logo-a-${i}`}
             src={logo}
             alt={`logo-${i}`}
-            className="w-8 md:w-8 lg:w-10 opacity-100"
+            className="w-10 opacity-100 mx-1 md:mx-2 lg:mx-4"
           />
         ))}
         {logos.map((logo, i) => (
@@ -44,7 +44,7 @@ function LogosSlider() {
             key={`logo-b-${i}`}
             src={logo}
             alt={`logo-b-${i}`}
-            className="w-10 opacity-100"
+            className="w-10 opacity-100 mx-1 md:mx-2 lg:mx-4"
           />
         ))}
       </div>
