@@ -15,7 +15,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="w-full relative flex items-center justify-between px-8 py-4 bg-white shadow-sm">
+    <nav className="w-full relative flex items-center justify-between px-8 py-4 h-16 bg-white shadow-sm">
       <div className="flex items-center gap-2 cursor-pointer">
         <Link to={"/"} className="font-semibold text-xl">
           <img
@@ -27,7 +27,7 @@ export default function Navbar() {
       </div>
 
       {/* Desktop Links (centered) */}
-      <ul className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
+      <ul className="hidden lg:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
         {navLinks.map((link, idx) => (
           <li key={idx}>
             <NavLink
@@ -47,17 +47,17 @@ export default function Navbar() {
       </ul>
 
       {/* Icons */}
-      <div className="flex items-center gap-4 z-10">
+      <div className="flex items-center gap-4 z-50">
         <Search className="w-5 h-5 cursor-pointer" />
         <Menu
-          className="w-6 h-6 md:hidden cursor-pointer z-10"
+          className="w-6 h-6 lg:hidden cursor-pointer z-50"
           onClick={() => setMenuOpen(!menuOpen)}
         />
       </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white border-t shadow-md md:hidden">
+        <div className="absolute top-full left-0 w-full bg-white border-t shadow-md lg:hidden z-50">
           <ul className="flex flex-col items-start gap-4 p-4">
             {navLinks.map((link, idx) => (
               <li key={idx}>
