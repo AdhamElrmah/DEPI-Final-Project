@@ -27,7 +27,11 @@ function SearchOverlay({ allCars, setSearchOpen }) {
     query === ""
       ? []
       : allCars.filter((car) => {
-          return car.make.toLowerCase().includes(query.toLowerCase());
+          return (car.make + " " + car.model)
+            .split("-")
+            .join(" ")
+            .toLowerCase()
+            .includes(query.toLowerCase());
         });
 
   return (
