@@ -38,8 +38,10 @@ const Hero = () => {
           transition={{ duration: 1.2, delay: 0.3 }}
           className="text-gray-300 text-base md:text-lg mb-6 "
         >
-          Our team offering you a wide selection of high-end cars for purchase,
-          lease, or rent.
+          <p className="opacity-[0.8]">
+            Our team offering you a wide selection of high-end cars for
+            purchase, lease, or rent.
+          </p>
         </motion.p>
 
         <Button size="lg" className="bg-black text-white cursor-pointer">

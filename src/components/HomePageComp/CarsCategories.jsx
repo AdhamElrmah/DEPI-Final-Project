@@ -23,7 +23,7 @@ function CarCategories() {
         {categories.map((category, i) => (
           <div
             key={i}
-            className="rounded-xl hover:shadow-xl transition-shadow duration-500 overflow-hidden group bg-transparent"
+            className="rounded-xl hover:shadow-xl transition-shadow duration-300 overflow-hidden group bg-transparent"
           >
             <Link to="cars" className="block">
               <div className="p-6 flex flex-row lg:flex-col items-center gap-6 md:gap-0">
@@ -31,7 +31,7 @@ function CarCategories() {
                   <img
                     src={category.image}
                     alt={category.name}
-                    className="w-60 h-50 object-contain"
+                    className="w-40 h-30 object-contain"
                   />
                 </div>
 
@@ -40,7 +40,7 @@ function CarCategories() {
                     {category.name}
                   </h3>
 
-                  <span className="inline-block px-5 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-800 group-hover:bg-black group-hover:text-white transition-all duration-300">
+                  <span className="inline-block px-5 py-2 opacity-[0.8] rounded-full text-sm font-medium bg-gray-100 text-gray-800 group-hover:bg-black group-hover:text-white transition-all duration-300">
                     {category.number} Cars
                   </span>
                 </div>
