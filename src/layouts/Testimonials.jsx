@@ -19,11 +19,9 @@ function Testimonials() {
           alt="shape"
         />
 
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight leading-[3.1rem] text-gray-900 sm:text-[40px]">
-            Ready to book our car or a
-            <br />
-            private service?
+        <div className="mx-auto max-w-lg text-center">
+          <h2 className="text-4xl font-extrabold  tracking-tight leading-[3.1rem] text-gray-900 sm:text-[40px]">
+            Ready to book our car or a private service?
           </h2>
 
           <div className="mt-6 flex flex-col items-center justify-center">
@@ -37,7 +35,7 @@ function Testimonials() {
               </Link>
             </Button>
 
-            <p className="text-[13px] font-semibold text-black mt-2">
+            <p className="text-xs font-semibold text-black mt-2">
               Contact us to get started
             </p>
           </div>
