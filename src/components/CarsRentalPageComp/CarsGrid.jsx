@@ -9,7 +9,7 @@ function CarsGrid({ allCars }) {
     <>
       <CarCategoriesTabs onSelect={setSelectedCategory} />
 
-      <ul>
+      <ul className="flex gap-5">
         {allCars.map(
           (car) =>
             car.rental_class === selectedCar && (
