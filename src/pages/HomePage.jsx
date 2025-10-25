@@ -3,7 +3,8 @@ import DealsShowcase from "@/components/HomePageComp/DealsShowcase";
 import ExploreCars from "@/components/HomePageComp/ExploreCars";
 import Hero from "@/components/HomePageComp/Hero/Hero";
 import TrendingCars from "@/components/HomePageComp/TrendingCars";
-import Testimonials from "@/layouts/Testimonials";
+import DriverReview from "@/layouts/DriverReview";
+import GetInTouch from "@/layouts/GetInTouch";
 import React from "react";
 import { useLoaderData } from "react-router-dom";
 
@@ -16,8 +17,9 @@ function HomePage() {
       <CarCategories />
       <TrendingCars allCars={allCars} />
       <ExploreCars allCars={allCars} />
-      <Testimonials />
+      <DriverReview />
       <DealsShowcase />
+      <GetInTouch />
     </>
   );
 }

@@ -1,9 +1,11 @@
+import CarDetials from "@/components/CarPageComp/CarDetials";
+import ExploreSimilarCars from "@/components/CarPageComp/ExploreSimilarCars";
 import React from "react";
 import { Navigate, useLoaderData } from "react-router-dom";
 
 function CarPage() {
-  const car = useLoaderData();
-  if (!car) {
+  const allCars = useLoaderData();
+  if (!allCars) {
     return (
       <>
         <div>Car not found, redirecting to cars page...</div>
@@ -12,10 +14,10 @@ function CarPage() {
     );
   }
   return (
-    <div>
-      this is {car.make}
-      <img src={car.images.main} alt={car.id} />
-    </div>
+    <>
+      <CarDetials allCars={allCars} />
+      <ExploreSimilarCars />
+    </>
   );
 }
 

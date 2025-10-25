@@ -23,9 +23,11 @@ const Error404 = () => {
         </div>
 
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <button className="bg-black hover:bg-gray-800 text-white text-sm font-bold py-3 px-6 rounded-lg transition duration-300 w-full border border-black hover:border-gray-800">
-            <Link to="/"> Go to home page</Link>
-          </button>
+          <Link to="/">
+            <button className="bg-black hover:bg-gray-800 text-white cursor-pointer text-sm font-bold py-3 px-6 rounded-lg transition duration-300 w-full border border-black hover:border-gray-800">
+              Go to home page
+            </button>
+          </Link>
         </div>
       </main>
     </>
