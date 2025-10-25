@@ -146,6 +146,11 @@
   animation-direction: reverse;
 }
 
+@media (max-width: 400px) {
+  .trending {
+    height: 550px;
+  }
+}
 @media (max-width: 576px) {
   .marquee {
     animation-duration: 15s;
