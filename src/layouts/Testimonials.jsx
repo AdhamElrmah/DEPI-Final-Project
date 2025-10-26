@@ -9,7 +9,7 @@ function Testimonials() {
       <div className="absolute inset-0 flex items-end justify-center pointer-events-none">
         <div className="absolute bottom-[-700px] w-[600px] h-[600px] rounded-full border border-[#8d8d8d] opacity-15 transition-all duration-350 ease-out group-hover:bottom-[-600px] scale-150" />
 
-        <div className="absolute bottom-[-500px] w-[400px] h-[400px] rounded-full border border-[#8d8d8d] opacity-15 transition-all duration-350 ease-out group-hover:bottom-[-450px] scale-150" />
+        <div className="absolute bottom-[-500px] w-[400px] h-[400px] rounded-full border border-[#8d8d8d] opacity-15 transition-all duration-350 ease-out group-hover:bottom-[-450px] scale-150 delay-20" />
       </div>
 
       <div className="px-6 py-10 sm:px-6 lg:px-8 relative z-10">
