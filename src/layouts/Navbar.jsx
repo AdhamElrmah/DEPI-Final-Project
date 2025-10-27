@@ -21,7 +21,7 @@ export default function Navbar({ allCars }) {
       {searchOpen && (
         <SearchOverlay allCars={allCars} setSearchOpen={setSearchOpen} />
       )}
-      <nav className="w-full relative flex items-center justify-between px-8 py-4 h-16 bg-white shadow-sm">
+      <nav className="w-full relative flex items-center justify-between px-8 py-4 h-16 bg-white shadow-sm z-10">
         <div className="flex items-center gap-2 cursor-pointer">
           <Link to={"/"} className="font-semibold text-xl">
             <img
