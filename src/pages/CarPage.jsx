@@ -4,8 +4,8 @@ import React from "react";
 import { Navigate, useLoaderData } from "react-router-dom";
 
 function CarPage() {
-  const allCars = useLoaderData();
-  if (!allCars) {
+  const car = useLoaderData();
+  if (!car) {
     return (
       <>
         <div>Car not found, redirecting to cars page...</div>
@@ -15,7 +15,7 @@ function CarPage() {
   }
   return (
     <>
-      <CarDetials allCars={allCars} />
+      <CarDetials car={car} />
       <ExploreSimilarCars />
     </>
   );

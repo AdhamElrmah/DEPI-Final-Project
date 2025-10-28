@@ -4,7 +4,6 @@ import React from "react";
 import HeroImage from "../../../assets/HomePage/HeroImages/HeroMainImage.avif";
 import { Button } from "@/components/ui/button";
 import LogosSlider from "./LogosSlider";
-import { Nav } from "react-day-picker";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
@@ -21,7 +20,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-black/70"></div>
 
       {/* محتوى النص */}
-      <div className="max-md:flex max-md:flex-col max-md:items-center  relative z-10 px-6 md:px-10 lg:mb-24 mb-20 text-center md:text-left heroContent">
+      <motion className="max-md:flex max-md:flex-col max-md:items-center  relative  px-6 md:px-10 lg:mb-24 mb-20 text-center md:text-left heroContent">
         <motion.h1
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -47,7 +46,7 @@ const Hero = () => {
         >
           <Link to="/cars">Explore all cars</Link>
         </Button>
-      </div>
+      </motion>
       <LogosSlider />
     </section>
   );

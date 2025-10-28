@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 import React from "react";
 import { Link } from "react-router-dom";
 import Shape from "../../assets/HomePage/TrendingCarsImages/BackgroundRoundShape.svg";
@@ -26,7 +28,16 @@ function TrendingCars({ allCars }) {
     "2022-lamborghini-aventador": "Lamborghini",
   };
   return (
-    <section className=" px-6 md:pb-21 md:px-8  max-w-[1500px] mx-auto">
+    <motion.section
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        ease: "easeOut",
+      }}
+      viewport={{ once: true }}
+      className=" px-6 md:pb-12 md:px-8  max-w-[1500px] mx-auto"
+    >
       <h2 className="text-3xl font-extrabold text-center md:text-left mb-10 max-sm:text-xl max-md:text-2xl">
         Explore trending cars
       </h2>
@@ -103,7 +114,7 @@ function TrendingCars({ allCars }) {
           </div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }
 

@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 import React from "react";
 import { Link } from "react-router-dom";
 import Image1 from "../../assets/HomePage/CarsCategoriesImages/CarsCategories1.avif";
@@ -14,7 +16,16 @@ function CarCategories() {
   ];
 
   return (
-    <section className="py-12 px-6 md:py-21 md:px-8 max-w-[1500px] mx-auto">
+    <motion.section
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        ease: "easeOut",
+      }}
+      viewport={{ once: true }}
+      className="py-12 px-6 md:py-21 md:px-8 max-w-[1500px] mx-auto"
+    >
       <h2 className="text-3xl font-extrabold max-sm:text-xl max-md:text-2xl mb-4  text-black text-center md:text-left ">
         Check out car categories
       </h2>
@@ -49,7 +60,7 @@ function CarCategories() {
           </div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }
 

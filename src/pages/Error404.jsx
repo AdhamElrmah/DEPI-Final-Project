@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 import React from "react";
 import { Link } from "react-router-dom";
 const Error404 = () => {
@@ -13,13 +15,23 @@ const Error404 = () => {
             />
           </div>
 
-          <h1 className="text-5xl font-extrabold text-black mt-7 mb-3 sm:text-6xl">
+          <motion.h1
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="text-5xl font-extrabold text-black mt-7 mb-3 sm:text-6xl"
+          >
             404
-          </h1>
-          <p className="text-sm  max-w-md font-normal">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
+            className="text-sm  max-w-md font-normal"
+          >
             The page you are looking for doesn't exist or has been moved. Please
             go back to the homepage.
-          </p>
+          </motion.p>
         </div>
 
         <div className="mt-10 flex items-center justify-center gap-x-6">

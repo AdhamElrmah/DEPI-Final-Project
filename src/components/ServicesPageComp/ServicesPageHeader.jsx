@@ -1,23 +1,26 @@
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 import React from "react";
 import HeaderBackGround from "../../assets/ServicesPage/HeaderBackGround.avif";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Button } from "../UI/button";
+
 function ServicesPageHeader() {
   return (
     <>
-      <div className="px-8">
+      <div className="px-8 max-w-[1500px] mx-auto">
         <header className="w-full flex flex-col items-center justify-center text-center bg-white">
-          <div className="max-w-3xl px-6 py-20 -mb-5">
-            <motion.h1
-              className="text-4xl md:text-4xl lg:text-6xl font-bold text-black mb-6 "
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-            >
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="max-w-3xl px-6 pt-20 pb-3"
+          >
+            <h1 className="text-5xl md:text-[56px] lg:text-6xl font-extrabold text-black mb-6 ">
               Our Services
-            </motion.h1>
-            <motion.p
-              className="text-lg md:text-lg text-black max-w-4xl mx-auto mb-8 leading-relaxed"
+            </h1>
+            <p
+              className="text-sm  text-black max-w-2xl mx-auto mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
@@ -25,24 +28,17 @@ function ServicesPageHeader() {
               We have an exceptional limousine service for Business
               Professionals and VIP visitors. Please call us to get information
               about our luxury limousine fleet.
-            </motion.p>
-            <Link to="/">
-              <motion.button
-                className="bg-primary text-primary-foreground 
-                              hover:bg-primary/90 
-                              hover:scale-105 transition-all duration-100 rounded-lg px-5 py-4 text-sm font-medium"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1 }}
-              >
-                Book Our Service
-              </motion.button>
-            </Link>
-          </div>
+            </p>
+            <Button size="lg" className=" font-bold text-sm">
+              <Link to="/">Book Our Service</Link>
+            </Button>
+          </motion.div>
           <div
-            className="w-full min-h-[50vh] md:min-h-[60vh] bg-cover bg-center relative -mt-3 mb-3 rounded-xl"
+            className="w-full min-h-[350px] md:min-h-[500px] relative px-8 mb-3 rounded-4xl"
             style={{
               backgroundImage: `url(${HeaderBackGround})`,
+              backgroundSize: "cover",
+              backgroundPosition: "bottom",
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-b from-white via-white/50 to-transparent"></div>
