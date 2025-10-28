@@ -14,8 +14,8 @@ function CarCategories() {
   ];
 
   return (
-    <section className="py-12 px-6 md:px-12 lg:px-20">
-      <h2 className="text-2xl font-extrabold mb-4  text-black text-center md:text-left">
+    <section className="py-12 px-6 md:py-21 md:px-8 max-w-[1500px] mx-auto">
+      <h2 className="text-3xl font-extrabold max-sm:text-xl max-md:text-2xl mb-4  text-black text-center md:text-left ">
         Check out car categories
       </h2>
 

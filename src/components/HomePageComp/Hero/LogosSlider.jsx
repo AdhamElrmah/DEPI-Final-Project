@@ -29,7 +29,7 @@ function LogosSlider() {
   ];
 
   return (
-    <div className="absolute bottom-6 left-0 right-0 overflow-hidden px-6 marquee-mask mb-[25px] ">
+    <div className=" absolute bottom-6 left-0 right-0 overflow-hidden px-6 marquee-mask mb-[25px] ">
       <div className="marquee">
         {logos.map((logo, i) => (
           <img

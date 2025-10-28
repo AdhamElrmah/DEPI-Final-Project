@@ -17,13 +17,12 @@ function CarCategoriesTabs({ onSelect }) {
   };
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 py-6">
+    <div className="flex flex-wrap justify-center gap-1.5 p-6">
       {categories.map((category) => (
         <Button
           key={category}
           onClick={() => handleClick(category)}
-          variant="outline"
-          className={`rounded-full px-6 py-5 font-semibold transition-all duration-200
+          className={`rounded-full px-6 py-5 shadow-lg font-bold text-xs transition-all duration-200
             ${
               active === category
                 ? "bg-black text-white shadow-md hover:bg-black hover:text-white"

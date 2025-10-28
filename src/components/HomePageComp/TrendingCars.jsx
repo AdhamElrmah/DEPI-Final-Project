@@ -26,8 +26,8 @@ function TrendingCars({ allCars }) {
     "2022-lamborghini-aventador": "Lamborghini",
   };
   return (
-    <section className="py-10 px-10 ">
-      <h2 className="text-3xl font-extrabold text-center mb-10 max-sm:text-xl max-md:text-2xl">
+    <section className=" px-6 md:pb-21 md:px-8  max-w-[1500px] mx-auto">
+      <h2 className="text-3xl font-extrabold text-center md:text-left mb-10 max-sm:text-xl max-md:text-2xl">
         Explore trending cars
       </h2>
       <div className="flex flex-row  max-w-7xl w-full mx-auto ">
