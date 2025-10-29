@@ -20,7 +20,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-black/70"></div>
 
       {/* محتوى النص */}
-      <motion className="max-md:flex max-md:flex-col max-md:items-center  relative  px-6 md:px-10 lg:mb-24 mb-20 text-center md:text-left heroContent">
+      <div className="max-md:flex max-md:flex-col max-md:items-center  relative  px-6 md:px-10 lg:mb-24 mb-20 text-center md:text-left heroContent">
         <motion.h1
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -46,7 +46,7 @@ const Hero = () => {
         >
           <Link to="/cars">Explore all cars</Link>
         </Button>
-      </motion>
+      </div>
       <LogosSlider />
     </section>
   );

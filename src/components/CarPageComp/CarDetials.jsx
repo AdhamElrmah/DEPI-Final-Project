@@ -7,13 +7,7 @@ import CarLogo from "../../assets/CarPageLogos/car.svg";
 import Driver from "../../assets/CarPageLogos/driver.svg";
 import Engine from "../../assets/CarPageLogos/engine.svg";
 import Turbo from "../../assets/CarPageLogos/turbo.svg";
-/**
- * CarDetails
- * props:
- *   - car: array of car objects (like the JSON example you sent)
- *
- * Usage: <CarDetails allCars={allCars} />
- */
+
 export default function CarDetails({ car }) {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -21,31 +15,10 @@ export default function CarDetails({ car }) {
     maximumFractionDigits: 0,
   });
 
-  // Framer variants for staggered children
-  const container = {
-    hidden: { opacity: 0, scale: 1.06 },
-    show: {
-      opacity: 1,
-      scale: 1,
-      transition: { when: "beforeChildren", staggerChildren: 0.12 },
-    },
-  };
-  const item = {
-    hidden: { opacity: 0, scale: 1.06 },
-    show: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.7, ease: "easeOut" },
-    },
-  };
-
   return (
     <>
       {/* HERO IMAGE */}
-      <motion.div
-        variants={item}
-        className="w-full overflow-hidden max-w-[1500px] mx-auto md:px-6  md:pt-7"
-      >
+      <motion.div className="w-full overflow-hidden max-w-[1500px] mx-auto md:px-6  md:pt-7">
         <img
           src={car.images?.main}
           alt={`${car.make} ${car.model}`}
@@ -54,14 +27,24 @@ export default function CarDetails({ car }) {
       </motion.div>
 
       <motion.main
-        variants={container}
-        initial="hidden"
-        animate="show"
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.3,
+          ease: "easeOut",
+        }}
+        viewport={{ once: true }}
         className="max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-8"
       >
         {/* TITLE ROW */}
         <motion.section
-          variants={item}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          viewport={{ once: true }}
           className="mt-6 flex flex-col md:flex-row items-center md:justify-between gap-6"
         >
           <div className="flex max-md:flex-col max-md:text-center items-center gap-4">
@@ -103,7 +86,16 @@ export default function CarDetails({ car }) {
         </motion.section>
 
         {/* OVERVIEW */}
-        <motion.section variants={item} className="mt-8">
+        <motion.section
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          viewport={{ once: true }}
+          className="mt-8"
+        >
           <h3 className="text-lg font-extrabold mb-3">Overview</h3>
           <p className="text-gray-800 leading-relaxed text-sm font-normal">
             {car.overview}
@@ -113,7 +105,13 @@ export default function CarDetails({ car }) {
 
         {/* ICON STATS ROW */}
         <motion.section
-          variants={item}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          viewport={{ once: true }}
           className="mt-8 mb-20 max-md:mb-10 grid grid-cols-1 md:grid-cols-4 gap-4"
         >
           <StatCard title={car.body_type || "—"} subtitle="Body type">
@@ -134,7 +132,13 @@ export default function CarDetails({ car }) {
 
         {/* SUB IMAGES */}
         <motion.section
-          variants={item}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          viewport={{ once: true }}
           className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           <img
@@ -151,7 +155,13 @@ export default function CarDetails({ car }) {
 
         {/* SPECIFICATIONS + FEATURES */}
         <motion.section
-          variants={item}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          viewport={{ once: true }}
           className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
           {/* TECHNICAL SPECS */}
@@ -220,7 +230,13 @@ export default function CarDetails({ car }) {
 
         {/* MORE IMAGES */}
         <motion.section
-          variants={item}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          viewport={{ once: true }}
           className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           <img
@@ -236,7 +252,16 @@ export default function CarDetails({ car }) {
         </motion.section>
 
         {/* RENT CONDITIONS */}
-        <motion.section variants={item} className="mt-10 pb-16">
+        <motion.section
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+          viewport={{ once: true }}
+          className="mt-10 pb-16"
+        >
           <h4 className="text-lg font-extrabold mb-3">Rent Conditions</h4>
           <p className=" text-gray-800 leading-relaxed text-sm font-normal">
             {car.rental_conditions}

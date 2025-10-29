@@ -6,32 +6,10 @@ import SearchOverlay from "@/layouts/SearchOverlay";
 import { Search } from "lucide-react";
 function CarSearch({ allCars }) {
   const [searchOpen, setSearchOpen] = useState(false);
-  const container = {
-    hidden: { opacity: 0, scale: 1.06 },
-    show: {
-      opacity: 1,
-      scale: 1,
-      transition: { when: "beforeChildren", staggerChildren: 0.12 },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, scale: 1.06 },
-    show: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.7, ease: "easeOut" },
-    },
-  };
 
   return (
     <>
-      <motion.section
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="relative pb-13 xl:pb-8"
-      >
+      <motion.section className="relative pb-13 xl:pb-8">
         <div className="relative flex flex-col items-center justify-center  bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden py-5">
           <img
             src="/src/assets/CarsRentalPage/SearchBackGround.avif"
@@ -40,7 +18,10 @@ function CarSearch({ allCars }) {
           />
           <div>
             <motion.h2
-              variants={item}
+              initial={{ scale: 0.3, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              viewport={{ once: true }}
               className="relative text-[48px] md:text-6xl font-extrabold text-gray-900 mb-1 xl:mb-11 text-center mt-24 xl:mt-21 "
             >
               All Cars
@@ -59,7 +40,10 @@ function CarSearch({ allCars }) {
             className="mt-6 hover:bg-transparent group"
           >
             <motion.div
-              variants={item}
+              initial={{ scale: 0.3, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
+              viewport={{ once: true }}
               className=" absolute top-48 xl:top-46 inline-flex bg-white shadow-[0_2px_2px_rgba(0,0,0,0.07)]  rounded-[10px] p-4 transition-all duration-300 group-hover:shadow-[-2px_7px_9px_rgba(0,0,0,0.1)] ease-in-out cursor-pointer"
             >
               <ul className="flex ">
