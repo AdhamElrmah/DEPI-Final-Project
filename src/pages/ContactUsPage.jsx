@@ -1,5 +1,6 @@
 import ContactUsForm from "@/components/ContactUsPageComp/ContactUsForm";
 import ContactUsHeader from "@/components/ContactUsPageComp/ContactUsHeader";
+import ContactUsInfo from "@/components/ContactUsPageComp/ContactUsInfo";
 import GetInTouch from "@/layouts/GetInTouch";
 import React from "react";
 
@@ -8,6 +9,7 @@ function ContactUs() {
     <>
       <ContactUsHeader />
       <GetInTouch />
+      <ContactUsInfo />
       <ContactUsForm />
     </>
   );
