@@ -1,13 +1,9 @@
-import axios from "axios";
-
-const API_URL = "https://dummyjson.com/c/ee4d-a7a6-412b-bdc3";
+import { baseApi } from "./base";
 
 export const getAllCars = (signal) => {
-  return axios.get(API_URL, { signal }).then((res) => res.data);
+  return baseApi.get("allItems", { signal }).then((res) => res.data);
 };
 
 export const getCarById = (carId, signal) => {
-  return axios
-    .get(API_URL, { signal })
-    .then((res) => res.data.find((c) => c.id === carId));
+  return baseApi.get(`${carId}`, { signal }).then((res) => res.data);
 };

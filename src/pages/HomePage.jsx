@@ -19,7 +19,6 @@ function HomePage() {
       <ExploreCars allCars={allCars} />
       <DriverReview />
       <DealsShowcase />
-      <GetInTouch />
     </>
   );
 }
