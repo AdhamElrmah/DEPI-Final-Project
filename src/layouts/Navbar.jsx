@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Menu, Search } from "lucide-react";
-import { NavLink } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Menu, Search, User } from "lucide-react";
+import { NavLink, Link } from "react-router-dom";
 import React from "react";
 import SearchOverlay from "./SearchOverlay";
+import { useAuth } from "../contexts/AuthContext";
+import UserDropdown from "../components/UI/UserDropdown";
 
 export default function Navbar({ allCars }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { user, signout } = useAuth();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -15,6 +18,10 @@ export default function Navbar({ allCars }) {
     { name: "Contact Us", path: "/contact-us" },
     { name: "Services", path: "/Services" },
   ];
+
+  const displayLinks = [...navLinks];
+  if (user && user.role === "admin")
+    displayLinks.push({ name: "Admin", path: "/admin" });
 
   return (
     <>
@@ -35,7 +42,7 @@ export default function Navbar({ allCars }) {
 
           {/* Desktop Links (centered) */}
           <ul className="hidden lg:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
-            {navLinks.map((link, idx) => (
+            {displayLinks.map((link, idx) => (
               <li key={idx}>
                 <NavLink
                   to={link.path}
@@ -54,7 +61,7 @@ export default function Navbar({ allCars }) {
           </ul>
 
           {/* Icons */}
-          <div className="flex items-center gap-4 ">
+          <div className="flex items-center gap-4">
             <Search
               className="w-5 h-5 cursor-pointer"
               onClick={() => {
@@ -62,8 +69,36 @@ export default function Navbar({ allCars }) {
                 setSearchOpen(!searchOpen);
               }}
             />
+            {user ? (
+              <div className="flex items-center gap-3 relative">
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-8 h-8 rounded-full cursor-pointer"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  title="Click to sign out"
+                />
+                <UserDropdown
+                  user={user}
+                  isOpen={dropdownOpen}
+                  onClose={() => setDropdownOpen(false)}
+                  onSignOut={() => {
+                    signout();
+                    setDropdownOpen(false);
+                  }}
+                />
+              </div>
+            ) : (
+              <Link
+                to="/signin"
+                className="hidden lg:flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700"
+              >
+                <User className="w-5 h-5" />
+                Sign In
+              </Link>
+            )}
             <Menu
-              className="w-6 h-6 lg:hidden cursor-pointer "
+              className="w-6 h-6 lg:hidden cursor-pointer"
               onClick={() => setMenuOpen(!menuOpen)}
             />
           </div>
@@ -72,7 +107,7 @@ export default function Navbar({ allCars }) {
           {menuOpen && (
             <div className="absolute top-full left-0 w-full bg-white border-t shadow-md lg:hidden z-50">
               <ul className="flex flex-col items-start gap-4 p-4">
-                {navLinks.map((link, idx) => (
+                {displayLinks.map((link, idx) => (
                   <li key={idx}>
                     <NavLink
                       to={link.path}
@@ -89,10 +124,21 @@ export default function Navbar({ allCars }) {
                     </NavLink>
                   </li>
                 ))}
+                {!user && (
+                  <li>
+                    <Link
+                      to="/signin"
+                      className="block text-sm font-bold text-blue-600 hover:text-blue-700 hover:bg-[#f5f5f5] px-3 py-1 rounded-full"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           )}
-        </nav>{" "}
+        </nav>
       </div>
     </>
   );

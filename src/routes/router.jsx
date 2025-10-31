@@ -7,11 +7,15 @@ import HomePage from "../pages/HomePage";
 import ContactUsPage from "../pages/ContactUsPage";
 import ServicesPage from "../pages/ServicesPage";
 import Error404 from "../pages/Error404";
+import SignIn from "../pages/auth/SignIn";
+import SignUp from "../pages/auth/SignUp";
+import AdminDashboard from "../pages/AdminDashboard";
 import { getAllCars, getCarById } from "../lib/getData";
 
 export const router = createBrowserRouter([
   {
     element: <MainAppRoute />,
+    // errorElement: <Error404 />,
     loader: ({ request: { signal } }) => {
       return getAllCars(signal);
     },
@@ -26,6 +30,9 @@ export const router = createBrowserRouter([
       },
       { path: "/Services", element: <ServicesPage /> },
       { path: "/contact-us", element: <ContactUsPage /> },
+      { path: "/signin", element: <SignIn /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/admin", element: <AdminDashboard /> },
       {
         path: "/cars",
         children: [

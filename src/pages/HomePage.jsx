@@ -4,7 +4,7 @@ import ExploreCars from "@/components/HomePageComp/ExploreCars";
 import Hero from "@/components/HomePageComp/Hero/Hero";
 import TrendingCars from "@/components/HomePageComp/TrendingCars";
 import DriverReview from "@/layouts/DriverReview";
-import GetInTouch from "@/layouts/GetInTouch";
+import GetInTouch from "@/components/ContactUsPageComp/GetInTouch";
 import React from "react";
 import { useLoaderData } from "react-router-dom";
 
