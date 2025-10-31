@@ -8,7 +8,7 @@ function GetInTouch() {
   allowFullScreen=""
   loading="lazy"
   referrerPolicy="no-referrer-when-downgrade"
-  className=" w-337 h-150 rounded-[23px] sm:mx-4"
+  className=" w-full aspect-[16/7] rounded-[23px] mx-7"
 
 ></iframe>
 

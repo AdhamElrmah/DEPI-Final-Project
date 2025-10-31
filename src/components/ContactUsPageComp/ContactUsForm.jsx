@@ -5,10 +5,10 @@ import { Button } from "@headlessui/react";
 
 function ContactUsForm() {
   return   (
-    <div>
-   <h2 className='text-[25px] xl:ml-98 sm:ml-13 font-extrabold text-gray-900 text-start mt-10 mb-3'>Send your message</h2>
+    <div className="pb-10 pt-4">
+   <h2 className='px-8 text-[25px] font-extrabold text-gray-900 mb-8 xl:ml-80 l:ml-150 md:ml-4 wrap-anywhere'>Send your message</h2>
 
-   <div className="max-w-173 mx-auto p-8">
+   <div className="max-w-193 mx-auto p-8">
       <form className="space-y-6">
 
         <div className="flex flex-col space-y-2">
@@ -16,6 +16,7 @@ function ContactUsForm() {
             Full name
           </label>
           <Input
+            required
             id="name"
             placeholder="Enter your name"
             className=" font-bold h-14 rounded-md border border-gray-300 bg-[#f2f2f2] px-4 text-gray-800 placeholder:font-semibold placeholder:text-[#728189] focus:border-black focus:ring-1 focus:ring-black"
@@ -27,6 +28,7 @@ function ContactUsForm() {
             Phone number
           </label>
           <Input
+            required
             id="phone"
             type="tel"
             placeholder="Enter your phone number"
@@ -39,6 +41,7 @@ function ContactUsForm() {
             Email address
           </label>
           <Input
+            required
             id="email"
             type="email"
             placeholder="Enter your email address"
@@ -51,6 +54,7 @@ function ContactUsForm() {
             Message
           </label>
           <textarea
+            required
             id="message"
             placeholder="Tell us more"
             rows="4"
