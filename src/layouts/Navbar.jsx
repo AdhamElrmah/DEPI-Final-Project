@@ -74,7 +74,7 @@ export default function Navbar({ allCars }) {
                 <img
                   src={user.avatar}
                   alt={user.name}
-                  className="w-8 h-8 rounded-full cursor-pointer"
+                  className="w-7 h-7 rounded-full cursor-pointer"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   title="Click to sign out"
                 />

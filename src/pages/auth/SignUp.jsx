@@ -5,6 +5,13 @@ import React from "react";
 import { Input } from "../../components/UI/input";
 import { Label } from "../../components/UI/label";
 import { Button } from "../../components/UI/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../../components/UI/select";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -103,16 +110,18 @@ export default function SignUp() {
                   <div>
                     <Label htmlFor="role">Role</Label>
                     <div className="mt-2">
-                      <select
-                        id="role"
-                        name="role"
+                      <Select
                         value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                        onValueChange={(val) => setRole(val)}
                       >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                      </select>
+                        <SelectTrigger id="role" className="w-full">
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="user">User</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
 
