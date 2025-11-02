@@ -7,6 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const { Buffer } = require("buffer");
 const carsPath = path.join(__dirname, "..", "cars.json");
+const rentalsPath = path.join(__dirname, "..", "rentItem.json");
 
 function readCars() {
   try {
@@ -29,6 +30,26 @@ function writeCars(data) {
   }
 }
 
+function readRentals() {
+  try {
+    if (!fs.existsSync(rentalsPath)) return [];
+    const raw = fs.readFileSync(rentalsPath, "utf8") || "[]";
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error("Failed to read rentItem.json:", e.message);
+    return [];
+  }
+}
+
+function writeRentals(data) {
+  try {
+    fs.writeFileSync(rentalsPath, JSON.stringify(data, null, 2), "utf8");
+    return true;
+  } catch (e) {
+    console.error("Failed to write rentItem.json:", e.message);
+    return false;
+  }
+}
 /**
  * Add an item to the database.
  * This API allows users to add a new item available for rent.
@@ -85,53 +106,6 @@ exports.addItem = (req, res) => {
 };
 
 /**
- * Search for items based on name or pricePerDay range.
- * This API helps users find items available for rent.
- * @param {Request} req
- * @param {Response} res
- */
-exports.searchItems = (req, res) => {
-  const { name, minPrice, maxPrice } = req.query;
-
-  const items = readCars();
-
-  // Only return items that are available (if availability property exists), otherwise return all
-  let filteredItems = items.filter((item) =>
-    typeof item.availability === "boolean" ? item.availability : true
-  );
-
-  // Filter items by name (search make + model + overview)
-  if (name) {
-    const q = name.toLowerCase();
-    filteredItems = filteredItems.filter((item) => {
-      const title = `${item.make || ""} ${item.model || ""}`.toLowerCase();
-      const overview = (item.overview || "").toLowerCase();
-      return title.includes(q) || overview.includes(q);
-    });
-  }
-
-  // Filter by price (cars.json uses price_per_day)
-  if (minPrice) {
-    filteredItems = filteredItems.filter(
-      (item) =>
-        (item.price_per_day || item.price_per_day === 0
-          ? item.price_per_day
-          : Infinity) >= parseFloat(minPrice)
-    );
-  }
-  if (maxPrice) {
-    filteredItems = filteredItems.filter(
-      (item) =>
-        (item.price_per_day || item.price_per_day === 0
-          ? item.price_per_day
-          : 0) <= parseFloat(maxPrice)
-    );
-  }
-
-  res.status(200).json(filteredItems);
-};
-
-/**
  * Get a single item by ID.
  * Returns the item if found, otherwise 404.
  * @param {Request} req
@@ -151,120 +125,8 @@ exports.getItemById = (req, res) => {
   res.status(200).json(item);
 };
 
-/**
- * Search for items based on name or pricePerDay range.
- * This API helps users find items available for rent.
- * @param {Request} req
- * @param {Response} res
- */
 exports.listAllItems = (req, res) => {
   res.status(200).json(readCars());
-};
-
-/**
- * Rent an item for a specific date range.
- * This API allows users to rent an item if it is available and no date conflict exists.
- * @param {Request} req
- * @param {Response} res
- */
-exports.rentItem = (req, res) => {
-  const { id } = req.params;
-  const { startDate, endDate } = req.body;
-
-  if (!startDate || !endDate) {
-    return res
-      .status(400)
-      .json({ error: "Start date and end date are required" });
-  }
-
-  const items = readCars();
-  const item = items.find((item) => item.id === id || item.id === parseInt(id));
-
-  if (!item) {
-    return res.status(404).json({ error: "Item not found" });
-  }
-
-  // ensure rentals array and availability flag exist
-  if (!Array.isArray(item.rentals)) item.rentals = [];
-  if (typeof item.availability !== "boolean") item.availability = true;
-
-  if (!item.availability) {
-    return res.status(400).json({ error: "Item is currently unavailable" });
-  }
-
-  // Check for overlapping rental dates
-  const isOverlapping = item.rentals.some(
-    (rental) => startDate <= rental.endDate && endDate >= rental.startDate
-  );
-
-  if (isOverlapping) {
-    return res
-      .status(400)
-      .json({ error: "Item is already rented for the selected dates" });
-  }
-
-  // Add the rental and mark the item as unavailable
-  item.rentals.push({ startDate, endDate });
-  item.availability = false;
-
-  // persist
-  if (!writeCars(items)) {
-    console.warn("Could not persist rental change to cars.json");
-  }
-
-  res.status(200).json({ message: "Item rented successfully", item });
-};
-
-/**
- * Return an item and mark it as available again.
- * This API allows users to return an item after use.
- * @param {Request} req
- * @param {Response} res
- */
-exports.returnItem = (req, res) => {
-  const { id } = req.params;
-
-  const items = readCars();
-  const item = items.find((item) => item.id === id || item.id === parseInt(id));
-
-  if (!item) {
-    return res.status(404).json({ error: "Item not found" });
-  }
-
-  if (typeof item.availability !== "boolean") item.availability = true;
-
-  if (item.availability) {
-    return res.status(400).json({ error: "Item is already available" });
-  }
-
-  // Mark the item as available
-  item.availability = true;
-
-  // persist
-  if (!writeCars(items)) {
-    console.warn("Could not persist return change to cars.json");
-  }
-
-  res.status(200).json({ message: "Item returned successfully", item });
-};
-
-/**
- * View the rental history of an item.
- * This API shows the rental dates for a specific item.
- * @param {Request} req
- * @param {Response} res
- */
-exports.viewRentalHistory = (req, res) => {
-  const { id } = req.params;
-
-  const items = readCars();
-  const item = items.find((item) => item.id === id || item.id === parseInt(id));
-
-  if (!item) {
-    return res.status(404).json({ error: "Item not found" });
-  }
-
-  res.status(200).json({ rentals: item.rentals || [] });
 };
 
 /**
@@ -326,4 +188,355 @@ exports.deleteItem = (req, res) => {
     console.warn("Could not persist delete to cars.json");
   }
   res.status(200).json({ message: "Item deleted successfully" });
+};
+
+/**
+ * Rent an item for a specific date range.
+ * This API allows users to rent an item if it is available and no date conflict exists.
+ * @param {Request} req
+ * @param {Response} res
+ */
+exports.rentItem = (req, res) => {
+  try {
+    // Get current user from token
+    const auth = req.headers.authorization || "";
+    const token = auth.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const usersPath = path.join(__dirname, "..", "users.json");
+    let users = [];
+    if (fs.existsSync(usersPath)) {
+      users = JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
+    }
+    const currentUser = users.find((u) => u.email === currentUserEmail);
+    if (!currentUser) return res.status(401).json({ error: "Unauthorized" });
+
+    const { id } = req.params;
+    const {
+      startDate,
+      endDate,
+      pickupLocation,
+      dropoffLocation,
+      specialRequests,
+    } = req.body;
+
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ error: "Start date and end date are required" });
+    }
+
+    const items = readCars();
+    const item = items.find(
+      (item) => item.id === id || item.id === parseInt(id)
+    );
+
+    if (!item) {
+      return res.status(404).json({ error: "Car not found" });
+    }
+
+    // Calculate rental duration and total price
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+    const totalPrice = days * item.price_per_day;
+
+    // Check for overlapping rental dates
+    const rentals = readRentals();
+    const isOverlapping = rentals.some(
+      (rental) =>
+        rental.carId === item.id &&
+        rental.status === "active" &&
+        startDate <= rental.endDate &&
+        endDate >= rental.startDate
+    );
+
+    if (isOverlapping) {
+      return res
+        .status(400)
+        .json({ error: "Car is already rented for the selected dates" });
+    }
+
+    // Create rental record
+    const rentalId = Date.now().toString();
+    const rentalData = {
+      id: rentalId,
+      carId: item.id,
+      userId: currentUser.id,
+      userEmail: currentUser.email,
+      userName: currentUser.name,
+      startDate,
+      endDate,
+      pickupLocation: pickupLocation || "Default Location",
+      dropoffLocation: dropoffLocation || "Default Location",
+      specialRequests: specialRequests || "",
+      totalDays: days,
+      pricePerDay: item.price_per_day,
+      totalPrice,
+      status: "active",
+      createdAt: new Date().toISOString(),
+    };
+
+    rentals.push(rentalData);
+
+    // Save rental data
+    if (!writeRentals(rentals)) {
+      console.warn("Could not persist rental to rentItem.json");
+      return res.status(500).json({ error: "Failed to save rental" });
+    }
+
+    res.status(200).json({
+      message: "Car rented successfully",
+      rental: rentalData,
+      car: item,
+    });
+  } catch (err) {
+    console.error("Rental error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getUserRentals = (req, res) => {
+  try {
+    // Get current user from token
+    const auth = req.headers.authorization || "";
+    const token = auth.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const usersPath = path.join(__dirname, "..", "users.json");
+    let users = [];
+    if (fs.existsSync(usersPath)) {
+      users = JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
+    }
+    const currentUser = users.find((u) => u.email === currentUserEmail);
+    if (!currentUser) return res.status(401).json({ error: "Unauthorized" });
+
+    const rentals = readRentals();
+    const userRentals = rentals.filter(
+      (rental) => rental.userId === currentUser.id
+    );
+
+    // Get car details for each rental
+    const cars = readCars();
+    const rentalsWithCarDetails = userRentals.map((rental) => {
+      const car = cars.find((c) => c.id === rental.carId);
+      return {
+        ...rental,
+        car: car
+          ? {
+              id: car.id,
+              make: car.make,
+              model: car.model,
+              year: car.year,
+              images: car.images,
+              price_per_day: car.price_per_day,
+            }
+          : null,
+      };
+    });
+
+    res.status(200).json(rentalsWithCarDetails);
+  } catch (err) {
+    console.error("Get user rentals error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.cancelRental = (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Get current user from token
+    const auth = req.headers.authorization || "";
+    const token = auth.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const usersPath = path.join(__dirname, "..", "users.json");
+    let users = [];
+    if (fs.existsSync(usersPath)) {
+      users = JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
+    }
+    const currentUser = users.find((u) => u.email === currentUserEmail);
+    if (!currentUser) return res.status(401).json({ error: "Unauthorized" });
+
+    const rentals = readRentals();
+    const rentalIndex = rentals.findIndex((r) => r.id === id);
+
+    if (rentalIndex === -1) {
+      return res.status(404).json({ error: "Rental not found" });
+    }
+
+    // Check permissions: user can cancel their own rentals, admin can cancel any
+    const rental = rentals[rentalIndex];
+    const isOwner = rental.userId === currentUser.id;
+    const isAdmin = currentUser.role === "admin";
+
+    if (!isOwner && !isAdmin) {
+      return res
+        .status(403)
+        .json({ error: "You can only cancel your own rentals" });
+    }
+
+    // Check if rental can be cancelled (not in the past)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const startDate = new Date(rental.startDate);
+
+    if (startDate < today && !isAdmin) {
+      return res.status(400).json({ error: "Cannot cancel past rentals" });
+    }
+
+    // Update rental status
+    rentals[rentalIndex].status = "cancelled";
+    rentals[rentalIndex].cancelledAt = new Date().toISOString();
+
+    if (!writeRentals(rentals)) {
+      console.warn("Could not persist rental cancellation to rentItem.json");
+      return res.status(500).json({ error: "Failed to cancel rental" });
+    }
+
+    res.status(200).json({
+      message: "Rental cancelled successfully",
+      rental: rentals[rentalIndex],
+    });
+  } catch (err) {
+    console.error("Cancel rental error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getAllRentals = (req, res) => {
+  try {
+    // Admin only
+    const auth = req.headers.authorization || "";
+    const token = auth.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const usersPath = path.join(__dirname, "..", "users.json");
+    let users = [];
+    if (fs.existsSync(usersPath)) {
+      users = JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
+    }
+    const currentUser = users.find((u) => u.email === currentUserEmail);
+    if (!currentUser || currentUser.role !== "admin") {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+
+    const rentals = readRentals();
+    const cars = readCars();
+
+    // Add car details to each rental
+    const rentalsWithDetails = rentals.map((rental) => {
+      const car = cars.find((c) => c.id === rental.carId);
+      const user = users.find((u) => u.id === rental.userId);
+
+      return {
+        ...rental,
+        car: car
+          ? {
+              id: car.id,
+              make: car.make,
+              model: car.model,
+              year: car.year,
+              images: car.images,
+              price_per_day: car.price_per_day,
+            }
+          : null,
+        user: user
+          ? {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+            }
+          : null,
+      };
+    });
+
+    res.status(200).json(rentalsWithDetails);
+  } catch (err) {
+    console.error("Get all rentals error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.updateRental = (req, res) => {
+  try {
+    // Admin only
+    const auth = req.headers.authorization || "";
+    const token = auth.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const usersPath = path.join(__dirname, "..", "users.json");
+    let users = [];
+    if (fs.existsSync(usersPath)) {
+      users = JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
+    }
+    const currentUser = users.find((u) => u.email === currentUserEmail);
+    if (!currentUser || currentUser.role !== "admin") {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+
+    const { id } = req.params;
+    const { startDate, endDate } = req.body;
+
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ error: "Start date and end date are required" });
+    }
+
+    const rentals = readRentals();
+    const rentalIndex = rentals.findIndex((r) => r.id === id);
+
+    if (rentalIndex === -1) {
+      return res.status(404).json({ error: "Rental not found" });
+    }
+
+    const rental = rentals[rentalIndex];
+
+    // Check for overlapping dates with other rentals of the same car
+    const isOverlapping = rentals.some(
+      (r) =>
+        r.id !== rental.id &&
+        r.carId === rental.carId &&
+        r.status === "active" &&
+        startDate <= r.endDate &&
+        endDate >= r.startDate
+    );
+
+    if (isOverlapping) {
+      return res
+        .status(400)
+        .json({ error: "Car is already rented for the selected dates" });
+    }
+
+    // Update rental dates
+    rentals[rentalIndex].startDate = startDate;
+    rentals[rentalIndex].endDate = endDate;
+
+    // Recalculate total price
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+    rentals[rentalIndex].totalDays = days;
+    rentals[rentalIndex].totalPrice = days * rental.pricePerDay;
+
+    if (!writeRentals(rentals)) {
+      console.warn("Could not persist rental update to rentItem.json");
+      return res.status(500).json({ error: "Failed to update rental" });
+    }
+
+    res.status(200).json({
+      message: "Rental updated successfully",
+      rental: rentals[rentalIndex],
+    });
+  } catch (err) {
+    console.error("Update rental error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 };

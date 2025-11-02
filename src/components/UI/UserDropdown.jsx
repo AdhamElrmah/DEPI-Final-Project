@@ -5,6 +5,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 export default function UserDropdown({
   avatar,
   name,
+  email,
   onDropdownToggle,
   onSignOut,
   onClose,
@@ -14,7 +15,7 @@ export default function UserDropdown({
       {({ open }) => (
         <>
           <MenuButton
-            className="focus:outline-none"
+            className="focus:outline-none flex"
             onClick={() => onDropdownToggle && onDropdownToggle(!open)}
           >
             <img
@@ -29,6 +30,11 @@ export default function UserDropdown({
             className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
           >
             <div className="py-1">
+              <div className="px-4 py-2 text-sm text-gray-500 border-b border-gray-200">
+                Signed in as <br />
+                <span className="font-medium text-gray-900">{email}</span>
+              </div>
+
               <MenuItem>
                 <Link
                   to="/profile"
@@ -38,7 +44,6 @@ export default function UserDropdown({
                   Profile
                 </Link>
               </MenuItem>
-
               <form
                 onSubmit={(e) => {
                   e.preventDefault();

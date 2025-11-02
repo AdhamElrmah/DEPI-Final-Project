@@ -11,6 +11,7 @@ import SignIn from "../pages/auth/SignIn";
 import SignUp from "../pages/auth/SignUp";
 import AdminDashboard from "../pages/AdminDashboard";
 import ProfilePage from "../pages/ProfilePage";
+import CheckoutPage from "../pages/CheckoutPage";
 import { getAllCars, getCarById } from "../lib/getData";
 
 export const router = createBrowserRouter([
@@ -48,6 +49,13 @@ export const router = createBrowserRouter([
           {
             path: ":carId",
             element: <CarPage />,
+            loader: ({ request: { signal }, params }) => {
+              return getCarById(params.carId, signal);
+            },
+          },
+          {
+            path: ":carId/checkout",
+            element: <CheckoutPage />,
             loader: ({ request: { signal }, params }) => {
               return getCarById(params.carId, signal);
             },
