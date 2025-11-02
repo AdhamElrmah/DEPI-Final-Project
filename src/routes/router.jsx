@@ -10,6 +10,7 @@ import Error404 from "../pages/Error404";
 import SignIn from "../pages/auth/SignIn";
 import SignUp from "../pages/auth/SignUp";
 import AdminDashboard from "../pages/AdminDashboard";
+import ProfilePage from "../pages/ProfilePage";
 import { getAllCars, getCarById } from "../lib/getData";
 
 export const router = createBrowserRouter([
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
       { path: "/signin", element: <SignIn /> },
       { path: "/signup", element: <SignUp /> },
       { path: "/admin", element: <AdminDashboard /> },
+      { path: "/profile", element: <ProfilePage /> },
       {
         path: "/cars",
         children: [

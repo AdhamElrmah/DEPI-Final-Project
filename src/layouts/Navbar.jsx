@@ -9,7 +9,7 @@ import UserDropdown from "../components/UI/UserDropdown";
 export default function Navbar({ allCars }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const { user, signout } = useAuth();
 
   const navLinks = [
@@ -22,6 +22,29 @@ export default function Navbar({ allCars }) {
   const displayLinks = [...navLinks];
   if (user && user.role === "admin")
     displayLinks.push({ name: "Admin", path: "/admin" });
+
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
+    // Close user dropdown when opening mobile menu
+    if (!menuOpen) {
+      setUserDropdownOpen(false);
+    }
+  };
+
+  const handleUserDropdownToggle = (isOpen) => {
+    setUserDropdownOpen(isOpen);
+    // Close mobile menu when opening user dropdown
+    if (isOpen) {
+      setMenuOpen(false);
+    }
+  };
+
+  const handleSearchToggle = () => {
+    // Close both menus when opening search
+    if (menuOpen) setMenuOpen(false);
+    if (userDropdownOpen) setUserDropdownOpen(false);
+    setSearchOpen(!searchOpen);
+  };
 
   return (
     <>
@@ -64,30 +87,18 @@ export default function Navbar({ allCars }) {
           <div className="flex items-center gap-4">
             <Search
               className="w-5 h-5 cursor-pointer"
-              onClick={() => {
-                if (menuOpen) setMenuOpen(!open);
-                setSearchOpen(!searchOpen);
-              }}
+              onClick={handleSearchToggle}
             />
             {user ? (
-              <div className="flex items-center gap-3 relative">
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="w-7 h-7 rounded-full cursor-pointer"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  title="Click to sign out"
-                />
-                <UserDropdown
-                  user={user}
-                  isOpen={dropdownOpen}
-                  onClose={() => setDropdownOpen(false)}
-                  onSignOut={() => {
-                    signout();
-                    setDropdownOpen(false);
-                  }}
-                />
-              </div>
+              <UserDropdown
+                avatar={user.avatar}
+                name={user.name}
+                onDropdownToggle={handleUserDropdownToggle}
+                onClose={() => {}}
+                onSignOut={() => {
+                  signout();
+                }}
+              />
             ) : (
               <Link
                 to="/signin"
@@ -99,7 +110,7 @@ export default function Navbar({ allCars }) {
             )}
             <Menu
               className="w-6 h-6 lg:hidden cursor-pointer"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={handleMenuToggle}
             />
           </div>
 
