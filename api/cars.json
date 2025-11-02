@@ -2338,5 +2338,57 @@
     "currency": "USD",
     "rental_conditions": "Renting a sports car also allows you to explore Dubai in a way that you never thought was possible. You can take a leisurely drive along the stunning coastline of Dubai, take a scenic route through the desert or simply enjoy the breathtaking views of the city. No matter where you go, a sports car rental in Dubai will always make your journey a memorable one.",
     "rental_class": "SUV"
+  },
+  {
+    "id": "2019-fiat-500ssssss",
+    "make": "Fiat",
+    "model": "500",
+    "logo": "https://framerusercontent.com/images/ELPJflVOVAUOOEqZmPzcyDYmo.png",
+    "year": 2019,
+    "overview": "A turbocharged 1.4-liter four-cylinder is now the sole engine available; the car isn't lightning-quick, but its 135 ponies scoot it around town just fine. The last time we tested a 500 with this engine was in 2013 and it delivered a zero-to-60-mph time of 8.1 seconds. A six-speed automatic is optional, but those who prefer to shift for themselves can stay with the standard five-speed manual.\n \nDespite Fiat's claim that the 500's suspension is sport tuned, there's not much athleticism in this chassis. But no one buys a Fiat 500 for the performance—well, maybe those interested in the hot Abarth model do—as the diminutive city car is more of a fashion accessory.",
+    "body_type": "Hatchback",
+    "seats": 2,
+    "fuel_consumption": "12-18 mpg",
+    "engine": {
+      "type": "4-Cylinder",
+      "displacement": "1.4L",
+      "configuration": "I4 8V GDI",
+      "power_hp": 135
+    },
+    "transmission": "Automatic",
+    "drivetrain": "FWD",
+    "fuel_type": "Gasoline",
+    "colors": {
+      "exterior": "#CFCFCF",
+      "interior": "#EBEBEB"
+    },
+    "primary_features": [
+      "17-inch aluminum wheels",
+      "LED headlights",
+      "Rain-sensing windshield wipers",
+      "Push-button start",
+      "Forward collision warning",
+      "Lane departure warning",
+      "Front and rear parking sensors"
+    ],
+    "additional_features": [
+      "Keyless access",
+      "Power moonroof",
+      "Heated front seats",
+      "Heated steering wheel",
+      "Wireless device charging",
+      "Harman Kardon stereo"
+    ],
+    "images": {
+      "main": "https://framerusercontent.com/images/piP6vECWdDgFFQpiFmHNyzvDO0g.jpg",
+      "sub1": "https://framerusercontent.com/images/HGsi7BjXwHAYVf11AvwOHYzJo8.jpeg",
+      "sub2": "https://framerusercontent.com/images/TqNxJmgl4C80Quso07lFuYMNss.jpeg",
+      "sub3": "https://framerusercontent.com/images/OC9tPNJKsDOrahAT6eBrLVwiQA.jpeg",
+      "sub4": "https://framerusercontent.com/images/VE6hCt4PNz94ntTDfTX3bPRU2s.jpeg"
+    },
+    "price_per_day": 19,
+    "currency": "USD",
+    "rental_conditions": "Renting a sports car also allows you to explore Dubai in a way that you never thought was possible. You can take a leisurely drive along the stunning coastline of Dubai, take a scenic route through the desert or simply enjoy the breathtaking views of the city. No matter where you go, a sports car rental in Dubai will always make your journey a memorable one.",
+    "rental_class": "Economy"
   }
 ]

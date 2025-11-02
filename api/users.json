@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "Admin",
-    "email": "admin@example.com",
+    "email": "admin@gmail.com",
     "passwordHash": "$2a$10$Wq1J2H1yq3GZQqYqYxQ3Eu1Yv6rZ6X6/3c7zQvQ/6u1pZ8eK1Yz6a",
     "role": "admin"
   },
@@ -25,20 +25,6 @@
     "name": "user",
     "email": "user@gmail.com",
     "passwordHash": "$2a$10$B8.E4p4g4FZaqx2xXodx2udL4VMS0KT34XLvBhMtVnggNvfeKlO2e",
-    "role": "user"
-  },
-  {
-    "id": 5,
-    "name": "asd",
-    "email": "ad@asas",
-    "passwordHash": "$2a$10$BUwNczZD3mZ4WNrktBxmH..V7.q0ssBTKhzcrHhJ8zwm1fucvKTJS",
-    "role": "user"
-  },
-  {
-    "id": 6,
-    "name": "a",
-    "email": "aaaa@gmail.com",
-    "passwordHash": "$2a$10$/6cabJdc5/RR/i8v6MUY3OjocFR0etmMwvqx0V1K4My.BmZlUEUMy",
     "role": "user"
   },
   {
