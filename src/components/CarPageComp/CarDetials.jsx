@@ -78,7 +78,7 @@ export default function CarDetails({ car }) {
           </div>
           <div>
             <Button size="lg" className="font-bold text-sm ">
-              <Link to={`/${car.id}/rent`}>
+              <Link to={`/rent/${car.id}`}>
                 Rent From {formatter.format(car.price_per_day)}{" "}
               </Link>
             </Button>

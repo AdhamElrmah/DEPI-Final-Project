@@ -141,7 +141,7 @@ function ContactUsForm() {
                   <div className="mt-5 sm:mt-6">
                     <button
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-900 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-black"
                       onClick={() => {
                         setOpen(false);
                         navigate("/");
