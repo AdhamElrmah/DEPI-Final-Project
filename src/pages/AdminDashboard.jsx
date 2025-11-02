@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import CarsManagement from "../components/Admin/CarsManagement";
 import UsersManagement from "../components/Admin/UsersManagement";
+import RentalsManagement from "../components/Admin/RentalsManagement";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -10,7 +11,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("cars");
 
   if (!user || user.role !== "admin") {
-    navigate("/signin");
+    navigate("/404");
     return null;
   }
 
@@ -45,11 +46,22 @@ export default function AdminDashboard() {
         >
           Edit Users
         </button>
+        <button
+          onClick={() => setActiveTab("rentals")}
+          className={`px-4 py-2 font-semibold border-b-2 transition-colors ${
+            activeTab === "rentals"
+              ? "border-black text-black"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Manage Rentals
+        </button>
       </div>
 
       {/* Tab Content */}
       {activeTab === "cars" && <CarsManagement user={user} />}
       {activeTab === "users" && <UsersManagement user={user} />}
+      {activeTab === "rentals" && <RentalsManagement user={user} />}
     </div>
   );
 }

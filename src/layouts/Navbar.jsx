@@ -66,7 +66,7 @@ export default function Navbar({ allCars }) {
           {/* Desktop Links (centered) */}
           <ul className="hidden lg:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
             {displayLinks.map((link, idx) => (
-              <li key={idx}>
+              <li key={idx} className="text-nowrap">
                 <NavLink
                   to={link.path}
                   className={({ isActive }) =>
@@ -93,6 +93,7 @@ export default function Navbar({ allCars }) {
               <UserDropdown
                 avatar={user.avatar}
                 name={user.name}
+                email={user.email}
                 onDropdownToggle={handleUserDropdownToggle}
                 onClose={() => {}}
                 onSignOut={() => {
