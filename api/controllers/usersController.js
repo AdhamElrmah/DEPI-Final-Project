@@ -97,17 +97,35 @@ exports.createUser = (req, res) => {
 
 exports.updateUser = (req, res) => {
   try {
-    const check = requireAdmin(req);
-    if (!check.ok)
-      return res
-        .status(check.msg === "Forbidden" ? 403 : 401)
-        .json({ error: check.msg });
+    // Get current user from token
+    const auth = req.headers.authorization || "";
+    const token = auth.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const users = readUsers();
+    const currentUser = users.find((u) => u.email === currentUserEmail);
+
+    if (!currentUser) return res.status(401).json({ error: "Unauthorized" });
 
     const { id } = req.params;
+    const targetUserId = id || currentUser.id;
     const updated = req.body;
-    const users = readUsers();
-    const idx = users.findIndex((u) => u.id === id || u.id === parseInt(id));
+
+    const idx = users.findIndex(
+      (u) => u.id === targetUserId || u.id === parseInt(targetUserId)
+    );
     if (idx === -1) return res.status(404).json({ error: "User not found" });
+
+    // Check permissions: user can update their own profile, or admin can update any profile
+    const isSelfUpdate = users[idx].id === currentUser.id;
+    const isAdmin = currentUser.role === "admin";
+
+    if (!isSelfUpdate && !isAdmin) {
+      return res
+        .status(403)
+        .json({ error: "Forbidden: You can only update your own profile" });
+    }
 
     // If changing email, ensure uniqueness
     if (updated.email && updated.email !== users[idx].email) {
@@ -117,22 +135,41 @@ exports.updateUser = (req, res) => {
           .json({ error: "Another user with this email already exists" });
     }
 
-    // If updating password, hash it
+    // If updating password, hash it (only admins can update passwords of others)
     if (updated.password) {
+      if (!isAdmin && !isSelfUpdate) {
+        return res
+          .status(403)
+          .json({ error: "Forbidden: Cannot update password" });
+      }
       users[idx].passwordHash = bcrypt.hashSync(updated.password, 10);
       delete updated.password;
     }
 
+    // Update user data
     users[idx] = { ...users[idx], ...updated };
     if (!writeUsers(users))
       console.warn("Could not persist user update to users.json");
-    res.status(200).json(pubUser(users[idx]));
+
+    // Generate new token if email changed and it's a self-update
+    let newToken = token;
+    if (isSelfUpdate && updated.email && updated.email !== currentUser.email) {
+      newToken = Buffer.from(updated.email.toLowerCase().trim()).toString(
+        "base64"
+      );
+    }
+
+    const response = { ...pubUser(users[idx]) };
+    if (isSelfUpdate) {
+      response.token = newToken;
+    }
+
+    res.status(200).json(response);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 };
-
 exports.deleteUser = (req, res) => {
   try {
     const check = requireAdmin(req);

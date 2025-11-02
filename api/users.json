@@ -15,7 +15,7 @@
   },
   {
     "id": 3,
-    "name": "ad",
+    "name": "admin",
     "email": "ad@gmail.com",
     "passwordHash": "$2a$10$D23iHrnEBulpIG66HyOQ4eER8OLPxTW/9tnnMRo0u4YExssNAKu/6",
     "role": "admin"
@@ -32,6 +32,6 @@
     "name": "adham ahmed",
     "email": "adham@gmail.com",
     "passwordHash": "$2a$10$TlaRtES7geDv0PNCFEVJzO9y7yuBitxh3C6ttG88Q00X83smpU4mW",
-    "role": "admin"
+    "role": "user"
   }
 ]

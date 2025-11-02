@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "../components/UI/input";
 import { Label } from "../components/UI/label";
 import { Button } from "../components/UI/button";
+import { updateUser } from "../lib/getUsers";
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, updateuser } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -21,6 +22,16 @@ export default function ProfilePage() {
     }
   }, [user, navigate]);
 
+  // Update form data when user changes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+      });
+    }
+  }, [user]);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -32,10 +43,28 @@ export default function ProfilePage() {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-    setTimeout(() => {
+
+    try {
+      const response = await updateUser(user.id, formData, user.token);
+
+      // Update the auth context with new user data and token (if provided)
+      updateuser({
+        ...response,
+        avatar:
+          response.avatar ||
+          `https://api.dicebear.com/7.x/initials/svg?seed=${response.email}`,
+        token: response.token || user.token,
+      });
+
       setMessage({ type: "success", text: "Profile updated successfully!" });
+    } catch (err) {
+      console.error("Profile update error:", err);
+      const errorMessage =
+        err?.response?.data?.error || "Failed to update profile";
+      setMessage({ type: "error", text: errorMessage });
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   if (!user) {

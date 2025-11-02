@@ -59,6 +59,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateuser = (userData) => {
+    setUser(userData);
+  };
+
   const signout = () => {
     setUser(null);
     // remove token
@@ -70,6 +74,7 @@ export const AuthProvider = ({ children }) => {
     signin,
     signup,
     signout,
+    updateuser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
