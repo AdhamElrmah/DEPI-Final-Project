@@ -31,6 +31,7 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - **React 18** - Modern JavaScript library for building user interfaces
 - **React Router** - Declarative routing for React applications
 - **Tailwind CSS** - Utility-first CSS framework for styling
+- **Framer Motion** - Library for smooth and interactive animations in React
 - **Headless UI** - Accessible UI components for React
 - **Axios** - HTTP client for API communication
 - **Lucide React** - Beautiful icon library
@@ -71,44 +72,43 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - 👥 **User Management** - Complete control over user accounts and permissions
 - 🚙 **Fleet Management** - Add, edit, and remove vehicles from inventory
 - 📊 **Rental Oversight** - View, modify, and cancel rental bookings
-- 📈 **Business Analytics** - Comprehensive reporting and insights
 - ⚙️ **System Administration** - Platform configuration and maintenance
 
 ### Advanced Features
 
 - 🔍 **Smart Search** - Multi-criteria filtering and sorting
-- 📧 **Email Notifications** - Automated booking confirmations
 - 🛡️ **Data Security** - Encrypted passwords and secure API endpoints
 - 🎨 **Modern UI/UX** - Clean, intuitive interface with smooth animations
 - ⚡ **Performance Optimized** - Fast loading times and efficient data handling
+- 📧 **Email Notifications** - Automated booking confirmations
 
 ## 🗂️ Project Structure
 
+```
 car-rental-app/
-├── frontend/ # React application
+├── frontend/             # React application
 │ ├── src/
-│ │ ├── components/ # Reusable UI components
-│ │ │ ├── ui/ # Core UI elements (Button, Input, etc.)
-│ │ │ ├── auth/ # Authentication components
-│ │ │ └── admin/ # Admin-specific components
-│ │ ├── contexts/ # React contexts (AuthContext)
-│ │ ├── layouts/ # Layout components (Navbar, Footer)
-│ │ ├── lib/ # API functions and utilities
-│ │ ├── pages/ # Page components
-│ │ ├── routes/ # Routing configuration
-│ │ └── utils/ # Helper functions
-│ ├── public/ # Static assets
+│ │ ├── components/         # Reusable UI components
+│ │ │ ├── ui/                   # Core UI elements (Button, Input, etc.)
+│ │ │ ├── auth/                 # Authentication components
+│ │ │ └── admin/                # Admin-specific components
+│ │ ├── contexts/         # React contexts
+│ │ ├── layouts/          # Layout components (Navbar, Footer)
+│ │ ├── lib/              # API functions and utilities
+│ │ ├── pages/            # Page components
+│ │ ├── routes/           # Routing configuration
+│ │ └── utils/            # Helper functions
+│ ├── assets/             # Static assets
 │ └── package.json
-├── backend/ # Node.js API server
-│ ├── controllers/ # API controllers
-│ ├── routes/ # API route definitions
-│ ├── data/ # JSON database files
-│ ├── utils/ # Server utilities
-│ ├── app.js # Express app configuration
-│ ├── server.js # Server startup file
+├── api/                  # Node.js API server
+│ ├── controllers/        # API controllers
+│ ├── routes/             # API route definitions
+│ ├── data/               # JSON database files
+│ ├── utils/              # Server utilities
+│ ├── server.js           # Server startup file
 │ └── package.json
-├── docs/ # Documentation files
 └── README.md
+```
 
 ## 🔌 API Documentation
 
@@ -331,20 +331,20 @@ git clone <repository-url>
 cd car-rental-app
 
 # Navigate to backend directory
-cd backend
+cd api
 
 # Install dependencies
 npm install
 
 # Start development server
-npm run dev
+npm start
 ```
 
 ### Frontend Setup
 
 ```bash
 # Open new terminal and navigate to frontend
-cd frontend
+cd /
 
 # Install dependencies
 npm install
@@ -358,10 +358,10 @@ npm run dev
 Create `.env` file in the backend directory:
 
 ```env
-PORT=5000
+PORT=3000
 JWT_SECRET=your_super_secret_jwt_key_here
 NODE_ENV=development
-API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:3000/api/
 ```
 
 ### Database Initialization
@@ -400,11 +400,11 @@ The project includes comprehensive testing setup:
 
 ```bash
 # Run backend tests
-cd backend
+cd api
 npm test
 
 # Run frontend tests
-cd frontend
+cd /
 npm test
 
 # Run end-to-end tests (if configured)
@@ -423,7 +423,7 @@ npm run test:e2e
 
 ```bash
 # Build for production
-cd frontend
+cd /
 npm run build
 
 # Deploy to Vercel/Netlify
@@ -434,21 +434,11 @@ npm run build
 
 ```bash
 # Build for production
-cd backend
+cd api
 npm run build
 
 # Deploy to Railway/Heroku
 # Set environment variables in hosting platform
-```
-
-### Docker Deployment (Optional)
-
-```dockerfile
-# Build Docker image
-docker build -t car-rental-app .
-
-# Run container
-docker run -p 5000:5000 car-rental-app
 ```
 
 ### Environment Variables for Production
@@ -487,204 +477,16 @@ We welcome contributions to improve the Car Rental Management System!
 - Implement proper error handling
 - Use TypeScript for type safety (future enhancement)
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 👤 Authors & Credits
 
 ### Development Team
 
-- **Frontend Developer**: React application architecture and UI/UX implementation
-- **Backend Developer**: Node.js API development and database design
-- **UI/UX Designer**: Interface design and user experience optimization
-
-### Technologies & Libraries
-
-- React ecosystem maintained by Meta and contributors
-- Express.js framework by TJ Holowaychuk
-- Tailwind CSS by Tailwind Labs
-- JWT authentication libraries
-
-### Special Thanks
-
-- Open source community for providing excellent tools and libraries
-- Beta testers for valuable feedback and bug reports
+- **Adham Ahmed** - Team Leader & Frontend Developer
+- **Salma Medhat** - Frontend Developer
+- **Mahitab Hesham** - Frontend Developer
+- **Ahmed Ashraf** - Frontend Developer
 
 ---
 
 **Last Updated**: November 2024  
-**Version**: 1.0.0  
-**Contact**: For questions or support, please open an issue on GitHub.
-
-POST /auth/signin
-Authenticate and login user.
-
-// Request
-{
-"email": "john@example.com",
-"password": "securepassword123"
-}
-
-// Response
-{
-"success": true,
-"user": {
-"id": 1,
-"name": "John Doe",
-"email": "john@example.com",
-"role": "user"
-},
-"token": "jwt_token_here"
-}
-
-Car Management Endpoints
-GET /items/allItems
-Retrieve all available cars.
-// Response
-[
-{
-"id": "2019-fiat-500",
-"make": "Fiat",
-"model": "500",
-"year": 2019,
-"price_per_day": 19,
-"rental_class": "Economy",
-"images": { "main": "url" },
-// ... other car details
-}
-]
-
-GET /items/:id
-Get detailed information about a specific car.
-POST /items
-Add a new car to inventory (Admin only).
-PUT /items/:id
-Update car information (Admin only).
-DELETE /items/:id
-Remove a car from inventory (Admin only).
-Rental Management Endpoints
-POST /items/:carId/rent
-Create a new rental booking.
-
-// Request
-{
-"startDate": "2024-01-15",
-"endDate": "2024-01-20",
-"pickupLocation": "Airport Terminal",
-"dropoffLocation": "Downtown",
-"specialRequests": "GPS navigation required"
-}
-
-// Response
-{
-"success": true,
-"message": "Car rented successfully",
-"rental": {
-"id": "rental_123",
-"userId": 1,
-"carId": "2019-fiat-500",
-"totalPrice": 95,
-// ... rental details
-}
-}
-
-GET /items/rentals/user
-Get all rentals for the authenticated user.
-GET /items/rentals/all
-Get all rentals in the system (Admin only).
-PUT /items/rentals/:id
-Update rental details (Admin only).
-DELETE /items/rentals/:id
-Cancel a rental booking.
-Authentication Requirements
-Bearer Token: Include Authorization: Bearer <jwt_token> header for protected endpoints
-Admin Routes: Require role: "admin" in user token
-Rate Limiting: Implemented to prevent API abuse
-🗄️ Database Design
-The application uses a JSON file-based database system optimized for development and easy migration to relational databases.
-Core Entities
-Users Collection
-
-{
-"id": "integer (auto-increment)",
-"name": "string (required)",
-"email": "string (unique)",
-"passwordHash": "string (bcrypt)",
-"role": "enum: user|admin",
-"avatar": "string (URL)",
-"createdAt": "ISO date"
-}
-
-Cars Collection
-{
-"id": "string (unique)",
-"make": "string",
-"model": "string",
-"year": "integer",
-"price_per_day": "number",
-"rental_class": "enum: Economy|Luxury|Sport|SUV|Exotic",
-"body_type": "string",
-"seats": "integer",
-"transmission": "string",
-"images": "object",
-"features": "array",
-"availability": "boolean"
-}
-
-Rentals Collection
-{
-"id": "string (unique)",
-"userId": "integer (foreign key)",
-"carId": "string (foreign key)",
-"startDate": "ISO date",
-"endDate": "ISO date",
-"totalPrice": "number",
-"status": "enum: active|completed|cancelled",
-"pickupLocation": "string",
-"dropoffLocation": "string",
-"createdAt": "ISO date"
-}
-
-Relationships
-Users → Rentals: One-to-many (user can have multiple rentals)
-Cars → Rentals: One-to-many (car can have multiple rental bookings)
-Data Integrity: Enforced through application-level validation
-⚡ Installation & Setup
-Prerequisites
-Node.js 18.x or higher
-npm or yarn package manager
-Git
-
-Backend Setup
-
-# Clone the repository
-
-git clone <repository-url>
-cd car-rental-app
-
-# Navigate to backend directory
-
-cd backend
-
-# Install dependencies
-
-npm install
-
-# Start development server
-
-npm run dev
-
-Frontend Setup
-
-# Open new terminal and navigate to frontend
-
-cd frontend
-
-# Install dependencies
-
-npm install
-
-# Start development server
-
-npm run dev
+**Version**: 1.0.0
