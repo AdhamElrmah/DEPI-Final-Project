@@ -5,7 +5,7 @@ import { Input } from "../components/UI/input";
 import { Label } from "../components/UI/label";
 import { Button } from "../components/UI/button";
 import { updateUser } from "../lib/getUsers";
-import { getUserRentals, cancelRental } from "../lib/getData";
+import { getUserRentals, cancelRental } from "../lib/getRent";
 import ConfirmDialog from "../components/UI/ConfirmDialog";
 
 export default function ProfilePage() {

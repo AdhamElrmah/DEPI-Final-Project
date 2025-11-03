@@ -1,8 +1,19 @@
 import React from "react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 
 const ContactUsInfo = () => {
   return (
-    <div className="px-6 pt-15 pb-3 max-w-[1500px] mx-auto">
+    <motion.div
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        ease: "easeOut",
+      }}
+      viewport={{ once: true }}
+      className="px-6 pt-15 pb-3 max-w-[1500px] mx-auto"
+    >
       <h2 className="text-[25px] font-extrabold text-gray-900 mb-8 xl:ml-80 l:ml-150 md:ml-4 ">
         Contact Details
       </h2>
@@ -59,7 +70,7 @@ const ContactUsInfo = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

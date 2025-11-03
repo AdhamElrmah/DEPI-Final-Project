@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,7 +7,16 @@ import { ArrowRight } from "lucide-react";
 
 function Testimonials() {
   return (
-    <div className="relative bg-[#f2f2f2] overflow-hidden group py-10 sm:py-12">
+    <motion.section
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        ease: "easeOut",
+      }}
+      viewport={{ once: true }}
+      className="relative bg-[#f2f2f2] overflow-hidden group py-10 sm:py-12"
+    >
       <div className="absolute inset-0 flex items-end justify-center pointer-events-none">
         <div className="absolute bottom-[-700px] w-[600px] h-[600px] rounded-full border border-[#8d8d8d] opacity-15 transition-all duration-350 ease-out group-hover:bottom-[-600px] scale-150" />
 
@@ -41,7 +52,7 @@ function Testimonials() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.section>
   );
 }
 

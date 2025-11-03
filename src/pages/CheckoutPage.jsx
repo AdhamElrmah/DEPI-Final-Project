@@ -5,8 +5,9 @@ import { Input } from "../components/UI/input";
 import { Label } from "../components/UI/label";
 import { Button } from "../components/UI/button";
 import { Textarea } from "../components/UI/textarea";
-import { rentCar } from "../lib/getData";
+import { rentCar } from "../lib/getRent";
 import { getCarById } from "../lib/getData";
+import SuccessDialog from "@/components/UI/SuccessDialog";
 
 export default function CheckoutPage() {
   const { carId } = useParams();
@@ -17,6 +18,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [carLoading, setCarLoading] = useState(true);
   const [message, setMessage] = useState(null);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   // Get rental dates from location state (passed from car details page)
   const rentalDates = location.state?.rentalDates || {};
@@ -111,18 +113,14 @@ export default function CheckoutPage() {
         dropoffLocation: formData.dropoffLocation,
         specialRequests: formData.specialRequests,
       };
-
+      // eslint-disable-next-line no-unused-vars
       const response = await rentCar(carId, rentalData, user.token);
 
-      setMessage({
-        type: "success",
-        text: "Car rented successfully! You will receive a confirmation email shortly.",
-      });
+      // Show success dialog instead of message
+      setSuccessDialogOpen(true);
 
-      // Redirect to profile page after successful rental
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      // Clear any error messages
+      setMessage(null);
     } catch (err) {
       console.error("Rental error:", err);
       const errorMessage =
@@ -277,14 +275,8 @@ export default function CheckoutPage() {
               />
             </div>
 
-            {message && (
-              <div
-                className={`p-3 rounded ${
-                  message.type === "success"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
-                }`}
-              >
+            {message && message.type === "error" && (
+              <div className="p-3 rounded bg-red-100 text-red-800">
                 {message.text}
               </div>
             )}
@@ -299,6 +291,17 @@ export default function CheckoutPage() {
           </form>
         </div>
       </div>
+
+      {/* Success Dialog */}
+      <SuccessDialog
+        open={successDialogOpen}
+        setOpen={setSuccessDialogOpen}
+        title="Rental Confirmed!"
+        message="Your car rental has been successfully booked. You will receive a confirmation email shortly."
+        buttonText="Continue to Home"
+        onButtonClick={() => navigate("/")}
+        onClose={() => navigate("/")}
+      />
     </div>
   );
 }

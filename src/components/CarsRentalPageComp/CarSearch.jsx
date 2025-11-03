@@ -34,10 +34,10 @@ function CarSearch({ allCars }) {
             <SearchOverlay allCars={allCars} setSearchOpen={setSearchOpen} />
           )}
 
-          <Button
+          <div
             onClick={() => setSearchOpen(!searchOpen)}
             variant="ghost"
-            className="mt-6 hover:bg-transparent group"
+            className="mt-6 hover:bg-transparent group flex justify-center"
           >
             <motion.div
               initial={{ scale: 0.3, opacity: 0 }}
@@ -59,7 +59,7 @@ function CarSearch({ allCars }) {
                 </li>
               </ul>
             </motion.div>
-          </Button>
+          </div>
         </motion.div>
       </motion.section>
     </>
