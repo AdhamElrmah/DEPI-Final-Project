@@ -1,5 +1,5 @@
 import OurAdvantages from "@/components/ServicesPageComp/OurAdvantages";
-import PrivateDrivers from "@/components/ServicesPageComp/PrivateDrivers";
+import PrivateDrivers from "@/components/ServicesPageComp/PrivateDriversSection/PrivateDrivers";
 import ServicesPageHeader from "@/components/ServicesPageComp/ServicesPageHeader";
 import DriverReview from "@/layouts/DriverReview";
 import Testimonials from "@/layouts/Testimonials";

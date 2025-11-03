@@ -1,11 +1,12 @@
-import React, { Fragment, useState } from "react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
+import React, { useState } from "react";
 import { Label } from "../UI/label";
 import { Input } from "../UI/input";
 import { Button } from "../UI/button";
 import { Textarea } from "../UI/textarea";
-import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import SuccessDialog from "../UI/SuccessDialog";
 
 function ContactUsForm() {
   const [open, setOpen] = useState(false);
@@ -16,9 +17,22 @@ function ContactUsForm() {
     setOpen(true);
   };
 
+  const handleDialogClose = () => {
+    navigate("/");
+  };
+
   return (
-    <div className="pb-10 pt-4 max-w-[1500px] mx-auto">
-      <h2 className="px-8 text-[25px] font-extrabold text-gray-900 mb-8 xl:ml-80 l:ml-150 md:ml-4 wrap-anywhere">
+    <motion.div
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        ease: "easeOut",
+      }}
+      viewport={{ once: true }}
+      className="pb-10 pt-4 max-w-[1500px] mx-auto"
+    >
+      <h2 className="px-8 text-[25px] font-extrabold text-gray-900  xl:ml-80 l:ml-150 md:ml-4 wrap-anywhere">
         Send your message
       </h2>
 
@@ -83,80 +97,17 @@ function ContactUsForm() {
           </Button>
         </form>
       </div>
-      {/* Success dialog shown after submit */}
-      <Transition show={open} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={() => {
-            setOpen(false);
-            navigate("/");
-          }}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
 
-          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                enterTo="opacity-100 translate-y-0 sm:scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
-                  <div>
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                      <CheckIcon
-                        className="h-6 w-6 text-green-600"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="mt-3 text-center sm:mt-5">
-                      <Dialog.Title
-                        as="h3"
-                        className="text-base font-semibold leading-6 text-gray-900"
-                      >
-                        Message sent
-                      </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Thank you — your message has been sent successfully.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-5 sm:mt-6">
-                    <button
-                      type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-900 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-black"
-                      onClick={() => {
-                        setOpen(false);
-                        navigate("/");
-                      }}
-                    >
-                      Go to home
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
-    </div>
+      {/* Success dialog */}
+      <SuccessDialog
+        open={open}
+        setOpen={setOpen}
+        title="Message sent"
+        message="Thank you — your message has been sent successfully."
+        buttonText="Go to home"
+        onButtonClick={handleDialogClose}
+      />
+    </motion.div>
   );
 }
 

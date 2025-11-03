@@ -1,14 +1,14 @@
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 import React from "react";
-import { motion } from "framer-motion";
 import DriverCard from "./DriverCard";
-import Driver1 from "../../assets/ServicesPage/Driver1.avif";
-import Driver2 from "../../assets/ServicesPage/Driver2.avif";
-import Driver3 from "../../assets/ServicesPage/Driver3.avif";
-import Driver4 from "../../assets/ServicesPage/Driver4.avif";
-import Driver5 from "../../assets/ServicesPage/Driver5.avif";
-import Driver6 from "../../assets/ServicesPage/Driver6.avif";
-import CardsShow from "../ServicesPageComp/cardsShow";
-
+import Driver1 from "../../../assets/ServicesPage/Driver1.avif";
+import Driver2 from "../../../assets/ServicesPage/Driver2.avif";
+import Driver3 from "../../../assets/ServicesPage/Driver3.avif";
+import Driver4 from "../../../assets/ServicesPage/Driver4.avif";
+import Driver5 from "../../../assets/ServicesPage/Driver5.avif";
+import Driver6 from "../../../assets/ServicesPage/Driver6.avif";
+import CardsShow from "./CardsShow";
 
 const drivers = [
   { id: 1, name: "Vincent Luggers", carModel: "Mercedes-Benz", image: Driver2 },
@@ -23,11 +23,13 @@ function PrivateDrivers() {
   return (
     <>
       <motion.section
-        className="py-14 px-8 max-w-3xl mx-auto"
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 1 }}
+        transition={{
+          duration: 0.3,
+          ease: "easeOut",
+        }}
+        viewport={{ once: true }}
       >
         <div className="max-w-3xl mx-auto text-center sm:text-left">
           <div className="mb-8">

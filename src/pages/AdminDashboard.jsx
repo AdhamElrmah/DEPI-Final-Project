@@ -11,7 +11,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("cars");
 
   if (!user || user.role !== "admin") {
-    navigate("/404");
+    navigate("/");
     return null;
   }
 

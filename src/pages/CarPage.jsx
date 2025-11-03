@@ -17,7 +17,7 @@ function CarPage() {
   return (
     <>
       <CarDetials car={car} />
-      <ExploreSimilarCars />
+      <ExploreSimilarCars currentCar={car} />
       <Testimonials />
     </>
   );

@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateuser = (userData) => {
+  const updateUser = (userData) => {
     setUser(userData);
   };
 
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     signin,
     signup,
     signout,
-    updateuser,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

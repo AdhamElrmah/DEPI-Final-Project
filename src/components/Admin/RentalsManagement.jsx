@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getAllRentals, updateRental, cancelRental } from "../../lib/getData";
+import { getAllRentals, updateRental, cancelRental } from "../../lib/getRent";
 import ConfirmDialog from "../UI/ConfirmDialog";
 import { Input } from "../UI/input";
 import { Label } from "../UI/label";
@@ -64,6 +64,7 @@ export default function RentalsManagement({ user }) {
 
   const handleSaveEdit = async () => {
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await updateRental(editingRental, editForm, user.token);
       setMessage({ type: "success", text: "Rental updated successfully!" });
       setEditingRental(null);
