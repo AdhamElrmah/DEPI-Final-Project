@@ -488,5 +488,5 @@ We welcome contributions to improve the Car Rental Management System!
 
 ---
 
-**Last Updated**: November 2024  
+**Last Updated**: November 2025
 **Version**: 1.0.0

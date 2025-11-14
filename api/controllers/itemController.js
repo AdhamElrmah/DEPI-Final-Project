@@ -297,6 +297,52 @@ exports.rentItem = (req, res) => {
   }
 };
 
+// Check car availability for given dates
+exports.checkCarAvailability = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { startDate, endDate } = req.body;
+
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ error: "Start date and end date are required" });
+    }
+
+    const items = readCars();
+    const item = items.find(
+      (item) => item.id === id || item.id === parseInt(id)
+    );
+
+    if (!item) {
+      return res.status(404).json({ error: "Car not found" });
+    }
+
+    // Check for overlapping rental dates
+    const rentals = readRentals();
+    const isOverlapping = rentals.some(
+      (rental) =>
+        rental.carId === item.id &&
+        rental.status === "active" &&
+        startDate <= rental.endDate &&
+        endDate >= rental.startDate
+    );
+
+    res.status(200).json({
+      available: !isOverlapping,
+      car: {
+        id: item.id,
+        make: item.make,
+        model: item.model,
+        year: item.year,
+      },
+    });
+  } catch (err) {
+    console.error("Availability check error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 exports.getUserRentals = (req, res) => {
   try {
     // Get current user from token

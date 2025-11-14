@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../components/UI/input";
 import { Label } from "../components/UI/label";
 import { Button } from "../components/UI/button";
 import { updateUser } from "../lib/getUsers";
 import { getUserRentals, cancelRental } from "../lib/getRent";
 import ConfirmDialog from "../components/UI/ConfirmDialog";
+import LoaderSpinner from "../layouts/LoaderSpinner";
 
 export default function ProfilePage() {
   const { user, updateUser: updateUserContext } = useAuth();
@@ -235,20 +236,17 @@ export default function ProfilePage() {
           <h2 className="text-2xl font-semibold mb-6">My Rental History</h2>
 
           {rentalsLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
+            <LoaderSpinner />
           ) : rentals.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">
                 You haven't rented any cars yet.
               </p>
-              <a
-                href="/cars"
-                className="inline-block mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Browse Cars
-              </a>
+              <Link to={"/cars"}>
+                <Button className="inline-block mt-4 px-6 py-2  rounded-lg  ">
+                  Browse Cars
+                </Button>
+              </Link>
             </div>
           ) : (
             <div className="space-y-4">

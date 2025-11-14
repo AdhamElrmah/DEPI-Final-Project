@@ -5,9 +5,9 @@ import { Input } from "../components/UI/input";
 import { Label } from "../components/UI/label";
 import { Button } from "../components/UI/button";
 import { Textarea } from "../components/UI/textarea";
-import { rentCar } from "../lib/getRent";
 import { getCarById } from "../lib/getData";
-import SuccessDialog from "@/components/UI/SuccessDialog";
+import { checkCarAvailability as carAvailability } from "../lib/getRent";
+import LoaderSpinner from "../layouts/LoaderSpinner";
 
 export default function CheckoutPage() {
   const { carId } = useParams();
@@ -18,7 +18,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [carLoading, setCarLoading] = useState(true);
   const [message, setMessage] = useState(null);
-  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
 
   // Get rental dates from location state (passed from car details page)
   const rentalDates = location.state?.rentalDates || {};
@@ -77,6 +77,29 @@ export default function CheckoutPage() {
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
+  // Check car availability for selected dates
+  const checkCarAvailability = async (startDate, endDate) => {
+    try {
+      setAvailabilityLoading(true);
+
+      // Use the new availability check API
+      const response = await carAvailability(carId, startDate, endDate);
+
+      return {
+        available: response.available,
+        error: response.available
+          ? null
+          : "Car is already rented for the selected dates",
+      };
+    } catch (err) {
+      console.error("Availability check error:", err);
+      // If API call fails, assume car is available to not block users unnecessarily
+      return { available: true };
+    } finally {
+      setAvailabilityLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -105,40 +128,37 @@ export default function CheckoutPage() {
       return;
     }
 
-    try {
-      const rentalData = {
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        pickupLocation: formData.pickupLocation,
-        dropoffLocation: formData.dropoffLocation,
-        specialRequests: formData.specialRequests,
-      };
-      // eslint-disable-next-line no-unused-vars
-      const response = await rentCar(carId, rentalData, user.token);
-
-      // Show success dialog instead of message
-      setSuccessDialogOpen(true);
-
-      // Clear any error messages
-      setMessage(null);
-    } catch (err) {
-      console.error("Rental error:", err);
-      const errorMessage =
-        err?.response?.data?.error || "Failed to complete rental";
-      setMessage({ type: "error", text: errorMessage });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (carLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-      </div>
+    // Check car availability before proceeding to payment
+    const availabilityCheck = await checkCarAvailability(
+      formData.startDate,
+      formData.endDate
     );
-  }
 
+    if (!availabilityCheck.available) {
+      setMessage({ type: "error", text: availabilityCheck.error });
+      setLoading(false);
+      return;
+    }
+
+    // Navigate to payment page with rental data
+    navigate(`/cars/${carId}/payment`, {
+      state: {
+        rentalData: {
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          pickupLocation: formData.pickupLocation,
+          dropoffLocation: formData.dropoffLocation,
+          specialRequests: formData.specialRequests,
+          totalPrice: calculateTotal(),
+          totalDays: calculateDays(),
+        },
+        car: car,
+      },
+    });
+  };
+  if (carLoading) {
+    return <LoaderSpinner />;
+  }
   if (!car) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -283,25 +303,16 @@ export default function CheckoutPage() {
 
             <Button
               type="submit"
-              disabled={loading || totalDays <= 0}
+              disabled={loading || availabilityLoading || totalDays <= 0}
               className="w-full text-lg py-3"
             >
-              {loading ? "Processing..." : `Complete Rental - $${totalPrice}`}
+              {loading || availabilityLoading
+                ? "Checking Availability..."
+                : `Continue to Payment - $${totalPrice}`}
             </Button>
           </form>
         </div>
       </div>
-
-      {/* Success Dialog */}
-      <SuccessDialog
-        open={successDialogOpen}
-        setOpen={setSuccessDialogOpen}
-        title="Rental Confirmed!"
-        message="Your car rental has been successfully booked. You will receive a confirmation email shortly."
-        buttonText="Continue to Home"
-        onButtonClick={() => navigate("/")}
-        onClose={() => navigate("/")}
-      />
     </div>
   );
 }

@@ -42,3 +42,14 @@ export const updateRental = async (rentalId, rentalData, token) => {
   );
   return res.data;
 };
+
+export const checkCarAvailability = async (carId, startDate, endDate) => {
+  const res = await baseApi.post(
+    `items/${encodeURIComponent(carId)}/availability`,
+    {
+      startDate,
+      endDate,
+    }
+  );
+  return res.data;
+};

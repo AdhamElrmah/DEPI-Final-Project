@@ -13,6 +13,7 @@ const {
   updateRental,
   updateItem,
   deleteItem,
+  checkCarAvailability,
 } = require("../controllers/itemController");
 
 // Define routes
@@ -46,5 +47,8 @@ router.put("/rentals/:id", updateRental);
 
 // Rent an item by ID
 router.post("/:id/rent", rentItem);
+
+// Check car availability for dates
+router.post("/:id/availability", checkCarAvailability);
 
 module.exports = router;

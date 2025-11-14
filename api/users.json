@@ -32,13 +32,6 @@
     "name": "adham ahmed",
     "email": "adham@gmail.com",
     "passwordHash": "$2a$10$TlaRtES7geDv0PNCFEVJzO9y7yuBitxh3C6ttG88Q00X83smpU4mW",
-    "role": "admin"
-  },
-  {
-    "id": 8,
-    "name": "adham",
-    "email": "testing@gmail.com",
-    "passwordHash": "$2a$10$/2YbSEgDyk1tH2aU/QYpr.QXpYICSc1npM1D4i/X5Jsm10dqjKQg2",
     "role": "user"
   }
 ]

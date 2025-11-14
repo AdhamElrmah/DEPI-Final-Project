@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../UI/select";
+import LoaderSpinner from "../../layouts/LoaderSpinner";
 
 export default function RentalsManagement({ user }) {
   const [rentals, setRentals] = useState([]);
@@ -63,9 +64,40 @@ export default function RentalsManagement({ user }) {
   };
 
   const handleSaveEdit = async () => {
+    // Validate dates
+    const start = new Date(editForm.startDate);
+    const end = new Date(editForm.endDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Check if start date is in the past
+    if (start < today) {
+      setMessage({ type: "error", text: "Start date cannot be in the past" });
+      return;
+    }
+
+    // Check if end date is after start date
+    if (end <= start) {
+      setMessage({ type: "error", text: "End date must be after start date" });
+      return;
+    }
+
+    // Calculate new total price and days
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+    const rental = rentals.find((r) => r.id === editingRental);
+    const newTotalPrice = days * rental.pricePerDay;
+
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await updateRental(editingRental, editForm, user.token);
+      const response = await updateRental(
+        editingRental,
+        {
+          ...editForm,
+          totalDays: days,
+          totalPrice: newTotalPrice,
+        },
+        user.token
+      );
       setMessage({ type: "success", text: "Rental updated successfully!" });
       setEditingRental(null);
       await fetchRentals();
@@ -76,7 +108,6 @@ export default function RentalsManagement({ user }) {
       setMessage({ type: "error", text: errorMessage });
     }
   };
-
   const handleCancelEdit = () => {
     setEditingRental(null);
     setEditForm({ startDate: "", endDate: "" });
@@ -117,11 +148,7 @@ export default function RentalsManagement({ user }) {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <LoaderSpinner />;
   }
 
   return (

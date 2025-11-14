@@ -12,6 +12,7 @@ import SignUp from "../pages/auth/SignUp";
 import AdminDashboard from "../pages/AdminDashboard";
 import ProfilePage from "../pages/ProfilePage";
 import CheckoutPage from "../pages/CheckoutPage";
+import PaymentPage from "../pages/PaymentPage";
 import { getAllCars, getCarById } from "../lib/getData";
 
 export const router = createBrowserRouter([
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
             loader: ({ request: { signal }, params }) => {
               return getCarById(params.carId, signal);
             },
+          },
+          {
+            path: ":carId/payment",
+            element: <PaymentPage />,
           },
         ],
       },
