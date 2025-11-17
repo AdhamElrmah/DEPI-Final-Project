@@ -54,14 +54,49 @@ const writeCars = (cars) => {
 
 const addItem = async (req, res) => {
   try {
+    const carData = req.body;
+
     if (process.env.USE_MONGODB === "true" && Car) {
-      const car = await Car.create(req.body);
+      // Only check ID duplicates, allow multiple cars with same specs
+      if (carData.id) {
+        const existingCar = await Car.findOne({ id: carData.id });
+        if (existingCar) {
+          return res.status(409).json({
+            error: `Car with ID "${carData.id}" already exists. Please use a different ID.`,
+          });
+        }
+      }
+
+      /*
+      // Check if car with same make/model/year already exists
+      const existingCar = await Car.findOne({
+        make: carData.make,
+        model: carData.model,
+        year: carData.year,
+      });
+      if (existingCar) {
+        return res.status(409).json({
+          error: `Car "${carData.year} ${carData.make} ${carData.model}" already exists.`,
+        });
+      }
+      */
+
+      const car = await Car.create(carData);
       res.status(201).json(car);
     } else {
+      // JSON fallback
       const cars = readCars();
+
+      // Check for duplicate id
+      if (carData.id && cars.find((c) => c.id === carData.id)) {
+        return res.status(409).json({
+          error: `Car with ID "${carData.id}" already exists. Please use a different ID.`,
+        });
+      }
+
       const newCar = {
-        id: cars.length ? cars[cars.length - 1].id + 1 : 1,
-        ...req.body,
+        id: carData.id || (cars.length ? cars[cars.length - 1].id + 1 : 1),
+        ...carData,
       };
       cars.push(newCar);
       writeCars(cars);
@@ -69,6 +104,24 @@ const addItem = async (req, res) => {
     }
   } catch (error) {
     console.error("Add item error:", error);
+
+    // Handle MongoDB duplicate key error gracefully
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      const value = error.keyValue[field];
+      return res.status(409).json({
+        error: `Car with ${field} "${value}" already exists. Please use a different value.`,
+      });
+    }
+
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({
+        error: `Validation Error: ${messages.join(", ")}`,
+      });
+    }
+
     res.status(500).json({ error: "Server error" });
   }
 };

@@ -64,7 +64,7 @@ function ExploreSimilarCars({ currentCar }) {
         ease: "easeOut",
       }}
       viewport={{ once: true }}
-      className="pt-12 px-6 md:pt-16 md:px-8 bg-[#f2f2f2]"
+      className="pt-12 pb-2.5 px-6 md:pt-16 md:px-8 bg-[#f2f2f2]"
     >
       <div className="max-w-7xl mx-auto flex flex-col gap-8 ">
         {/* Section Header */}
