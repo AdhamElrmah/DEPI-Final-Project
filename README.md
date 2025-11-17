@@ -1,8 +1,9 @@
-# 🚗 Car Rental Management System
+# 🚗 Car Rental Management System (ByDrive)
 
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.x-lightgrey.svg)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.x-green.svg)](https://mongodb.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-blue.svg)](https://tailwindcss.com/)
 [![JWT](https://img.shields.io/badge/JWT-Authentication-black.svg)](https://jwt.io/)
 
@@ -47,8 +48,9 @@ The Car Rental Management System is a comprehensive platform that enables users 
 
 ### Database
 
-- **JSON File Storage** - Lightweight file-based database for development
-- **Migration-ready** for SQL databases (PostgreSQL/MySQL)
+- **MongoDB Atlas** - Cloud-hosted NoSQL database for production
+- **Mongoose ODM** - Object Data Modeling for MongoDB
+- **JSON File Fallback** - Local file storage for development/testing
 
 ### Development Tools
 
@@ -81,6 +83,9 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - 🎨 **Modern UI/UX** - Clean, intuitive interface with smooth animations
 - ⚡ **Performance Optimized** - Fast loading times and efficient data handling
 - 📧 **Email Notifications** - Automated booking confirmations
+- 🗄️ **MongoDB Integration** - Scalable NoSQL database with automatic migration
+- 🔄 **Dual Database Support** - Seamless switching between MongoDB and JSON storage
+- 📊 **Data Validation** - Mongoose schemas ensure data integrity
 
 ## 🗂️ Project Structure
 
@@ -88,7 +93,7 @@ The Car Rental Management System is a comprehensive platform that enables users 
 car-rental-app/
 ├── frontend/             # React application
 │ ├── src/
-│ │ ├── components/         # Reusable UI components
+│ │ ├── components/       # Reusable UI components
 │ │ │ ├── ui/                   # Core UI elements (Button, Input, etc.)
 │ │ │ ├── auth/                 # Authentication components
 │ │ │ └── admin/                # Admin-specific components
@@ -100,11 +105,12 @@ car-rental-app/
 │ │ └── utils/            # Helper functions
 │ ├── assets/             # Static assets
 │ └── package.json
-├── api/                  # Node.js API server
+├── api/                    # Node.js API server
 │ ├── controllers/        # API controllers
+│ ├── models/             # MongoDB/Mongoose schemas
 │ ├── routes/             # API route definitions
-│ ├── data/               # JSON database files
-│ ├── utils/              # Server utilities
+│ ├── scripts/            # Migration and seeding scripts
+│ ├── lib/                # Database utilities
 │ ├── server.js           # Server startup file
 │ └── package.json
 └── README.md
@@ -251,11 +257,38 @@ Cancel a rental booking.
 
 - **Bearer Token**: Include `Authorization: Bearer <jwt_token>` header for protected endpoints
 - **Admin Routes**: Require `role: "admin"` in user token
+- **Database Flexibility**: Supports both MongoDB and JSON storage modes
 - **Rate Limiting**: Implemented to prevent API abuse
+
+# 🔄 Database Migration
+
+The application includes comprehensive migration tools:
+
+## Migration Scripts
+
+### Migrate existing JSON data to MongoDB
+
+```bash
+cd api
+node scripts/migrate.js
+```
+
+### Seed database with initial data
+
+```bash
+node scripts/seed.js
+```
+
+### Migration Features
+
+- **Data Preservation**: Maintains all existing relationships
+- **ID Compatibility**: Supports both legacy IDs and MongoDB ObjectIds
+- **Rollback Support**: Can revert to JSON storage if needed
+- **Validation**: Ensures data integrity during migration
 
 ## 🗄️ Database Design
 
-The application uses a JSON file-based database system optimized for development and easy migration to relational databases.
+The application uses MongoDB with Mongoose schemas for data validation and structure.
 
 ### Core Entities
 
@@ -263,13 +296,13 @@ The application uses a JSON file-based database system optimized for development
 
 ```json
 {
-  "id": "integer (auto-increment)",
+  "id": "number (optional - for legacy support)",
+  "_id": "ObjectId (MongoDB auto-generated)",
   "name": "string (required)",
-  "email": "string (unique)",
-  "passwordHash": "string (bcrypt)",
-  "role": "enum: user|admin",
-  "avatar": "string (URL)",
-  "createdAt": "ISO date"
+  "email": "string (unique, required)",
+  "passwordHash": "string (bcrypt, select: false)",
+  "role": "enum: user|admin (default: user)",
+  "createdAt": "Date (auto-generated)"
 }
 ```
 
@@ -277,18 +310,18 @@ The application uses a JSON file-based database system optimized for development
 
 ```json
 {
-  "id": "string (unique)",
-  "make": "string",
-  "model": "string",
-  "year": "integer",
-  "price_per_day": "number",
-  "rental_class": "enum: Economy|Luxury|Sport|SUV|Exotic",
+  "id": "string (required, unique)",
+  "make": "string (required)",
+  "model": "string (required)",
+  "year": "number (required)",
+  "price_per_day": "number (required)",
+  "transmission": "string (enum with validation)",
   "body_type": "string",
-  "seats": "integer",
-  "transmission": "string",
+  "seats": "number",
+  "engine": "object",
   "images": "object",
   "features": "array",
-  "availability": "boolean"
+  "available": "boolean (default: true)"
 }
 ```
 
@@ -296,16 +329,17 @@ The application uses a JSON file-based database system optimized for development
 
 ```json
 {
-  "id": "string (unique)",
-  "userId": "integer (foreign key)",
-  "carId": "string (foreign key)",
-  "startDate": "ISO date",
-  "endDate": "ISO date",
+  "id": "string (optional - for legacy support)",
+  "carId": "Mixed (string/ObjectId)",
+  "userId": "Mixed (string/ObjectId)",
+  "userEmail": "string",
+  "userName": "string",
+  "startDate": "string",
+  "endDate": "string",
   "totalPrice": "number",
   "status": "enum: active|completed|cancelled",
-  "pickupLocation": "string",
-  "dropoffLocation": "string",
-  "createdAt": "ISO date"
+  "paymentInfo": "object",
+  "createdAt": "Date (auto-generated)"
 }
 ```
 
@@ -322,6 +356,25 @@ The application uses a JSON file-based database system optimized for development
 - Node.js 18.x or higher
 - npm or yarn package manager
 - Git
+- MongoDB Atlas account (for production) or local MongoDB (optional)
+
+### Database Setup
+
+#### Option 1: MongoDB Atlas (Recommended)
+
+##### 1. Create account at [MongoDB Atlas](https://www.mongodb.com/atlas)
+
+##### 2. Create a new cluster
+
+##### 3. Set up database user and whitelist IP
+
+##### 4. Get connection string from Atlas dashboard
+
+#### Option 2: Local MongoDB
+
+##### 1. Install MongoDB locally
+
+##### 2. Start MongoDB service
 
 ### Backend Setup
 
@@ -337,7 +390,7 @@ cd api
 npm install
 
 # Start development server
-npm start
+npm run dev
 ```
 
 ### Frontend Setup
@@ -359,34 +412,44 @@ Create `.env` file in the backend directory:
 
 ```env
 PORT=3000
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/car_rental
 JWT_SECRET=your_super_secret_jwt_key_here
 NODE_ENV=development
+USE_MONGODB=true
+SEED_ON_STARTUP=true
 VITE_API_URL=http://localhost:3000/api/
 ```
 
 ### Database Initialization
 
-The application uses JSON files for data storage. Initial data is automatically created on first run:
+The application supports dual database modes:
 
-- `backend/data/users.json`
-- `backend/data/cars.json`
-- `backend/data/rentItem.json`
+#### MongoDB Mode (Production)
+
+- Automatic seeding on first run if `SEED_ON_STARTUP=true`
+- Data migration scripts available in `api/scripts/`
+- Uses Mongoose schemas for data validation
+
+#### JSON Mode (Development)
+
+- Fallback to JSON files if MongoDB unavailable
+- Files: `api/cars.json`, `api/users.json`, `api/rentItem.json`
 
 ## 💡 Usage Instructions
 
 ### For Customers
 
-1. **Register/Login**: Create an account or sign in with existing credentials
-2. **Browse Cars**: Use filters to find suitable vehicles by category, price, or features
-3. **Book Rental**: Select dates, choose pickup/dropoff locations, and complete booking
-4. **Manage Account**: View booking history and manage profile settings
+- **Register/Login**: Create an account or sign in with existing credentials
+- **Browse Cars**: Use filters to find suitable vehicles by category, price, or features
+- **Book Rental**: Select dates, choose pickup/dropoff locations, and complete booking
+- **Manage Account**: View booking history and manage profile settings
 
 ### For Administrators
 
-1. **Access Dashboard**: Login with admin credentials
-2. **Manage Users**: View, edit, or deactivate user accounts
-3. **Manage Fleet**: Add new cars, update pricing, or remove vehicles
-4. **Oversee Rentals**: View all bookings, modify dates, or cancel reservations
+- **Access Dashboard**: Login with admin credentials
+- **Manage Users**: View, edit, or deactivate user accounts
+- **Manage Fleet**: Add new cars, update pricing, or remove vehicles
+- **Oversee Rentals**: View all bookings, modify dates, or cancel reservations
 
 ### Key Features Demo
 
@@ -445,9 +508,11 @@ npm run build
 
 ```env
 NODE_ENV=production
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/car_rental
 JWT_SECRET=your_production_secret_key
 API_URL=https://your-api-domain.com
-DATABASE_URL=your_database_connection_string
+USE_MONGODB=true
+SEED_ON_STARTUP=false
 ```
 
 ## 🤝 Contributing

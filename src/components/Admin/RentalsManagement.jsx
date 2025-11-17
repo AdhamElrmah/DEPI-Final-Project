@@ -218,10 +218,12 @@ export default function RentalsManagement({ user }) {
                           src={
                             rental.car?.images?.main ||
                             rental.car?.logo ||
-                            "/placeholder-car.jpg"
+                            "/placeholder-car.jpg" // Add a fallback image
                           }
-                          alt={`${rental.car?.make} ${rental.car?.model}`}
-                        />
+                          alt={`${rental.car?.make || "Unknown"} ${
+                            rental.car?.model || "Car"
+                          }`}
+                        />{" "}
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">

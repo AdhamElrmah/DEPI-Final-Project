@@ -1,9 +1,10 @@
 /* eslint-env node */
-/* global require, module */
+/* global require, module process __dirname*/
 
 const fs = require("fs");
 const path = require("path");
 const { Buffer } = require("buffer");
+const mongoose = require("mongoose");
 
 const Car =
   process.env.USE_MONGODB === "true" ? require("../models/Car") : null;
@@ -67,7 +68,6 @@ const addItem = async (req, res) => {
         }
       }
 
-      /*
       // Check if car with same make/model/year already exists
       const existingCar = await Car.findOne({
         make: carData.make,
@@ -79,7 +79,6 @@ const addItem = async (req, res) => {
           error: `Car "${carData.year} ${carData.make} ${carData.model}" already exists.`,
         });
       }
-      */
 
       const car = await Car.create(carData);
       res.status(201).json(car);
@@ -289,9 +288,17 @@ const rentItem = async (req, res) => {
 
     if (!currentUser) return res.status(401).json({ error: "Unauthorized" });
 
+    // Find car with multiple ID type support
     let car;
     if (process.env.USE_MONGODB === "true" && Car) {
-      car = await Car.findById(id);
+      // Try different ways to find the car
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        car = await Car.findById(id);
+      } else {
+        car =
+          (await Car.findOne({ id: id })) ||
+          (await Car.findOne({ id: parseInt(id) }));
+      }
     } else {
       const cars = readCars();
       car = cars.find((c) => c.id == id);
@@ -301,11 +308,14 @@ const rentItem = async (req, res) => {
       return res.status(404).json({ error: "Car not found" });
     }
 
-    // Check availability
+    // Check availability with proper car ID handling
     let isOverlapping;
     if (process.env.USE_MONGODB === "true" && Rental) {
+      // Get the correct car ID for database lookup
+      const carIdForLookup = car._id || car.id;
+
       isOverlapping = await Rental.findOne({
-        carId: process.env.USE_MONGODB === "true" ? car._id : id,
+        carId: carIdForLookup,
         status: "active",
         $or: [{ startDate: { $lte: endDate }, endDate: { $gte: startDate } }],
       });
@@ -333,9 +343,13 @@ const rentItem = async (req, res) => {
     const totalPrice = days * (car.price_per_day || car.pricePerDay);
 
     if (process.env.USE_MONGODB === "true" && Rental) {
+      // Create rental with OLD FORMAT (matching JSON structure)
+      const rentalId = Date.now().toString(); // Generate timestamp-based ID like old rentals
+
       const rental = new Rental({
-        carId: car._id,
-        userId: currentUser._id,
+        id: rentalId, // Add custom ID field like old rentals
+        carId: car.id || car._id, // Use car's custom id, fallback to _id
+        userId: currentUser.id || currentUser._id, // Use user's custom id, fallback to _id
         userEmail: currentUser.email || currentUserEmail,
         userName: currentUser.name,
         startDate,
@@ -344,7 +358,7 @@ const rentItem = async (req, res) => {
         dropoffLocation: dropoffLocation || "Default Location",
         specialRequests: specialRequests || "",
         totalDays: days,
-        pricePerDay: car.price_per_day,
+        pricePerDay: car.price_per_day || car.pricePerDay,
         totalPrice,
         paymentInfo,
         status: "active",
@@ -392,8 +406,8 @@ const rentItem = async (req, res) => {
         },
       });
     }
-  } catch (err) {
-    console.error("Rental error:", err);
+  } catch (error) {
+    console.error("Rental error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
@@ -406,13 +420,44 @@ const getUserRentals = async (req, res) => {
 
     const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
 
-    if (process.env.USE_MONGODB === "true" && Rental && User) {
+    if (process.env.USE_MONGODB === "true" && Rental && User && Car) {
       const user = await User.findOne({ email: currentUserEmail });
       if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-      const rentals = await Rental.find({ userId: user._id }).populate("carId");
-      res.status(200).json(rentals);
+      // Find rentals - handle both ObjectId and string userId
+      const rentals = await Rental.find({
+        $or: [
+          { userId: user._id }, // ObjectId match
+          { userId: user.id }, // String ID match
+          { userId: parseInt(user.id) }, // Number ID match
+          { userEmail: currentUserEmail }, // Fallback to email
+        ],
+      });
+
+      // Populate car data for each rental
+      const rentalsWithCars = await Promise.all(
+        rentals.map(async (rental) => {
+          let carData = null;
+
+          // Try to find car by different ID types
+          if (mongoose.Types.ObjectId.isValid(rental.carId)) {
+            carData = await Car.findById(rental.carId);
+          } else {
+            carData =
+              (await Car.findOne({ id: rental.carId })) ||
+              (await Car.findOne({ id: parseInt(rental.carId) }));
+          }
+
+          return {
+            ...rental.toObject(),
+            car: carData,
+          };
+        })
+      );
+
+      res.status(200).json(rentalsWithCars);
     } else {
+      // JSON fallback
       const rentals = readRentals();
       const userRentals = rentals.filter(
         (r) => r.userEmail === currentUserEmail
@@ -437,12 +482,50 @@ const cancelRental = async (req, res) => {
       const user = await User.findOne({ email: currentUserEmail });
       if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-      const rental = await Rental.findById(req.params.id);
+      // Try to find rental by different ID types
+      let rental = null;
+
+      // 1. Try by MongoDB _id (for new rentals)
+      if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+        rental = await Rental.findById(req.params.id);
+        if (rental) {
+          console.log("Found rental by MongoDB _id");
+        }
+      }
+
+      // 2. Try by id field as string (for old rentals)
       if (!rental) {
+        rental = await Rental.findOne({ id: req.params.id });
+        if (rental) {
+          console.log("Found rental by id field (string)");
+        }
+      }
+
+      // 3. Try by id field as number (for old rentals)
+      if (!rental) {
+        rental = await Rental.findOne({ id: parseInt(req.params.id) });
+        if (rental) {
+          console.log("Found rental by id field (number)");
+        }
+      }
+
+      if (!rental) {
+        console.log("Rental not found with ID:", req.params.id);
         return res.status(404).json({ error: "Rental not found" });
       }
 
-      if (rental.userId.toString() !== user._id.toString()) {
+      // Check authorization - handle both ObjectId and string userId
+      const rentalUserId = rental.userId;
+      const currentUserId = user._id || user.id;
+
+      // Allow admin to cancel any rental, or user to cancel their own rental
+      const isAuthorized =
+        user.role === "admin" || // Admin can cancel any rental
+        rentalUserId.toString() === currentUserId.toString() ||
+        rentalUserId === currentUserId ||
+        rental.userEmail === currentUserEmail;
+
+      if (!isAuthorized) {
         return res
           .status(403)
           .json({ error: "Not authorized to cancel this rental" });
@@ -453,20 +536,21 @@ const cancelRental = async (req, res) => {
 
       res.status(200).json({ message: "Rental cancelled successfully" });
     } else {
+      // JSON fallback
       const rentals = readRentals();
       const rentalIndex = rentals.findIndex((r) => r.id == req.params.id);
-
       if (rentalIndex === -1) {
         return res.status(404).json({ error: "Rental not found" });
       }
 
-      if (rentals[rentalIndex].userEmail !== currentUserEmail) {
+      const rental = rentals[rentalIndex];
+      if (rental.userEmail !== currentUserEmail) {
         return res
           .status(403)
           .json({ error: "Not authorized to cancel this rental" });
       }
 
-      rentals[rentalIndex].status = "cancelled";
+      rental.status = "cancelled";
       writeRentals(rentals);
 
       res.status(200).json({ message: "Rental cancelled successfully" });
@@ -479,16 +563,133 @@ const cancelRental = async (req, res) => {
 
 const getAllRentals = async (req, res) => {
   try {
-    if (process.env.USE_MONGODB === "true" && Rental) {
-      const rentals = await Rental.find().populate("carId").populate("userId");
-      res.status(200).json(rentals);
+    if (process.env.USE_MONGODB === "true" && Rental && Car && User) {
+      console.log("Fetching all rentals...");
+      const rentals = await Rental.find();
+      console.log(`Found ${rentals.length} rentals`);
+
+      // Populate car and user data manually with error handling
+      const rentalsWithData = [];
+
+      for (const rental of rentals) {
+        try {
+          let carData = null;
+          let userData = null;
+
+          // Find car data with null checks
+          if (rental.carId) {
+            if (
+              typeof rental.carId === "string" &&
+              mongoose.Types.ObjectId.isValid(rental.carId)
+            ) {
+              carData = await Car.findById(rental.carId);
+            } else {
+              const carIdToSearch =
+                typeof rental.carId === "string"
+                  ? rental.carId
+                  : rental.carId.toString();
+              carData =
+                (await Car.findOne({ id: carIdToSearch })) ||
+                (await Car.findOne({ id: parseInt(rental.carId) }));
+            }
+          }
+
+          // Find user data - handle all ID types (ObjectId, number, string)
+          if (rental.userId) {
+            // Try multiple lookup strategies
+
+            // 1. Try ObjectId lookup (for new rentals with ObjectId userId)
+            if (mongoose.Types.ObjectId.isValid(rental.userId)) {
+              try {
+                userData = await User.findById(rental.userId).select(
+                  "-passwordHash"
+                );
+                if (userData) {
+                  console.log(`Found user by ObjectId: ${rental.userId}`);
+                }
+              } catch (error) {
+                console.log(`ObjectId lookup failed for: ${rental.userId}`);
+              }
+            }
+
+            // 2. Try custom id field lookup (for old rentals with numeric/string userId)
+            if (!userData) {
+              // Handle different userId formats
+              let idToSearch;
+              if (typeof rental.userId === "number") {
+                idToSearch = rental.userId; // Already a number
+              } else if (
+                typeof rental.userId === "string" &&
+                !isNaN(rental.userId)
+              ) {
+                idToSearch = parseInt(rental.userId); // String that represents a number
+              } else {
+                idToSearch = rental.userId; // String ID
+              }
+
+              // Try both exact match and parsed number
+              userData = await User.findOne({ id: idToSearch }).select(
+                "-passwordHash"
+              );
+              if (!userData && typeof idToSearch === "number") {
+                userData = await User.findOne({
+                  id: idToSearch.toString(),
+                }).select("-passwordHash");
+              }
+
+              if (userData) {
+                console.log(`Found user by custom id: ${idToSearch}`);
+              }
+            }
+          }
+
+          // Fallback to email lookup if ID lookup failed
+          if (!userData && rental.userEmail) {
+            userData = await User.findOne({ email: rental.userEmail }).select(
+              "-passwordHash"
+            );
+            if (userData) {
+              console.log(`Found user by email fallback: ${rental.userEmail}`);
+            }
+          }
+
+          // Only include rentals where user data was successfully found
+          if (userData) {
+            rentalsWithData.push({
+              ...rental.toObject(),
+              car: carData,
+              user: userData,
+            });
+          } else {
+            console.log(
+              `Skipping rental ${rental.id || rental._id} - user not found`
+            );
+          }
+        } catch (rentalError) {
+          console.error(
+            `Error processing rental ${rental.id}:`,
+            rentalError.message
+          );
+          // Skip rentals that cause errors entirely
+          console.log(
+            `Skipping rental ${rental.id || rental._id} due to error`
+          );
+        }
+      }
+
+      console.log(
+        `Returning ${rentalsWithData.length} rentals with populated data (filtered)`
+      );
+      res.status(200).json(rentalsWithData);
     } else {
+      // JSON fallback
+      console.log("Using JSON fallback for rentals");
       const rentals = readRentals();
       res.status(200).json(rentals);
     }
   } catch (error) {
     console.error("Get all rentals error:", error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Server error", details: error.message });
   }
 };
 
@@ -497,8 +698,35 @@ const updateRental = async (req, res) => {
     const { startDate, endDate, status } = req.body;
 
     if (process.env.USE_MONGODB === "true" && Rental && Car) {
-      const rental = await Rental.findById(req.params.id);
+      // Try to find rental by different ID types
+      let rental = null;
+
+      // 1. Try by MongoDB _id (for new rentals)
+      if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+        rental = await Rental.findById(req.params.id);
+        if (rental) {
+          console.log("Found rental by MongoDB _id for update");
+        }
+      }
+
+      // 2. Try by id field as string (for old rentals)
       if (!rental) {
+        rental = await Rental.findOne({ id: req.params.id });
+        if (rental) {
+          console.log("Found rental by id field (string) for update");
+        }
+      }
+
+      // 3. Try by id field as number (for old rentals)
+      if (!rental) {
+        rental = await Rental.findOne({ id: parseInt(req.params.id) });
+        if (rental) {
+          console.log("Found rental by id field (number) for update");
+        }
+      }
+
+      if (!rental) {
+        console.log("Rental not found for update with ID:", req.params.id);
         return res.status(404).json({ error: "Rental not found" });
       }
 
@@ -506,7 +734,18 @@ const updateRental = async (req, res) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
         const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-        const car = await Car.findById(rental.carId);
+
+        // Find car - handle both ObjectId and string carId
+        let car = null;
+        if (mongoose.Types.ObjectId.isValid(rental.carId)) {
+          car = await Car.findById(rental.carId);
+        } else {
+          car = await Car.findOne({ id: rental.carId });
+        }
+
+        if (!car) {
+          return res.status(404).json({ error: "Associated car not found" });
+        }
 
         rental.startDate = startDate;
         rental.endDate = endDate;
@@ -523,6 +762,7 @@ const updateRental = async (req, res) => {
 
       res.status(200).json(rental);
     } else {
+      // JSON fallback
       const rentals = readRentals();
       const rentalIndex = rentals.findIndex((r) => r.id == req.params.id);
 

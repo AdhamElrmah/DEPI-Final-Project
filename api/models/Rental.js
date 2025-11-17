@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
 const rentalSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    unique: true,
+    sparse: true, // Allow null values for uniqueness
+  },
+
   carId: {
     type: mongoose.Schema.Types.Mixed, // Can be ObjectId or number for backward compatibility
     required: true,
