@@ -3,7 +3,7 @@
 
 const express = require("express");
 const {
-  listAllUsers,
+  getAllUsers,
   getUserById,
   createUser,
   updateUser,
@@ -12,10 +12,11 @@ const {
 
 const router = express.Router();
 
-router.get("/", listAllUsers);
-router.get("/:id", getUserById);
+// All user routes require admin authentication (you can add middleware later)
+router.get("/", getAllUsers);
+router.get("/:userId", getUserById);
 router.post("/", createUser);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
+router.put("/:userId", updateUser);
+router.delete("/:userId", deleteUser);
 
 module.exports = router;

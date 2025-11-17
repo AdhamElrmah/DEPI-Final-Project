@@ -16,39 +16,23 @@ const {
   checkCarAvailability,
 } = require("../controllers/itemController");
 
-// Define routes
 const router = express.Router();
 
-// Add a new item
-router.post("/", addItem);
-
-// List all items in the database
+// Public routes
 router.get("/allItems", listAllItems);
-
-// Get a single item by ID
 router.get("/:id", getItemById);
+router.post("/:id/availability", checkCarAvailability);
 
+// Protected routes (require authentication)
+router.post("/", addItem);
 router.put("/:id", updateItem);
-
-// Delete an item by ID
 router.delete("/:id", deleteItem);
-
-// Get user rentals
+router.post("/:id/rent", rentItem);
 router.get("/rentals/user", getUserRentals);
-
-// Get all rentals (admin only)
-router.get("/rentals/all", getAllRentals);
-
-// Cancel a rental
 router.delete("/rentals/:id", cancelRental);
 
-// Update rental dates (admin only)
+// Admin routes (require admin authentication)
+router.get("/rentals/all", getAllRentals);
 router.put("/rentals/:id", updateRental);
-
-// Rent an item by ID
-router.post("/:id/rent", rentItem);
-
-// Check car availability for dates
-router.post("/:id/availability", checkCarAvailability);
 
 module.exports = router;

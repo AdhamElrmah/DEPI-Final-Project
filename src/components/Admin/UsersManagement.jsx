@@ -127,18 +127,27 @@ export default function UsersManagement({ user }) {
                       {u.email}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <Select
-                        value={u.role}
-                        onValueChange={(value) => handleRoleChange(u.id, value)}
-                      >
-                        <SelectTrigger className="w-32">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="user">User</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      {u.id !== user.id && (
+                        <Select
+                          value={u.role}
+                          onValueChange={(value) => {
+                            const userId = u.id || u._id; // Use _id as fallback
+                            if (userId) {
+                              handleRoleChange(userId, value);
+                            } else {
+                              console.error("User has no ID:", u);
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="w-32">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="user">User</SelectItem>
+                            <SelectItem value="admin">Admin</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {u.id !== user.id && (

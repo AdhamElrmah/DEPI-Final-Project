@@ -3,191 +3,300 @@
 
 const fs = require("fs");
 const path = require("path");
-const bcrypt = require("bcryptjs");
-const { Buffer } = require("buffer");
+const mongoose = require("mongoose");
 
+const User =
+  process.env.USE_MONGODB === "true" ? require("../models/User") : null;
+
+// Helper functions for JSON fallback
 const usersPath = path.join(__dirname, "..", "users.json");
 
 function readUsers() {
+  if (!fs.existsSync(usersPath)) return [];
   try {
-    if (!fs.existsSync(usersPath)) return [];
-    const raw = fs.readFileSync(usersPath, "utf8") || "[]";
-    return JSON.parse(raw);
-  } catch (e) {
-    console.error("Failed to read users.json:", e.message);
+    return JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
+  } catch {
     return [];
   }
 }
 
-function writeUsers(data) {
+function writeUsers(users) {
+  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2), "utf8");
+}
+
+exports.getAllUsers = async (req, res) => {
   try {
-    fs.writeFileSync(usersPath, JSON.stringify(data, null, 2), "utf8");
-    return true;
-  } catch (e) {
-    console.error("Failed to write users.json:", e.message);
-    return false;
-  }
-}
+    if (process.env.USE_MONGODB === "true" && User) {
+      const users = await User.find().select("-passwordHash");
 
-function pubUser(u) {
-  const { passwordHash: _passwordHash, ...rest } = u;
-  return rest;
-}
+      // Ensure all users have an id field
+      const usersWithIds = users.map((user) => ({
+        id: user.id || user._id.toString(), // Use existing id or convert _id to string
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }));
 
-function requireAdmin(req) {
-  const auth = req.headers.authorization || "";
-  const token = auth.split(" ")[1];
-  if (!token) return { ok: false, msg: "Unauthorized" };
-  const email = Buffer.from(token, "base64").toString("utf8");
-  const users = readUsers();
-  const requestingUser = users.find((x) => x.email === email);
-  if (!requestingUser) return { ok: false, msg: "Unauthorized" };
-  if (requestingUser.role !== "admin") return { ok: false, msg: "Forbidden" };
-  return { ok: true, user: requestingUser };
-}
-
-exports.listAllUsers = (req, res) => {
-  const users = readUsers();
-  res.status(200).json(users.map(pubUser));
-};
-
-exports.getUserById = (req, res) => {
-  const { id } = req.params;
-  const users = readUsers();
-  const user = users.find((u) => u.id === id || u.id === parseInt(id));
-  if (!user) return res.status(404).json({ error: "User not found" });
-  res.status(200).json(pubUser(user));
-};
-
-exports.createUser = (req, res) => {
-  try {
-    // admin-only
-    const check = requireAdmin(req);
-    if (!check.ok)
-      return res
-        .status(check.msg === "Forbidden" ? 403 : 401)
-        .json({ error: check.msg });
-
-    const { name, email, password, role } = req.body;
-    if (!email || !password)
-      return res.status(400).json({ error: "email and password required" });
-
-    const users = readUsers();
-    if (users.find((u) => u.email === email))
-      return res.status(409).json({ error: "User already exists" });
-
-    const passwordHash = bcrypt.hashSync(password, 10);
-    const id = users.length ? users[users.length - 1].id + 1 : 1;
-    const newUser = {
-      id,
-      name: name || email.split("@")[0],
-      email,
-      passwordHash,
-      role: role || "user",
-    };
-    users.push(newUser);
-    if (!writeUsers(users))
-      console.warn("Could not persist new user to users.json");
-    res.status(201).json(pubUser(newUser));
-  } catch (err) {
-    console.error(err);
+      res.status(200).json(usersWithIds);
+    } else {
+      const users = readUsers().map((user) => {
+        const { passwordHash, ...publicUser } = user;
+        return publicUser;
+      });
+      res.status(200).json(users);
+    }
+  } catch (error) {
+    console.error("Get all users error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
 
-exports.updateUser = (req, res) => {
+exports.getUserById = async (req, res) => {
   try {
-    // Get current user from token
-    const auth = req.headers.authorization || "";
-    const token = auth.split(" ")[1];
-    if (!token) return res.status(401).json({ error: "Unauthorized" });
+    const { userId } = req.params;
 
-    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
-    const users = readUsers();
-    const currentUser = users.find((u) => u.email === currentUserEmail);
-
-    if (!currentUser) return res.status(401).json({ error: "Unauthorized" });
-
-    const { id } = req.params;
-    const targetUserId = id || currentUser.id;
-    const updated = req.body;
-
-    const idx = users.findIndex(
-      (u) => u.id === targetUserId || u.id === parseInt(targetUserId)
-    );
-    if (idx === -1) return res.status(404).json({ error: "User not found" });
-
-    // Check permissions: user can update their own profile, or admin can update any profile
-    const isSelfUpdate = users[idx].id === currentUser.id;
-    const isAdmin = currentUser.role === "admin";
-
-    if (!isSelfUpdate && !isAdmin) {
-      return res
-        .status(403)
-        .json({ error: "Forbidden: You can only update your own profile" });
+    if (
+      !userId ||
+      userId === "undefined" ||
+      userId === "null" ||
+      userId === ""
+    ) {
+      return res.status(400).json({
+        error: "Invalid user ID",
+        received: userId,
+        message:
+          "Frontend is sending undefined userId. Check your routing and state management.",
+        suggestion:
+          "Make sure the user ID is properly stored after user creation.",
+      });
     }
 
-    // If changing email, ensure uniqueness
-    if (updated.email && updated.email !== users[idx].email) {
-      if (users.find((u) => u.email === updated.email))
-        return res
-          .status(409)
-          .json({ error: "Another user with this email already exists" });
-    }
+    if (process.env.USE_MONGODB === "true" && User) {
+      console.log("Looking for user with ID:", userId);
 
-    // If updating password, hash it (only admins can update passwords of others)
-    if (updated.password) {
-      if (!isAdmin && !isSelfUpdate) {
-        return res
-          .status(403)
-          .json({ error: "Forbidden: Cannot update password" });
+      let user = null;
+
+      // Try by id field (number) first
+      if (!isNaN(userId)) {
+        user = await User.findOne({ id: parseInt(userId) }).select(
+          "-passwordHash"
+        );
+        if (user) {
+          console.log("Found user by id field (number)");
+        }
       }
-      users[idx].passwordHash = bcrypt.hashSync(updated.password, 10);
-      delete updated.password;
+
+      // Try by MongoDB _id (for ObjectIds)
+      if (!user && mongoose.Types.ObjectId.isValid(userId)) {
+        user = await User.findById(userId).select("-passwordHash");
+        if (user) {
+          console.log("Found user by MongoDB _id");
+        }
+      }
+
+      if (!user) {
+        console.log("User not found with ID:", userId);
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.status(200).json({
+        id: user.id || user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      });
+    } else {
+      // JSON fallback
+      const users = readUsers();
+      const user = users.find((u) => u.id == userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      const { passwordHash, ...publicUser } = user;
+      res.status(200).json(publicUser);
     }
-
-    // Update user data
-    users[idx] = { ...users[idx], ...updated };
-    if (!writeUsers(users))
-      console.warn("Could not persist user update to users.json");
-
-    // Generate new token if email changed and it's a self-update
-    let newToken = token;
-    if (isSelfUpdate && updated.email && updated.email !== currentUser.email) {
-      newToken = Buffer.from(updated.email.toLowerCase().trim()).toString(
-        "base64"
-      );
-    }
-
-    const response = { ...pubUser(users[idx]) };
-    if (isSelfUpdate) {
-      response.token = newToken;
-    }
-
-    res.status(200).json(response);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Get user by ID error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };
-exports.deleteUser = (req, res) => {
-  try {
-    const check = requireAdmin(req);
-    if (!check.ok)
-      return res
-        .status(check.msg === "Forbidden" ? 403 : 401)
-        .json({ error: check.msg });
 
-    const { id } = req.params;
-    const users = readUsers();
-    const idx = users.findIndex((u) => u.id === id || u.id === parseInt(id));
-    if (idx === -1) return res.status(404).json({ error: "User not found" });
-    users.splice(idx, 1);
-    if (!writeUsers(users))
-      console.warn("Could not persist user delete to users.json");
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (err) {
-    console.error(err);
+exports.createUser = async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+
+    if (process.env.USE_MONGODB === "true" && User) {
+      const exists = await User.findOne({ email });
+      if (exists) {
+        return res.status(409).json({ error: "User already exists" });
+      }
+
+      // Find the highest existing id and increment it
+      const lastUser = await User.findOne().sort({ id: -1 }).select("id");
+      const nextId =
+        lastUser && typeof lastUser.id === "number" ? lastUser.id + 1 : 1;
+
+      console.log("Creating user with ID:", nextId);
+
+      const user = await User.create({
+        id: nextId, // Auto-increment ID
+        name,
+        email,
+        passwordHash: password,
+        role: role || "user",
+      });
+
+      const publicUser = {
+        id: user.id, // Return the numeric ID for frontend
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      };
+      res.status(201).json(publicUser);
+    } else {
+      // JSON fallback
+      const users = readUsers();
+      const exists = users.find((u) => u.email === email);
+      if (exists) {
+        return res.status(409).json({ error: "User already exists" });
+      }
+
+      const passwordHash = require("bcryptjs").hashSync(password, 10);
+      const id = users.length ? users[users.length - 1].id + 1 : 1;
+      const newUser = {
+        id,
+        name,
+        email,
+        passwordHash,
+        role: role || "user",
+      };
+      users.push(newUser);
+      writeUsers(users);
+
+      const { passwordHash: _passwordHash, ...publicUser } = newUser;
+      res.status(201).json(publicUser);
+    }
+  } catch (error) {
+    console.error("Create user error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const updates = req.body;
+
+    if (!userId || userId === "undefined" || userId === "null") {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    if (process.env.USE_MONGODB === "true" && User) {
+      console.log("Updating user with ID:", userId);
+
+      let user = null;
+
+      // Try by id field (number) first
+      if (!isNaN(userId)) {
+        user = await User.findOne({ id: parseInt(userId) }).select(
+          "-passwordHash"
+        );
+        if (user) {
+          console.log("Found user by id field for update");
+          Object.assign(user, updates);
+          await user.save();
+          return res.status(200).json({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          });
+        }
+      }
+
+      // Try by MongoDB _id
+      if (!user && mongoose.Types.ObjectId.isValid(userId)) {
+        user = await User.findByIdAndUpdate(userId, updates, {
+          new: true,
+          runValidators: true,
+        }).select("-passwordHash");
+        if (user) {
+          console.log("Updated user by MongoDB _id");
+          return res.status(200).json({
+            id: user.id || user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          });
+        }
+      }
+
+      console.log("User not found for update:", userId);
+      return res.status(404).json({ error: "User not found" });
+    } else {
+      // JSON fallback
+      const users = readUsers();
+      const userIndex = users.findIndex((u) => u.id == userId);
+      if (userIndex === -1) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      users[userIndex] = { ...users[userIndex], ...updates };
+      writeUsers(users);
+      const { passwordHash, ...publicUser } = users[userIndex];
+      res.status(200).json(publicUser);
+    }
+  } catch (error) {
+    console.error("Update user error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId || userId === "undefined" || userId === "null") {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    if (process.env.USE_MONGODB === "true" && User) {
+      console.log("Deleting user with ID:", userId);
+
+      let user = null;
+
+      // Try by id field (number) first
+      if (!isNaN(userId)) {
+        user = await User.findOneAndDelete({ id: parseInt(userId) });
+        if (user) {
+          console.log("Deleted user by id field");
+          return res.status(200).json({ message: "User deleted successfully" });
+        }
+      }
+
+      // Try by MongoDB _id
+      if (!user && mongoose.Types.ObjectId.isValid(userId)) {
+        user = await User.findByIdAndDelete(userId);
+        if (user) {
+          console.log("Deleted user by MongoDB _id");
+          return res.status(200).json({ message: "User deleted successfully" });
+        }
+      }
+
+      console.log("User not found for deletion:", userId);
+      return res.status(404).json({ error: "User not found" });
+    } else {
+      // JSON fallback
+      const users = readUsers();
+      const userIndex = users.findIndex((u) => u.id == userId);
+      if (userIndex === -1) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      users.splice(userIndex, 1);
+      writeUsers(users);
+      res.status(200).json({ message: "User deleted successfully" });
+    }
+  } catch (error) {
+    console.error("Delete user error:", error);
     res.status(500).json({ error: "Server error" });
   }
 };

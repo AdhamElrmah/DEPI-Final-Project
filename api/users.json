@@ -15,7 +15,7 @@
   },
   {
     "id": 3,
-    "name": "adminAdham",
+    "name": "AdhamAhmed",
     "email": "ad@gmail.com",
     "passwordHash": "$2a$10$D23iHrnEBulpIG66HyOQ4eER8OLPxTW/9tnnMRo0u4YExssNAKu/6",
     "role": "admin"
