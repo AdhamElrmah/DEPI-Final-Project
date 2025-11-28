@@ -8,6 +8,7 @@ import {
 import Navbar from "../layouts/Navbar";
 import Footer from "../layouts/Footer";
 import LoaderSpinner from "../layouts/LoaderSpinner";
+import ChatBot from "../layouts/ChatBot";
 import { AuthProvider } from "../contexts/AuthContext";
 
 function MainAppRoute() {
@@ -16,6 +17,7 @@ function MainAppRoute() {
 
   return (
     <AuthProvider>
+      <ChatBot />
       {state === "loading" ? (
         <LoaderSpinner />
       ) : (
