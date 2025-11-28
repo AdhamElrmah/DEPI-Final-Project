@@ -25,6 +25,7 @@ const corsOptions = {
     "http://localhost:3000", // React default
     "http://localhost:5173", // Vite default
     "http://localhost:3001", // Alternative
+    "https://depi-final-project-frontend.netlify.app"
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
