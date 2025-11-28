@@ -6,7 +6,7 @@ import Shape from "../../assets/HomePage/TrendingCarsImages/BackgroundRoundShape
 import ferrari from "../../assets/HomePage/TrendingCarsImages/2019-ferrari-488-gtb.avif";
 import bugatti from "../../assets/HomePage/TrendingCarsImages/2022-bugatti-chiron-sport.avif";
 import lamborghini from "../../assets/HomePage/TrendingCarsImages/2022-lamborghini-aventador.avif";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/UI/button";
 
 function TrendingCars({ allCars }) {
   const trendingCars = allCars.filter(

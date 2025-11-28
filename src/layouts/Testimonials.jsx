@@ -2,7 +2,7 @@
 import { motion } from "motion/react";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/UI/button";
 import { ArrowRight } from "lucide-react";
 
 function Testimonials() {

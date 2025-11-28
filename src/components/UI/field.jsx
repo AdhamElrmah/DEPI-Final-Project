@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { cva } from "class-variance-authority";
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/UI/label";
+import { Separator } from "@/components/UI/separator";
 
 function FieldSet({ className, ...props }) {
   return (

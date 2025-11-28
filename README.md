@@ -417,7 +417,7 @@ JWT_SECRET=your_super_secret_jwt_key_here
 NODE_ENV=development
 USE_MONGODB=true
 SEED_ON_STARTUP=true
-VITE_API_URL=http://localhost:3000/api/
+VITE_API_URL=http://localhost:3000/
 ```
 
 ### Database Initialization

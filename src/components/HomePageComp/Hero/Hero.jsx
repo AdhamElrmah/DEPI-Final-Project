@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 import HeroImage from "../../../assets/HomePage/HeroImages/HeroMainImage.avif";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/UI/button";
 import LogosSlider from "./LogosSlider";
 import { Link } from "react-router-dom";
 

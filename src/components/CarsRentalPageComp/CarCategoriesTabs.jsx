@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/UI/button";
 
 function CarCategoriesTabs({ onSelect }) {
   const [active, setActive] = useState("Economy Cars");

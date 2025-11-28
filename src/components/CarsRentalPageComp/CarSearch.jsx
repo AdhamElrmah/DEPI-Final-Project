@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/UI/button";
 import SearchOverlay from "@/layouts/SearchOverlay";
 import { Search } from "lucide-react";
 function CarSearch({ allCars }) {

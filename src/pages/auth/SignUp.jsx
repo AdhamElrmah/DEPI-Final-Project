@@ -24,7 +24,6 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const { signup } = useAuth();
   const navigate = useNavigate();
-  const [role, setRole] = useState("user");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,7 +54,7 @@ export default function SignUp() {
           firstName,
           lastName,
           username,
-          role,
+          "user", // Always register new users as 'user' role
           phoneNumber
         );
         navigate("/");
@@ -193,24 +192,6 @@ export default function SignUp() {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="role">Role</Label>
-                    <div className="mt-2">
-                      <Select
-                        value={role}
-                        onValueChange={(val) => setRole(val)}
-                      >
-                        <SelectTrigger id="role" className="w-full">
-                          <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="user">User</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
-                        </SelectContent>
-                      </Select>
                     </div>
                   </div>
 
