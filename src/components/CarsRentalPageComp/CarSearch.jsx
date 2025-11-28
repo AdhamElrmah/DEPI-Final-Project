@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { Button } from "@/components/UI/button";
 import SearchOverlay from "@/layouts/SearchOverlay";
 import { Search } from "lucide-react";
+import SearchBackGround from "../../assets/CarsRentalPage/SearchBackGround.avif";
+
 function CarSearch({ allCars }) {
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -12,7 +14,7 @@ function CarSearch({ allCars }) {
       <motion.section className="relative pb-13 xl:pb-8">
         <div className="relative flex flex-col items-center justify-center  bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden py-5">
           <img
-            src="/src/assets/CarsRentalPage/SearchBackGround.avif"
+            src={SearchBackGround}
             alt="Background"
             className="absolute xl:right-5 xl:-top-15 -top-8 w-auto h-auto max-w-[820px] object-contain opacity-90 sm:-right-60 sm:-top-20 "
           />

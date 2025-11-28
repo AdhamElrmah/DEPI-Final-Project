@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/UI/button";
 import { ArrowRight } from "lucide-react";
 
+import TestimonialShape1 from "../assets/TestimonialShapes/TestimonialShape1.avif";
+
 function Testimonials() {
   return (
     <motion.section
@@ -26,7 +28,7 @@ function Testimonials() {
       <div className="px-6 py-10 sm:px-6 lg:px-8 relative z-10">
         <img
           className="mx-auto mb-6 w-32 block"
-          src="\src\assets\TestimonialShapes\TestimonialShape1.avif"
+          src={TestimonialShape1}
           alt="shape"
         />
 

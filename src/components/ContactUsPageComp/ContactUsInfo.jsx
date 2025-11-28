@@ -1,6 +1,9 @@
 import React from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react";
+import AddressIcon from "../../assets/ContactUsPage/AddressIcon.png";
+import PhoneIcon from "../../assets/ContactUsPage/PhoneIcon.png";
+import MailIcon from "../../assets/ContactUsPage/MailIcon.png";
 
 const ContactUsInfo = () => {
   return (
@@ -27,7 +30,7 @@ const ContactUsInfo = () => {
             <li>Alexandria, Egypt</li>
           </ul>
           <img
-            src="src/assets/ContactUsPage/AddressIcon.png"
+            src={AddressIcon}
             className="absolute bottom-4 right-4"
             width={50}
             alt="Address icon"
@@ -44,7 +47,7 @@ const ContactUsInfo = () => {
                 <p className="text-[14px]">Call us</p>
               </div>
               <img
-                src="src/assets/ContactUsPage/PhoneIcon.png"
+                src={PhoneIcon}
                 width={30}
                 alt="Phone icon"
               />
@@ -62,7 +65,7 @@ const ContactUsInfo = () => {
                 <p className="text-[14px]">Send your email</p>
               </div>
               <img
-                src="src/assets/ContactUsPage/MailIcon.png"
+                src={MailIcon}
                 width={25}
                 alt="Email icon"
               />
