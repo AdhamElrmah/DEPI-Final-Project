@@ -39,12 +39,12 @@ const items = require("./routes/items");
 const auth = require("./routes/auth");
 const users = require("./routes/users");
 
-app.use("/api/items", items);
-app.use("/api/auth", auth);
-app.use("/api/users", users);
+app.use("/items", items);
+app.use("/auth", auth);
+app.use("/users", users);
 
 // Health check endpoint
-app.get("/api/health", (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).json({
     status: "OK",
     message: "Server is running",

@@ -4,7 +4,7 @@
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcryptjs");
-const { Buffer } = require("buffer");
+const jwt = require("jsonwebtoken");
 
 const User =
   process.env.USE_MONGODB === "true" ? require("../models/User") : null;
@@ -22,6 +22,14 @@ function readUsers() {
 
 function writeUsers(users) {
   fs.writeFileSync(usersPath, JSON.stringify(users, null, 2), "utf8");
+}
+
+// Helper function to generate JWT token
+function generateToken(userId, email) {
+  const payload = { id: userId, email };
+  const secret = process.env.JWT_SECRET || "fallback_secret_key";
+  const expiresIn = process.env.JWT_EXPIRES_IN || "7d";
+  return jwt.sign(payload, secret, { expiresIn });
 }
 
 exports.signup = async (req, res) => {
@@ -56,7 +64,7 @@ exports.signup = async (req, res) => {
         role: role || "user",
       });
 
-      const token = Buffer.from(email).toString("base64");
+      const token = generateToken(user._id, user.email);
       const publicUser = {
         id: user._id,
         firstName: user.firstName,
@@ -97,7 +105,7 @@ exports.signup = async (req, res) => {
       users.push(newUser);
       writeUsers(users);
 
-      const token = Buffer.from(email).toString("base64");
+      const token = generateToken(newUser.id, newUser.email);
       const { passwordHash: _passwordHash, ...publicUser } = newUser;
       res.status(201).json({ user: publicUser, token });
     }
@@ -126,7 +134,7 @@ exports.signin = async (req, res) => {
       const ok = await user.matchPassword(password);
       if (!ok) return res.status(401).json({ error: "Invalid credentials" });
 
-      const token = Buffer.from(user.email).toString("base64");
+      const token = generateToken(user._id, user.email);
       const publicUser = {
         id: user._id,
         firstName: user.firstName,
@@ -149,7 +157,7 @@ exports.signin = async (req, res) => {
       const ok = bcrypt.compareSync(password, user.passwordHash);
       if (!ok) return res.status(401).json({ error: "Invalid credentials" });
 
-      const token = Buffer.from(user.email).toString("base64");
+      const token = generateToken(user.id, user.email);
       const { passwordHash: _passwordHash, ...publicUser } = user;
       res.status(200).json({ user: publicUser, token });
     }

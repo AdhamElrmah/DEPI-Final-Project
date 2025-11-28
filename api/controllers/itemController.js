@@ -3,7 +3,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { Buffer } = require("buffer");
+const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
 const Car =
@@ -52,6 +52,17 @@ const writeRentals = (rentals) => {
 const writeCars = (cars) => {
   fs.writeFileSync(carsPath, JSON.stringify(cars, null, 2), "utf8");
 };
+
+// Helper function to verify JWT and get user email
+function verifyToken(token) {
+  try {
+    const secret = process.env.JWT_SECRET || "fallback_secret_key";
+    const decoded = jwt.verify(token, secret);
+    return decoded.email;
+  } catch (error) {
+    return null;
+  }
+}
 
 const addItem = async (req, res) => {
   try {
@@ -276,7 +287,8 @@ const rentItem = async (req, res) => {
     const token = auth.split(" ")[1];
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const currentUserEmail = verifyToken(token);
+    if (!currentUserEmail) return res.status(401).json({ error: "Unauthorized" });
     let currentUser;
 
     if (process.env.USE_MONGODB === "true" && User) {
@@ -418,7 +430,8 @@ const getUserRentals = async (req, res) => {
     const token = auth.split(" ")[1];
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const currentUserEmail = verifyToken(token);
+    if (!currentUserEmail) return res.status(401).json({ error: "Unauthorized" });
 
     if (process.env.USE_MONGODB === "true" && Rental && User && Car) {
       const user = await User.findOne({ email: currentUserEmail });
@@ -476,7 +489,8 @@ const cancelRental = async (req, res) => {
     const token = auth.split(" ")[1];
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-    const currentUserEmail = Buffer.from(token, "base64").toString("utf8");
+    const currentUserEmail = verifyToken(token);
+    if (!currentUserEmail) return res.status(401).json({ error: "Unauthorized" });
 
     if (process.env.USE_MONGODB === "true" && Rental && User) {
       const user = await User.findOne({ email: currentUserEmail });
