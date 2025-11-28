@@ -25,14 +25,17 @@ const corsOptions = {
     "http://localhost:3000", // React default
     "http://localhost:5173", // Vite default
     "http://localhost:3001", // Alternative
-    "https://depi-final-project-frontend.netlify.app"
+    "https://depi-final-project-frontend.netlify.app",
+    "https://www.depi-final-project-frontend.netlify.app"
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 app.use(express.json());
 
 // Routes
