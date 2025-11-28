@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import CarsManagement from "../components/Admin/CarsManagement";
-import UsersManagement from "../components/Admin/UsersManagement";
-import RentalsManagement from "../components/Admin/RentalsManagement";
+import { useNavigate, Outlet, NavLink } from "react-router-dom";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("cars");
 
-  if (!user || user.role !== "admin") {
-    navigate("/");
+  if (!user) {
+    navigate("/signin");
+    return null;
+  }
+
+  if (user.role !== "admin") {
+    navigate("/404");
     return null;
   }
 
@@ -26,42 +27,46 @@ export default function AdminDashboard() {
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b">
-        <button
-          onClick={() => setActiveTab("cars")}
-          className={`px-4 py-2 font-semibold border-b-2 transition-colors ${
-            activeTab === "cars"
-              ? "border-black text-black"
-              : "border-transparent text-gray-500 hover:text-gray-700"
-          }`}
+        <NavLink
+          to="/admin/cars"
+          className={({ isActive }) =>
+            `px-4 py-2 font-semibold border-b-2 transition-colors ${
+              isActive
+                ? "border-black text-black"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`
+          }
         >
           Edit Cars
-        </button>
-        <button
-          onClick={() => setActiveTab("users")}
-          className={`px-4 py-2 font-semibold border-b-2 transition-colors ${
-            activeTab === "users"
-              ? "border-black text-black"
-              : "border-transparent text-gray-500 hover:text-gray-700"
-          }`}
+        </NavLink>
+        <NavLink
+          to="/admin/users"
+          className={({ isActive }) =>
+            `px-4 py-2 font-semibold border-b-2 transition-colors ${
+              isActive
+                ? "border-black text-black"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`
+          }
         >
           Edit Users
-        </button>
-        <button
-          onClick={() => setActiveTab("rentals")}
-          className={`px-4 py-2 font-semibold border-b-2 transition-colors ${
-            activeTab === "rentals"
-              ? "border-black text-black"
-              : "border-transparent text-gray-500 hover:text-gray-700"
-          }`}
+        </NavLink>
+        <NavLink
+          to="/admin/rentals"
+          className={({ isActive }) =>
+            `px-4 py-2 font-semibold border-b-2 transition-colors ${
+              isActive
+                ? "border-black text-black"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`
+          }
         >
           Manage Rentals
-        </button>
+        </NavLink>
       </div>
 
       {/* Tab Content */}
-      {activeTab === "cars" && <CarsManagement user={user} />}
-      {activeTab === "users" && <UsersManagement user={user} />}
-      {activeTab === "rentals" && <RentalsManagement user={user} />}
+      <Outlet />
     </div>
   );
 }

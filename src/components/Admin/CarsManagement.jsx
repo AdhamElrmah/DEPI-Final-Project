@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import ConfirmDialog from "../UI/ConfirmDialog";
 import { Input } from "../UI/input";
 import { Label } from "../UI/label";
@@ -59,7 +60,8 @@ const defaultCar = {
   rental_class: "Economy",
 };
 
-export default function CarsManagement({ user }) {
+export default function CarsManagement() {
+  const { user } = useAuth();
   const [car, setCar] = useState(defaultCar);
   const [msg, setMsg] = useState(null);
   const [items, setItems] = useState([]);

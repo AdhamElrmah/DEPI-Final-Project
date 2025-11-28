@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import { getAllRentals, updateRental, cancelRental } from "../../lib/getRent";
 import ConfirmDialog from "../UI/ConfirmDialog";
 import { Input } from "../UI/input";
@@ -12,7 +13,8 @@ import {
 } from "../UI/select";
 import LoaderSpinner from "../../layouts/LoaderSpinner";
 
-export default function RentalsManagement({ user }) {
+export default function RentalsManagement() {
+  const { user } = useAuth();
   const [rentals, setRentals] = useState([]);
   const [filteredRentals, setFilteredRentals] = useState([]);
   const [loading, setLoading] = useState(true);

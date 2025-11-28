@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import React from "react";
 import MainAppRoute from "./MainAppRoute";
 import CarPage from "../pages/CarPage";
@@ -10,7 +10,12 @@ import Error404 from "../pages/Error404";
 import SignIn from "../pages/auth/SignIn";
 import SignUp from "../pages/auth/SignUp";
 import AdminDashboard from "../pages/AdminDashboard";
+import CarsManagement from "../components/Admin/CarsManagement";
+import UsersManagement from "../components/Admin/UsersManagement";
+import RentalsManagement from "../components/Admin/RentalsManagement";
 import ProfilePage from "../pages/ProfilePage";
+import ProfileSettings from "../components/ProfilePage/ProfileSettings";
+import RentalHistory from "../components/ProfilePage/RentalHistory";
 import CheckoutPage from "../pages/CheckoutPage";
 import PaymentPage from "../pages/PaymentPage";
 import { getAllCars, getCarById } from "../lib/getData";
@@ -18,7 +23,7 @@ import { getAllCars, getCarById } from "../lib/getData";
 export const router = createBrowserRouter([
   {
     element: <MainAppRoute />,
-    errorElement: <Error404 />,
+    // errorElement: <Error404 />,
     loader: ({ request: { signal } }) => {
       return getAllCars(signal);
     },
@@ -35,8 +40,46 @@ export const router = createBrowserRouter([
       { path: "/contact-us", element: <ContactUsPage /> },
       { path: "/signin", element: <SignIn /> },
       { path: "/signup", element: <SignUp /> },
-      { path: "/admin", element: <AdminDashboard /> },
-      { path: "/profile", element: <ProfilePage /> },
+      { 
+        path: "/admin",
+        element: <AdminDashboard />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="/admin/cars" replace />,
+          },
+          {
+            path: "cars",
+            element: <CarsManagement />,
+          },
+          {
+            path: "users",
+            element: <UsersManagement />,
+          },
+          {
+            path: "rentals",
+            element: <RentalsManagement />,
+          },
+        ],
+      },
+      { 
+        path: "/profile",
+        element: <ProfilePage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="/profile/settings" replace />,
+          },
+          {
+            path: "settings",
+            element: <ProfileSettings />,
+          },
+          {
+            path: "rentals",
+            element: <RentalHistory />,
+          },
+        ],
+      },
       {
         path: "/cars",
         children: [

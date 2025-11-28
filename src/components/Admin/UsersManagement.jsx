@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   Select,
   SelectTrigger,
@@ -9,7 +10,8 @@ import {
 import ConfirmDialog from "../UI/ConfirmDialog";
 import { getAllUsers, updateUser, deleteUser } from "../../lib/getUsers";
 
-export default function UsersManagement({ user }) {
+export default function UsersManagement() {
+  const { user } = useAuth();
   const [message, setMessage] = useState(null);
   const [users, setUsers] = useState([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
