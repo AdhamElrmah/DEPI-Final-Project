@@ -15,10 +15,17 @@ const deliveryMethods = [
   {
     id: 1,
     title: "Standard",
-    turnaround: "4–10 business days",
-    price: "$5.00",
+    turnaround: "Self-drive",
+    price: "$0.00",
+    value: 0,
   },
-  { id: 2, title: "Express", turnaround: "2–5 business days", price: "$16.00" },
+  {
+    id: 2,
+    title: "Private Driver",
+    turnaround: "Chauffeur service",
+    price: "$50.00",
+    value: 50,
+  },
 ];
 
 function classNames(...classes) {
@@ -71,20 +78,23 @@ export default function PaymentPage() {
   };
 
   const validatePaymentData = () => {
-    if (!paymentData.cardNumber.trim()) {
-      setMessage({ type: "error", text: "Card number is required" });
+    const cardNumberRegex = /^\d{16}$/;
+    if (!cardNumberRegex.test(paymentData.cardNumber.replace(/\s/g, ""))) {
+      setMessage({ type: "error", text: "Card number must be 16 digits" });
       return false;
     }
     if (!paymentData.cardName.trim()) {
       setMessage({ type: "error", text: "Name on card is required" });
       return false;
     }
-    if (!paymentData.expirationDate.trim()) {
-      setMessage({ type: "error", text: "Expiration date is required" });
+    const expirationDateRegex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+    if (!expirationDateRegex.test(paymentData.expirationDate)) {
+      setMessage({ type: "error", text: "Invalid expiration date (MM/YY)" });
       return false;
     }
-    if (!paymentData.cvc.trim()) {
-      setMessage({ type: "error", text: "CVC is required" });
+    const cvcRegex = /^\d{3,4}$/;
+    if (!cvcRegex.test(paymentData.cvc)) {
+      setMessage({ type: "error", text: "CVC must be 3 or 4 digits" });
       return false;
     }
     return true;
@@ -355,7 +365,7 @@ export default function PaymentPage() {
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                   <dt className="text-base font-medium">Total</dt>
                   <dd className="text-base font-medium text-gray-900">
-                    ${rentalData.totalPrice + 5.52}
+                    ${rentalData.totalPrice + 5.52 + selectedDeliveryMethod.value}
                   </dd>
                 </div>
               </dl>

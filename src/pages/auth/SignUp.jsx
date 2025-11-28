@@ -16,7 +16,11 @@ import {
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -25,9 +29,35 @@ export default function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
+
+    // Validation
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    const egyptianPhoneRegex = /^01[0125][0-9]{8}$/;
+    if (!egyptianPhoneRegex.test(phoneNumber)) {
+      setError("Please enter a valid Egyptian phone number");
+      return;
+    }
+
     (async () => {
       try {
-        await signup(email, password, name, role);
+        await signup(
+          email,
+          password,
+          firstName,
+          lastName,
+          username,
+          role,
+          phoneNumber
+        );
         navigate("/");
       } catch (err) {
         setError(err.message || "Failed to create an account");
@@ -63,16 +93,60 @@ export default function SignUp() {
                       <div className="text-sm text-red-700">{error}</div>
                     </div>
                   )}
+                  <div className="flex gap-4">
+                    <div className="flex-1">
+                      <Label htmlFor="firstName">First Name</Label>
+                      <div className="mt-2">
+                        <Input
+                          id="firstName"
+                          name="firstName"
+                          type="text"
+                          required
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <div className="mt-2">
+                        <Input
+                          id="lastName"
+                          name="lastName"
+                          type="text"
+                          required
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
-                    <Label htmlFor="name">Full Name</Label>
+                    <Label htmlFor="username">Username</Label>
                     <div className="mt-2">
                       <Input
-                        id="name"
-                        name="name"
+                        id="username"
+                        name="username"
                         type="text"
                         required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                    <div className="mt-2">
+                      <Input
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        type="tel"
+                        required
+                        placeholder="01xxxxxxxxx"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                       />
                     </div>
                   </div>
@@ -103,6 +177,21 @@ export default function SignUp() {
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <div className="mt-2">
+                      <Input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        autoComplete="new-password"
+                        required
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                       />
                     </div>
                   </div>

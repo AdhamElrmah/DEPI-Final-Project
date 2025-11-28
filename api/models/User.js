@@ -7,9 +7,28 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true, // Allow null values for uniqueness
   },
-  name: {
+  firstName: {
     type: String,
     required: true,
+    trim: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
+  name: {
+    type: String,
+    trim: true, // Keeping for backward compatibility
+  },
+  phoneNumber: {
+    type: String,
     trim: true,
   },
   email: {

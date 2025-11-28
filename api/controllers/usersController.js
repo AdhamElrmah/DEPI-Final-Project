@@ -1,5 +1,5 @@
 /* eslint-env node */
-/* global require, exports, __dirname */
+/* global require, exports, __dirname ,process*/
 
 const fs = require("fs");
 const path = require("path");
@@ -194,21 +194,47 @@ exports.updateUser = async (req, res) => {
     if (process.env.USE_MONGODB === "true" && User) {
       console.log("Updating user with ID:", userId);
 
+      // Handle password update
+      if (updates.password) {
+        // For MongoDB with Mongoose, the pre-save hook handles hashing
+        // So we just pass the plain password to passwordHash field
+        updates.passwordHash = updates.password;
+        delete updates.password;
+      }
+
+      // Handle name update
+      if (updates.firstName || updates.lastName) {
+        // We need to fetch the user first to get the other part of the name if only one is updated
+        // But for simplicity, we can assume the frontend sends both or we just update what we have
+        // Actually, let's just update the name if both are present in updates, or we will rely on the user object fetch below
+      }
+
       let user = null;
 
       // Try by id field (number) first
       if (!isNaN(userId)) {
-        user = await User.findOne({ id: parseInt(userId) }).select(
-          "-passwordHash"
-        );
+        user = await User.findOne({ id: parseInt(userId) }); // Removed .select("-passwordHash") to allow saving
         if (user) {
           console.log("Found user by id field for update");
+
+          // Update name if firstName or lastName is provided
+          if (updates.firstName || updates.lastName) {
+            const firstName = updates.firstName || user.firstName;
+            const lastName = updates.lastName || user.lastName;
+            updates.name = `${firstName} ${lastName}`;
+          }
+
           Object.assign(user, updates);
           await user.save();
+          
           return res.status(200).json({
             id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
             name: user.name,
             email: user.email,
+            phoneNumber: user.phoneNumber,
             role: user.role,
           });
         }
@@ -216,16 +242,52 @@ exports.updateUser = async (req, res) => {
 
       // Try by MongoDB _id
       if (!user && mongoose.Types.ObjectId.isValid(userId)) {
-        user = await User.findByIdAndUpdate(userId, updates, {
-          new: true,
-          runValidators: true,
-        }).select("-passwordHash");
+        // For findByIdAndUpdate, we need to construct the updates object carefully
+        if (updates.firstName || updates.lastName) {
+           // This is tricky with findByIdAndUpdate because we don't have the old doc easily without another query
+           // Let's fetch first then update, similar to above
+           user = await User.findById(userId);
+           if (user) {
+             if (updates.passwordHash) user.passwordHash = updates.passwordHash;
+             
+             if (updates.firstName || updates.lastName) {
+                const firstName = updates.firstName || user.firstName;
+                const lastName = updates.lastName || user.lastName;
+                user.name = `${firstName} ${lastName}`;
+             }
+             
+             Object.assign(user, updates);
+             await user.save();
+
+             return res.status(200).json({
+                id: user.id || user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+                name: user.name,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                role: user.role,
+              });
+           }
+        } else {
+            // Fallback to direct update if no complex logic needed (but we want consistency)
+             user = await User.findByIdAndUpdate(userId, updates, {
+              new: true,
+              runValidators: true,
+            }).select("-passwordHash");
+        }
+
         if (user) {
           console.log("Updated user by MongoDB _id");
           return res.status(200).json({
             id: user.id || user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
             name: user.name,
             email: user.email,
+            phoneNumber: user.phoneNumber,
             role: user.role,
           });
         }
@@ -240,13 +302,45 @@ exports.updateUser = async (req, res) => {
       if (userIndex === -1) {
         return res.status(404).json({ error: "User not found" });
       }
-      users[userIndex] = { ...users[userIndex], ...updates };
+
+      if (updates.password) {
+        const bcrypt = require("bcryptjs");
+        updates.passwordHash = bcrypt.hashSync(updates.password, 10);
+        delete updates.password;
+      }
+
+      const currentUser = users[userIndex];
+      if (updates.firstName || updates.lastName) {
+        const firstName = updates.firstName || currentUser.firstName;
+        const lastName = updates.lastName || currentUser.lastName;
+        updates.name = `${firstName} ${lastName}`;
+      }
+
+      users[userIndex] = { ...currentUser, ...updates };
       writeUsers(users);
       const { passwordHash, ...publicUser } = users[userIndex];
       res.status(200).json(publicUser);
     }
   } catch (error) {
     console.error("Update user error:", error);
+
+    // Handle MongoDB duplicate key error for username or email
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      const value = error.keyValue[field];
+      return res.status(409).json({
+        error: `${field.charAt(0).toUpperCase() + field.slice(1)} "${value}" already exists. Please use a different ${field}.`,
+      });
+    }
+
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({
+        error: `Validation Error: ${messages.join(", ")}`,
+      });
+    }
+
     res.status(500).json({ error: "Server error" });
   }
 };

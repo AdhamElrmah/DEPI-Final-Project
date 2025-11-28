@@ -10,10 +10,18 @@ export const signIn = async (email, password) => {
   return res.data;
 };
 
-export const signUp = async (email, password, name, role) => {
+export const signUp = async (
+  email,
+  password,
+  firstName,
+  lastName,
+  username,
+  role,
+  phoneNumber
+) => {
   const res = await baseApi.post(
     "/auth/signup",
-    { email, password, name, role },
+    { email, password, firstName, lastName, username, role, phoneNumber },
     { headers: { "Content-Type": "application/json" } }
   );
   return res.data;

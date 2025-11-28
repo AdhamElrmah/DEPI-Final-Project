@@ -351,7 +351,7 @@ const rentItem = async (req, res) => {
         carId: car.id || car._id, // Use car's custom id, fallback to _id
         userId: currentUser.id || currentUser._id, // Use user's custom id, fallback to _id
         userEmail: currentUser.email || currentUserEmail,
-        userName: currentUser.name,
+        username: currentUser.username,
         startDate,
         endDate,
         pickupLocation: pickupLocation || "Default Location",
@@ -381,7 +381,7 @@ const rentItem = async (req, res) => {
         carId: car.id,
         userId: currentUser.id,
         userEmail: currentUserEmail,
-        userName: currentUser.name,
+        username: currentUser.username,
         startDate,
         endDate,
         pickupLocation: pickupLocation || "Default Location",

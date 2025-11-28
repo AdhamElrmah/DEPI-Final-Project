@@ -7,7 +7,7 @@ import { Label } from "../../components/UI/label";
 import { Button } from "../../components/UI/button";
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { signin } = useAuth();
@@ -19,7 +19,7 @@ export default function SignIn() {
 
     (async () => {
       try {
-        await signin(email, password);
+        await signin(identifier, password);
         navigate("/");
       } catch (err) {
         setError(err.message || "Failed to sign in");
@@ -56,16 +56,16 @@ export default function SignIn() {
                     </div>
                   )}
                   <div>
-                    <Label htmlFor="email">Email address</Label>
+                    <Label htmlFor="identifier">Email or Username</Label>
                     <div className="mt-2">
                       <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
+                        id="identifier"
+                        name="identifier"
+                        type="text"
+                        autoComplete="username"
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
                       />
                     </div>
                   </div>

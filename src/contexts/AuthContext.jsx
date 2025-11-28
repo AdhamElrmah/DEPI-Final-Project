@@ -41,9 +41,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password, name, role) => {
+  const signup = async (
+    email,
+    password,
+    firstName,
+    lastName,
+    username,
+    role,
+    phoneNumber
+  ) => {
     try {
-      const data = await signUp(email, password, name, role);
+      const data = await signUp(
+        email,
+        password,
+        firstName,
+        lastName,
+        username,
+        role,
+        phoneNumber
+      );
       const u = {
         ...data.user,
         avatar:

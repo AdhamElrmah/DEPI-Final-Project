@@ -10,10 +10,43 @@ import SuccessDialog from "../UI/SuccessDialog";
 
 function ContactUsForm() {
   const [open, setOpen] = useState(false);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const name = formData.get("name");
+    const phone = formData.get("phone");
+    const email = formData.get("email");
+    const message = formData.get("message");
+
+    const newErrors = {};
+
+    if (!name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    const egyptianPhoneRegex = /^01[0125][0-9]{8}$/;
+    if (!egyptianPhoneRegex.test(phone)) {
+      newErrors.phone = "Please enter a valid Egyptian phone number";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!message.trim()) {
+      newErrors.message = "Message is required";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setOpen(true);
   };
 
@@ -44,10 +77,15 @@ function ContactUsForm() {
             </Label>
             <Input
               required
-              id="name"
+              name="name"
               placeholder="Enter your name"
-              className=" font-bold h-14 rounded-md border border-gray-300 bg-[#f2f2f2] px-4 text-gray-800 placeholder:font-semibold placeholder:text-[#728189] focus:border-black focus:ring-1 focus:ring-black"
+              className={`font-bold h-14 rounded-md border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } bg-[#f2f2f2] px-4 text-gray-800 placeholder:font-semibold placeholder:text-[#728189] focus:border-black focus:ring-1 focus:ring-black`}
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            )}
           </div>
 
           <div className=" flex flex-col space-y-2">
@@ -56,11 +94,16 @@ function ContactUsForm() {
             </Label>
             <Input
               required
-              id="phone"
+              name="phone"
               type="tel"
               placeholder="Enter your phone number"
-              className="font-bold h-14 rounded-md border-0 bg-[#f2f2f2] px-4 text-gray-800 placeholder:font-semibold placeholder:text-[#728189]"
+              className={`font-bold h-14 rounded-md border ${
+                errors.phone ? "border-red-500" : "border-0"
+              } bg-[#f2f2f2] px-4 text-gray-800 placeholder:font-semibold placeholder:text-[#728189]`}
             />
+            {errors.phone && (
+              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+            )}
           </div>
 
           <div className="flex flex-col space-y-2">
@@ -69,11 +112,16 @@ function ContactUsForm() {
             </Label>
             <Input
               required
-              id="email"
+              name="email"
               type="email"
               placeholder="Enter your email address"
-              className="font-bold h-14 rounded-md border-0 bg-[#f2f2f2] px-4 text-gray-800 placeholder:font-semibold placeholder:text-[#728189]"
+              className={`font-bold h-14 rounded-md border ${
+                errors.email ? "border-red-500" : "border-0"
+              } bg-[#f2f2f2] px-4 text-gray-800 placeholder:font-semibold placeholder:text-[#728189]`}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
 
           <div className="flex flex-col space-y-2">
@@ -82,11 +130,16 @@ function ContactUsForm() {
             </Label>
             <Textarea
               required
-              id="message"
+              name="message"
               placeholder="Tell us more"
               rows={4}
-              className="m-h-[150px] font-bold w-full resize-y rounded-md border-0 bg-[#f2f2f2] px-4 py-3 text-gray-800 placeholder:font-semibold placeholder:text-[#728189] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+              className={`m-h-[150px] font-bold w-full resize-y rounded-md border ${
+                errors.message ? "border-red-500" : "border-0"
+              } bg-[#f2f2f2] px-4 py-3 text-gray-800 placeholder:font-semibold placeholder:text-[#728189] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black`}
             />
+            {errors.message && (
+              <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+            )}
           </div>
 
           <Button
