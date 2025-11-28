@@ -1,5 +1,7 @@
 # 🚗 Car Rental Management System (ByDrive)
 
+[![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](https://depi-final-project-frontend.netlify.app/)
+
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.x-lightgrey.svg)](https://expressjs.com/)
@@ -482,26 +484,28 @@ npm run test:e2e
 
 ## 🌐 Deployment
 
-### Frontend Deployment
+### Frontend Deployment (Netlify)
 
 ```bash
 # Build for production
 cd /
 npm run build
 
-# Deploy to Vercel/Netlify
-# Upload the 'dist' folder to your hosting provider
+# Deploy to Netlify
+# Drag and drop the 'dist' folder to Netlify Drop
+# OR connect your GitHub repository to Netlify
 ```
 
-### Backend Deployment
+### Backend Deployment (Vercel)
 
 ```bash
 # Build for production
 cd api
 npm run build
 
-# Deploy to Railway/Heroku
-# Set environment variables in hosting platform
+# Deploy to Vercel
+# Import the 'api' directory as a project in Vercel
+# Set environment variables in Vercel dashboard
 ```
 
 ### Environment Variables for Production

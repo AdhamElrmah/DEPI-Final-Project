@@ -16,12 +16,18 @@ function MainAppRoute() {
 
   return (
     <AuthProvider>
-      <div>
-        <Navbar allCars={allCars} />
-        <ScrollRestoration />
-        <main>{state === "loading" ? <LoaderSpinner /> : <Outlet />}</main>
-        <Footer />
-      </div>
+      {state === "loading" ? (
+        <LoaderSpinner />
+      ) : (
+        <div>
+          <Navbar allCars={allCars} />
+          <ScrollRestoration />
+          <main>
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+      )}
     </AuthProvider>
   );
 }

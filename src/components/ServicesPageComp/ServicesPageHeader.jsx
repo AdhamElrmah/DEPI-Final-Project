@@ -30,7 +30,7 @@ function ServicesPageHeader() {
               about our luxury limousine fleet.
             </p>
             <Button size="lg" className=" font-bold text-sm">
-              <Link to="/">Book Our Service</Link>
+              <Link to="/contact-us">Book Our Service</Link>
             </Button>
           </motion.div>
           <div
