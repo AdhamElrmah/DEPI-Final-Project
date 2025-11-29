@@ -17,11 +17,11 @@ function MainAppRoute() {
 
   return (
     <AuthProvider>
-      <ChatBot />
       {state === "loading" ? (
         <LoaderSpinner />
       ) : (
         <div>
+          <ChatBot />
           <Navbar allCars={allCars} />
           <ScrollRestoration />
           <main>

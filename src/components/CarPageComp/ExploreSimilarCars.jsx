@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { getAllCars } from "../../lib/getData";
 import CarCard from "../../layouts/CarCard";
 import { generateRandomNumber } from "../../utils/generateNumber";
+import LoaderSpinner from "../../layouts/LoaderSpinner";
 
 function ExploreSimilarCars({ currentCar }) {
   const [similarCars, setSimilarCars] = useState([]);
@@ -40,15 +41,7 @@ function ExploreSimilarCars({ currentCar }) {
   }, [currentCar]);
 
   if (loading) {
-    return (
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          </div>
-        </div>
-      </section>
-    );
+    return <LoaderSpinner />;
   }
 
   if (similarCars.length === 0) {
