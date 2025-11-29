@@ -31,12 +31,12 @@ function PrivateDrivers() {
         }}
         viewport={{ once: true }}
       >
-        <div className="max-w-3xl mx-auto text-center sm:text-left">
+        <div className="max-w-2xl mx-auto text-center md:text-left max-md:px-6">
           <div className="mb-8">
-            <p className="text-gray-500 text-lg mb-3">Private drivers</p>
+            <p className="text-gray-500 text-sm mb-3">Private drivers</p>
 
             <div className="space-y-4">
-              <h2 className="text-2xl font-extrabold leading-snug ">
+              <h2 className="text-xl font-extrabold leading-snug ">
                 Meet our team of highly professional private drivers ready for
                 servicing any of client's needs. Nothing looks more menacing
                 than a hooded limousine. Life is what happens to you while
