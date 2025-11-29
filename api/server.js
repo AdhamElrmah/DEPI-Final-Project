@@ -42,10 +42,14 @@ app.use(express.json());
 const items = require("./routes/items");
 const auth = require("./routes/auth");
 const users = require("./routes/users");
+const reviews = require("./routes/reviews");
+const rentals = require("./routes/rentals");
 
 app.use("/items", items);
 app.use("/auth", auth);
 app.use("/users", users);
+app.use("/reviews", reviews);
+app.use("/rentals", rentals);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

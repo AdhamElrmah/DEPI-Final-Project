@@ -63,6 +63,18 @@ export default function AdminDashboard() {
         >
           Manage Rentals
         </NavLink>
+        <NavLink
+          to="/admin/reviews"
+          className={({ isActive }) =>
+            `px-4 py-2 font-semibold border-b-2 transition-colors ${
+              isActive
+                ? "border-black text-black"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`
+          }
+        >
+          Manage Reviews
+        </NavLink>
       </div>
 
       {/* Tab Content */}

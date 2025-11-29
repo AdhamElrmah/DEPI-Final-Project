@@ -3,6 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import ConfirmDialog from "../UI/ConfirmDialog";
 import { Input } from "../UI/input";
 import { Label } from "../UI/label";
+import { Button } from "../UI/button";
 import { getAllCars, createCar, updateCar, deleteCar } from "../../lib/getData";
 
 const defaultCar = {
@@ -245,21 +246,25 @@ export default function CarsManagement() {
                   <div className="text-xs text-gray-600">{it.id}</div>
                 </div>
                 <div className="flex gap-2">
-                  <button
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => handleSelect(it)}
-                    className="px-2 py-1 bg-yellow-400 text-xs rounded hover:bg-yellow-500 transition-colors"
+                    className="text-xs"
                   >
                     Edit
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => {
                       setPendingDeleteId(it.id);
                       setConfirmOpen(true);
                     }}
-                    className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors"
+                    className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
                   >
                     Delete
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))}

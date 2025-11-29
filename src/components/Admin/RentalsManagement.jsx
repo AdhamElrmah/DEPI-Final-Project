@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../UI/select";
+import { Button } from "../UI/button";
 import LoaderSpinner from "../../layouts/LoaderSpinner";
 
 export default function RentalsManagement() {
@@ -329,18 +330,22 @@ export default function RentalsManagement() {
                       <div className="space-x-1">
                         {rental.status === "active" && (
                           <>
-                            <button
+                            <Button
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleEditRental(rental)}
-                              className="px-2 py-1 bg-yellow-400 text-xs rounded hover:bg-yellow-500 transition-colors"
+                              className="text-xs"
                             >
                               Edit
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
                               onClick={() => openCancelConfirm(rental.id)}
-                              className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition-colors"
+                              className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
                             >
                               Cancel
-                            </button>
+                            </Button>
                           </>
                         )}
                       </div>

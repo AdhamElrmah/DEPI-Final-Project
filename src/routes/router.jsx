@@ -1,24 +1,27 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import React from "react";
+import React, { Suspense } from "react";
 import MainAppRoute from "./MainAppRoute";
-import CarPage from "../pages/CarPage";
-import CarsRentalPage from "../pages/CarsRentalPage";
-import HomePage from "../pages/HomePage";
-import ContactUsPage from "../pages/ContactUsPage";
-import ServicesPage from "../pages/ServicesPage";
 import Error404 from "../pages/Error404";
-import SignIn from "../pages/auth/SignIn";
-import SignUp from "../pages/auth/SignUp";
-import AdminDashboard from "../pages/AdminDashboard";
-import CarsManagement from "../components/Admin/CarsManagement";
-import UsersManagement from "../components/Admin/UsersManagement";
-import RentalsManagement from "../components/Admin/RentalsManagement";
-import ProfilePage from "../pages/ProfilePage";
-import ProfileSettings from "../components/ProfilePage/ProfileSettings";
-import RentalHistory from "../components/ProfilePage/RentalHistory";
-import CheckoutPage from "../pages/CheckoutPage";
-import PaymentPage from "../pages/PaymentPage";
 import { getAllCars, getCarById } from "../lib/getData";
+
+// Lazy load pages
+const CarPage = React.lazy(() => import("../pages/CarPage"));
+const CarsRentalPage = React.lazy(() => import("../pages/CarsRentalPage"));
+const HomePage = React.lazy(() => import("../pages/HomePage"));
+const ContactUsPage = React.lazy(() => import("../pages/ContactUsPage"));
+const ServicesPage = React.lazy(() => import("../pages/ServicesPage"));
+const SignIn = React.lazy(() => import("../pages/auth/SignIn"));
+const SignUp = React.lazy(() => import("../pages/auth/SignUp"));
+const AdminDashboard = React.lazy(() => import("../pages/AdminDashboard"));
+const CarsManagement = React.lazy(() => import("../components/Admin/CarsManagement"));
+const UsersManagement = React.lazy(() => import("../components/Admin/UsersManagement"));
+const RentalsManagement = React.lazy(() => import("../components/Admin/RentalsManagement"));
+const ReviewsManagement = React.lazy(() => import("../components/Admin/ReviewsManagement"));
+const ProfilePage = React.lazy(() => import("../pages/ProfilePage"));
+const ProfileSettings = React.lazy(() => import("../components/ProfilePage/ProfileSettings"));
+const RentalHistory = React.lazy(() => import("../components/ProfilePage/RentalHistory"));
+const CheckoutPage = React.lazy(() => import("../pages/CheckoutPage"));
+const PaymentPage = React.lazy(() => import("../pages/PaymentPage"));
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +62,10 @@ export const router = createBrowserRouter([
           {
             path: "rentals",
             element: <RentalsManagement />,
+          },
+          {
+            path: "reviews",
+            element: <ReviewsManagement />,
           },
         ],
       },

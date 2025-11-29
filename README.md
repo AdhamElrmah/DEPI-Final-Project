@@ -39,6 +39,7 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - **Axios** - HTTP client for API communication
 - **Lucide React** - Beautiful icon library
 - **Heroicons** - Icon components from Tailwind Labs
+- **Chatling.ai** - AI Chatbot integration
 
 ### Backend
 
@@ -69,6 +70,7 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - 📅 **Online Booking** - Real-time availability checking and reservation system
 - 💳 **Secure Checkout** - Comprehensive booking flow with payment integration
 - 👤 **Profile Management** - Account settings and rental history tracking
+- ⭐ **Reviews & Ratings** - Rate and review cars after completing rentals
 - 📱 **Responsive Design** - Mobile-first approach for all devices
 
 ### Administrator Features
@@ -76,6 +78,7 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - 👥 **User Management** - Complete control over user accounts and permissions
 - 🚙 **Fleet Management** - Add, edit, and remove vehicles from inventory
 - 📊 **Rental Oversight** - View, modify, and cancel rental bookings
+- ⭐ **Review Management** - Monitor and moderate user reviews
 - ⚙️ **System Administration** - Platform configuration and maintenance
 
 ### Advanced Features
@@ -86,6 +89,7 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - ⚡ **Performance Optimized** - Fast loading times and efficient data handling
 - 📧 **Email Notifications** - Automated booking confirmations
 - 🗄️ **MongoDB Integration** - Scalable NoSQL database with automatic migration
+- 🤖 **AI Chatbot** - Instant customer support powered by Chatling.ai
 - 🔄 **Dual Database Support** - Seamless switching between MongoDB and JSON storage
 - 📊 **Data Validation** - Mongoose schemas ensure data integrity
 
@@ -255,6 +259,28 @@ Update rental details (Admin only).
 
 Cancel a rental booking.
 
+### Review Management Endpoints
+
+#### GET `/reviews/car/:carId`
+
+Get all reviews for a specific car.
+
+#### POST `/reviews`
+
+Create a new review (Requires completed rental).
+
+#### PUT `/reviews/:id`
+
+Update an existing review.
+
+#### DELETE `/reviews/:id`
+
+Delete a review (User can delete own, Admin can delete any).
+
+#### GET `/reviews/all`
+
+Get all reviews in the system (Admin only).
+
 ### Authentication Requirements
 
 - **Bearer Token**: Include `Authorization: Bearer <jwt_token>` header for protected endpoints
@@ -345,11 +371,28 @@ The application uses MongoDB with Mongoose schemas for data validation and struc
 }
 ```
 
+#### Reviews Collection
+
+```json
+{
+  "carId": "Mixed (string/ObjectId)",
+  "userId": "Mixed (string/ObjectId)",
+  "rentalId": "Mixed (string/ObjectId)",
+  "username": "string",
+  "rating": "number (1-5)",
+  "comment": "string",
+  "createdAt": "Date (auto-generated)"
+}
+```
+
 ### Relationships
 
 - **Users → Rentals**: One-to-many (user can have multiple rentals)
 - **Cars → Rentals**: One-to-many (car can have multiple rental bookings)
-- **Data Integrity**: Enforced through application-level validation
+- **Rentals → Reviews**: One-to-one (a completed rental can have one review)
+- **Cars → Reviews**: One-to-many (a car can have multiple reviews)
+- **Users → Reviews**: One-to-many (a user can write multiple reviews)
+- **Data Integrity**: Enforced through application-level validation and Mongoose schemas.
 
 ## ⚡ Installation & Setup
 

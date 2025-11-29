@@ -7,6 +7,7 @@ import {
   SelectContent,
   SelectItem,
 } from "../UI/select";
+import { Button } from "../UI/button";
 import ConfirmDialog from "../UI/ConfirmDialog";
 import { getAllUsers, updateUser, deleteUser } from "../../lib/getUsers";
 
@@ -153,12 +154,14 @@ export default function UsersManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {u.id !== user.id && (
-                        <button
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => openDeleteConfirm(u.id)}
-                          className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                          className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
                         >
                           Remove
-                        </button>
+                        </Button>
                       )}
                     </td>
                   </tr>

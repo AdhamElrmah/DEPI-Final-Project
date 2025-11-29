@@ -3,28 +3,35 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { Button } from "../UI/button";
 import { getUserRentals, cancelRental } from "../../lib/getRent";
+import { getUserReviews } from "../../lib/getReviews";
 import ConfirmDialog from "../UI/ConfirmDialog";
 import LoaderSpinner from "../../layouts/LoaderSpinner";
+import StarRating from "../UI/StarRating";
 
 export default function RentalHistory() {
   const { user } = useAuth();
   const [rentalsLoading, setRentalsLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const [rentals, setRentals] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingRentalId, setPendingRentalId] = useState(null);
 
   useEffect(() => {
-    fetchUserRentals();
+    fetchData();
   }, []);
 
-  const fetchUserRentals = async () => {
+  const fetchData = async () => {
     try {
       setRentalsLoading(true);
-      const rentalsData = await getUserRentals(user.token);
+      const [rentalsData, reviewsData] = await Promise.all([
+        getUserRentals(user.token),
+        getUserReviews(user.token),
+      ]);
       setRentals(rentalsData);
+      setReviews(reviewsData.reviews || []);
     } catch (err) {
-      console.error("Failed to fetch rentals:", err);
+      console.error("Failed to fetch history:", err);
       setMessage({ type: "error", text: "Failed to load rental history" });
     } finally {
       setRentalsLoading(false);
@@ -71,6 +78,10 @@ export default function RentalHistory() {
       default:
         return "bg-gray-100 text-gray-800";
     }
+  };
+
+  const getReviewForCar = (carId) => {
+    return reviews.find((r) => r.carId === carId || r.carId?._id === carId);
   };
 
   return (
@@ -159,6 +170,33 @@ export default function RentalHistory() {
                         {rental.status.charAt(0).toUpperCase() +
                           rental.status.slice(1)}
                       </span>
+
+                      {/* Review Section for Completed Rentals */}
+                      {rental.status === "completed" && (
+                        <div className="mt-1">
+                          {getReviewForCar(rental.car?.id || rental.carId) ? (
+                            <div className="flex flex-col items-end">
+                              <StarRating
+                                rating={
+                                  getReviewForCar(rental.car?.id || rental.carId)
+                                    .rating
+                                }
+                                readonly
+                                size="w-4 h-4"
+                              />
+                            </div>
+                          ) : (
+                            <Link
+                              to={`/cars/${
+                                rental.car?.id || rental.carId
+                              }#reviews`}
+                              className="text-sm text-blue-600 hover:text-blue-800 underline font-medium"
+                            >
+                              Review the car
+                            </Link>
+                          )}
+                        </div>
+                      )}
 
                       {canCancelRental(rental) && (
                         <button
