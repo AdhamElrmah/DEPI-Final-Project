@@ -8,11 +8,28 @@ export default function ReviewsList({ carId, reviews = [], stats = null, onDelet
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 2;
 
+  // Sort reviews to show user's own review first
+  const sortedReviews = React.useMemo(() => {
+    if (!user) return reviews;
+    
+    const userId = user.id || user._id;
+    return [...reviews].sort((a, b) => {
+      const aUserId = a.userId?._id || a.userId;
+      const bUserId = b.userId?._id || b.userId;
+      const aIsOwner = userId?.toString() === aUserId?.toString();
+      const bIsOwner = userId?.toString() === bUserId?.toString();
+      
+      if (aIsOwner && !bIsOwner) return -1;
+      if (!aIsOwner && bIsOwner) return 1;
+      return 0; // Keep original order for other reviews
+    });
+  }, [reviews, user]);
+
   // Calculate pagination
   const indexOfLastReview = currentPage * reviewsPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+  const currentReviews = sortedReviews.slice(indexOfFirstReview, indexOfLastReview);
+  const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

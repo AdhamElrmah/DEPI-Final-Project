@@ -11,22 +11,7 @@ import { Button } from "../components/UI/button";
 import { Field, FieldLabel, FieldDescription } from "../components/UI/field";
 import LoaderSpinner from "../layouts/LoaderSpinner";
 
-const deliveryMethods = [
-  {
-    id: 1,
-    title: "Standard",
-    turnaround: "Self-drive",
-    price: "$0.00",
-    value: 0,
-  },
-  {
-    id: 2,
-    title: "Private Driver",
-    turnaround: "Chauffeur service",
-    price: "$50.00",
-    value: 50,
-  },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -40,13 +25,36 @@ export default function PaymentPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
-  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
-    deliveryMethods[0]
-  );
-
   // Get data from location state (passed from checkout page)
   const rentalData = location.state?.rentalData;
   const car = location.state?.car;
+
+  const [driverDays, setDriverDays] = useState(rentalData?.totalDays || 1);
+
+  const deliveryMethods = [
+    {
+      id: 1,
+      title: "Standard",
+      turnaround: "Self-drive",
+      price: "$0.00",
+      value: 0,
+    },
+    {
+      id: 2,
+      title: "Private Driver",
+      turnaround: "Chauffeur service",
+      price: `$${(10 * (driverDays || 0)).toFixed(2)}`,
+      value: 10 * (driverDays || 0),
+    },
+  ];
+
+  const [selectedDeliveryMethodId, setSelectedDeliveryMethodId] = useState(
+    deliveryMethods[0].id
+  );
+
+  const selectedDeliveryMethod = deliveryMethods.find(
+    (m) => m.id === selectedDeliveryMethodId
+  );
 
   const [paymentData, setPaymentData] = useState({
     email: user?.email || "",
@@ -246,14 +254,14 @@ export default function PaymentPage() {
                   Delivery method
                 </legend>
                 <RadioGroup
-                  value={selectedDeliveryMethod}
-                  onChange={setSelectedDeliveryMethod}
+                  value={selectedDeliveryMethodId}
+                  onChange={setSelectedDeliveryMethodId}
                   className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4"
                 >
                   {deliveryMethods.map((deliveryMethod) => (
                     <Radio
                       key={deliveryMethod.id}
-                      value={deliveryMethod}
+                      value={deliveryMethod.id}
                       aria-label={deliveryMethod.title}
                       aria-description={`${deliveryMethod.turnaround} for ${deliveryMethod.price}`}
                       className={({ checked, focus }) =>
@@ -267,7 +275,7 @@ export default function PaymentPage() {
                       {({ checked, focus }) => (
                         <>
                           <span className="flex flex-1">
-                            <span className="flex flex-col">
+                            <span className="flex flex-col w-full">
                               <span className="block text-sm font-medium text-gray-900">
                                 {deliveryMethod.title}
                               </span>
@@ -277,6 +285,55 @@ export default function PaymentPage() {
                               <span className="mt-6 text-sm font-medium text-gray-900">
                                 {deliveryMethod.price}
                               </span>
+                              {deliveryMethod.id === 2 && checked && (
+                                <div className="mt-4">
+                                  <label
+                                    htmlFor="driver-days"
+                                    className="block text-xs font-medium text-gray-700"
+                                  >
+                                    Driver Days (Max {rentalData?.totalDays})
+                                  </label>
+                                  <div className="mt-1 flex items-center gap-2">
+                                    <input
+                                      type="number"
+                                      id="driver-days"
+                                      min="1"
+                                      max={rentalData?.totalDays}
+                                      value={driverDays}
+                                      onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val === "") {
+                                          setDriverDays("");
+                                          return;
+                                        }
+                                        const numVal = parseInt(val);
+                                        if (
+                                          !isNaN(numVal) &&
+                                          numVal >= 1 &&
+                                          numVal <= (rentalData?.totalDays || 1)
+                                        ) {
+                                          setDriverDays(numVal);
+                                        }
+                                      }}
+                                      onBlur={() => {
+                                        if (
+                                          driverDays === "" ||
+                                          driverDays < 1
+                                        ) {
+                                          setDriverDays(1);
+                                        }
+                                      }}
+                                      className="block w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                      onClick={(e) => e.stopPropagation()}
+                                      onMouseDown={(e) => e.stopPropagation()}
+                                      onTouchStart={(e) => e.stopPropagation()}
+                                    />
+                                    <span className="text-xs text-gray-500">
+                                      days
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
                             </span>
                           </span>
                           {checked ? (
@@ -349,7 +406,7 @@ export default function PaymentPage() {
                 <div className="flex items-center justify-between">
                   <dt className="text-sm">Subtotal</dt>
                   <dd className="text-sm font-medium text-gray-900">
-                    ${rentalData.totalPrice}
+                    ${Number(rentalData.totalPrice).toFixed(2)}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between">
@@ -358,14 +415,14 @@ export default function PaymentPage() {
                     {selectedDeliveryMethod.price}
                   </dd>
                 </div>
-                <div className="flex items-center justify-between">
-                  <dt className="text-sm">Taxes</dt>
-                  <dd className="text-sm font-medium text-gray-900">$5.52</dd>
-                </div>
+
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                   <dt className="text-base font-medium">Total</dt>
                   <dd className="text-base font-medium text-gray-900">
-                    ${rentalData.totalPrice + 5.52 + selectedDeliveryMethod.value}
+                    ${(
+                      Number(rentalData.totalPrice) +
+                      Number(selectedDeliveryMethod.value)
+                    ).toFixed(2)}
                   </dd>
                 </div>
               </dl>

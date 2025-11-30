@@ -75,7 +75,8 @@ export default function ReviewsManagement() {
         <LoaderSpinner />
       ) : (
         <>
-          <div className="overflow-x-auto">
+          {/* Desktop View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b bg-gray-50">
@@ -96,7 +97,10 @@ export default function ReviewsManagement() {
                   </tr>
                 ) : (
                   reviews.map((review) => (
-                    <tr key={review._id || review.id} className="border-b hover:bg-gray-50">
+                    <tr
+                      key={review._id || review.id}
+                      className="border-b hover:bg-gray-50"
+                    >
                       <td className="p-4">
                         <span className="font-medium text-gray-900">
                           {review.carId}
@@ -104,7 +108,11 @@ export default function ReviewsManagement() {
                       </td>
                       <td className="p-4 text-gray-600">{review.username}</td>
                       <td className="p-4">
-                        <StarRating rating={review.rating} readonly size="w-4 h-4" />
+                        <StarRating
+                          rating={review.rating}
+                          readonly
+                          size="w-4 h-4"
+                        />
                       </td>
                       <td className="p-4 text-gray-600 max-w-xs truncate">
                         {review.comment || "-"}
@@ -129,9 +137,63 @@ export default function ReviewsManagement() {
             </table>
           </div>
 
+          {/* Mobile View */}
+          <div className="md:hidden space-y-4">
+            {reviews.length === 0 ? (
+              <div className="text-center text-gray-500 py-8">
+                No reviews found.
+              </div>
+            ) : (
+              reviews.map((review) => (
+                <div
+                  key={review._id || review.id}
+                  className="bg-white border rounded-lg p-4 shadow-sm space-y-3"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <span className="font-medium text-gray-900 block">
+                        Car: {review.carId}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {new Date(review.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <StarRating
+                      rating={review.rating}
+                      readonly
+                      size="w-4 h-4"
+                    />
+                  </div>
+
+                  <div className="text-sm text-gray-600">
+                    <span className="font-medium text-gray-700">User: </span>
+                    {review.username}
+                  </div>
+
+                  <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded">
+                    {review.comment || (
+                      <span className="italic text-gray-400">No comment</span>
+                    )}
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDeleteClick(review)}
+                      className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 w-full justify-center"
+                    >
+                      Delete Review
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
           {/* Pagination */}
           {pagination && pagination.pages > 1 && (
-            <div className="flex justify-center mt-6 gap-2">
+            <div className="flex justify-center mt-6 gap-2 pb-5">
               <Button
                 variant="outline"
                 size="sm"

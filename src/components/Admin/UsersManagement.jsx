@@ -17,6 +17,8 @@ export default function UsersManagement() {
   const [users, setUsers] = useState([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingUserId, setPendingUserId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -121,7 +123,9 @@ export default function UsersManagement() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((u) => (
+                {users
+                  .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                  .map((u) => (
                   <tr key={u.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {u.name}
@@ -169,6 +173,35 @@ export default function UsersManagement() {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {users.length > itemsPerPage && (
+            <div className="flex justify-center mt-6 gap-2 pb-5">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              >
+                Previous
+              </Button>
+              <span className="px-4 py-2 text-sm text-gray-600">
+                Page {currentPage} of {Math.ceil(users.length / itemsPerPage)}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage === Math.ceil(users.length / itemsPerPage)}
+                onClick={() =>
+                  setCurrentPage((p) =>
+                    Math.min(Math.ceil(users.length / itemsPerPage), p + 1)
+                  )
+                }
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

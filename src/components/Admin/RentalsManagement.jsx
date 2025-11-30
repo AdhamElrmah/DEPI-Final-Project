@@ -24,6 +24,8 @@ export default function RentalsManagement() {
   const [editingRental, setEditingRental] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const [editForm, setEditForm] = useState({
     startDate: "",
@@ -56,6 +58,7 @@ export default function RentalsManagement() {
         rentals.filter((rental) => rental.status === statusFilter)
       );
     }
+    setCurrentPage(1); // Reset to first page when filter changes
   }, [rentals, statusFilter]);
 
   const handleEditRental = (rental) => {
@@ -211,7 +214,9 @@ export default function RentalsManagement() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredRentals.map((rental) => (
+              {filteredRentals
+                .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                .map((rental) => (
                 <tr key={rental.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -356,6 +361,35 @@ export default function RentalsManagement() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {filteredRentals.length > itemsPerPage && (
+          <div className="flex justify-center mt-6 gap-2 pb-5">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            >
+              Previous
+            </Button>
+            <span className="px-4 py-2 text-sm text-gray-600">
+              Page {currentPage} of {Math.ceil(filteredRentals.length / itemsPerPage)}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage === Math.ceil(filteredRentals.length / itemsPerPage)}
+              onClick={() =>
+                setCurrentPage((p) =>
+                  Math.min(Math.ceil(filteredRentals.length / itemsPerPage), p + 1)
+                )
+              }
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Cancel Confirmation Dialog */}

@@ -117,6 +117,7 @@ car-rental-app/
 │ ├── routes/             # API route definitions
 │ ├── scripts/            # Migration and seeding scripts
 │ ├── lib/                # Database utilities
+│ ├── utils/              # Shared utility functions
 │ ├── server.js           # Server startup file
 │ └── package.json
 └── README.md
@@ -215,7 +216,7 @@ Remove a car from inventory (Admin only).
 
 ### Rental Management Endpoints
 
-#### POST `/items/:carId/rent`
+#### POST `/rentals/:id`
 
 Create a new rental booking.
 
@@ -243,19 +244,19 @@ Create a new rental booking.
 }
 ```
 
-#### GET `/items/rentals/user`
+#### GET `/rentals/user`
 
 Get all rentals for the authenticated user.
 
-#### GET `/items/rentals/all`
+#### GET `/rentals/all`
 
 Get all rentals in the system (Admin only).
 
-#### PUT `/items/rentals/:id`
+#### PUT `/rentals/:id`
 
 Update rental details (Admin only).
 
-#### DELETE `/items/rentals/:id`
+#### DELETE `/rentals/:id`
 
 Cancel a rental booking.
 
