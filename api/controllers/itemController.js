@@ -8,21 +8,7 @@ const mongoose = require("mongoose");
 const Car =
   process.env.USE_MONGODB === "true" ? require("../models/Car") : null;
 
-// Helper functions for JSON fallback
-const carsPath = path.join(__dirname, "..", "cars.json");
-
-const readCars = () => {
-  if (!fs.existsSync(carsPath)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(carsPath, "utf8") || "[]");
-  } catch {
-    return [];
-  }
-};
-
-const writeCars = (cars) => {
-  fs.writeFileSync(carsPath, JSON.stringify(cars, null, 2), "utf8");
-};
+const { readJsonFile, writeJsonFile } = require("../utils/fileHelpers");
 
 const addItem = async (req, res) => {
   try {
@@ -55,7 +41,7 @@ const addItem = async (req, res) => {
       res.status(201).json(car);
     } else {
       // JSON fallback
-      const cars = readCars();
+      const cars = readJsonFile("cars.json");
 
       // Check for duplicate id
       if (carData.id && cars.find((c) => c.id === carData.id)) {
@@ -69,7 +55,7 @@ const addItem = async (req, res) => {
         ...carData,
       };
       cars.push(newCar);
-      writeCars(cars);
+      writeJsonFile("cars.json", cars);
       res.status(201).json(newCar);
     }
   } catch (error) {
@@ -102,7 +88,7 @@ const listAllItems = async (req, res) => {
       const cars = await Car.find();
       res.status(200).json(cars);
     } else {
-      const cars = readCars();
+      const cars = readJsonFile("cars.json");
       res.status(200).json(cars);
     }
   } catch (error) {
@@ -121,7 +107,7 @@ const getItemById = async (req, res) => {
       }
       res.status(200).json(car);
     } else {
-      const cars = readCars();
+      const cars = readJsonFile("cars.json");
       const car = cars.find((c) => c.id == req.params.id);
       if (!car) {
         return res.status(404).json({ error: "Car not found" });
@@ -147,13 +133,13 @@ const updateItem = async (req, res) => {
       }
       res.status(200).json(car);
     } else {
-      const cars = readCars();
+      const cars = readJsonFile("cars.json");
       const carIndex = cars.findIndex((c) => c.id == req.params.id);
       if (carIndex === -1) {
         return res.status(404).json({ error: "Car not found" });
       }
       cars[carIndex] = { ...cars[carIndex], ...req.body };
-      writeCars(cars);
+      writeJsonFile("cars.json", cars);
       res.status(200).json(cars[carIndex]);
     }
   } catch (error) {
@@ -172,13 +158,13 @@ const deleteItem = async (req, res) => {
       }
       res.status(200).json({ message: "Car deleted successfully" });
     } else {
-      const cars = readCars();
+      const cars = readJsonFile("cars.json");
       const carIndex = cars.findIndex((c) => c.id == req.params.id);
       if (carIndex === -1) {
         return res.status(404).json({ error: "Car not found" });
       }
       cars.splice(carIndex, 1);
-      writeCars(cars);
+      writeJsonFile("cars.json", cars);
       res.status(200).json({ message: "Car deleted successfully" });
     }
   } catch (error) {

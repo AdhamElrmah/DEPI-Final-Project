@@ -13,41 +13,7 @@ const Rental =
 const User =
   process.env.USE_MONGODB === "true" ? require("../models/User") : null;
 
-// Helper functions for JSON fallback
-const carsPath = path.join(__dirname, "..", "cars.json");
-const rentalsPath = path.join(__dirname, "..", "rentItem.json");
-const usersPath = path.join(__dirname, "..", "users.json");
-
-const readCars = () => {
-  if (!fs.existsSync(carsPath)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(carsPath, "utf8") || "[]");
-  } catch {
-    return [];
-  }
-};
-
-const readRentals = () => {
-  if (!fs.existsSync(rentalsPath)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(rentalsPath, "utf8") || "[]");
-  } catch {
-    return [];
-  }
-};
-
-const readUsers = () => {
-  if (!fs.existsSync(usersPath)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
-  } catch {
-    return [];
-  }
-};
-
-const writeRentals = (rentals) => {
-  fs.writeFileSync(rentalsPath, JSON.stringify(rentals, null, 2), "utf8");
-};
+const { readJsonFile, writeJsonFile } = require("../utils/fileHelpers");
 
 // Helper function to verify JWT and get user email
 function verifyToken(token) {
@@ -83,7 +49,7 @@ const checkCarAvailability = async (req, res) => {
         car: { id },
       });
     } else {
-      const rentals = readRentals();
+      const rentals = readJsonFile("rentItem.json");
       const isOverlapping = rentals.some(
         (rental) =>
           rental.carId == id &&
@@ -127,7 +93,7 @@ const rentItem = async (req, res) => {
     if (process.env.USE_MONGODB === "true" && User) {
       currentUser = await User.findOne({ email: currentUserEmail });
     } else {
-      const users = readUsers();
+      const users = readJsonFile("users.json");
       currentUser = users.find((u) => u.email === currentUserEmail);
     }
 
@@ -145,7 +111,7 @@ const rentItem = async (req, res) => {
           (await Car.findOne({ id: parseInt(id) }));
       }
     } else {
-      const cars = readCars();
+      const cars = readJsonFile("cars.json");
       car = cars.find((c) => c.id == id);
     }
 
@@ -165,7 +131,7 @@ const rentItem = async (req, res) => {
         $or: [{ startDate: { $lte: endDate }, endDate: { $gte: startDate } }],
       });
     } else {
-      const rentals = readRentals();
+      const rentals = readJsonFile("rentItem.json");
       isOverlapping = rentals.some(
         (rental) =>
           rental.carId == id &&
@@ -219,7 +185,7 @@ const rentItem = async (req, res) => {
         },
       });
     } else {
-      const rentals = readRentals();
+      const rentals = readJsonFile("rentItem.json");
       const rentalId = Date.now().toString();
       const rentalData = {
         id: rentalId,
@@ -241,7 +207,7 @@ const rentItem = async (req, res) => {
       };
 
       rentals.push(rentalData);
-      writeRentals(rentals);
+      writeJsonFile("rentItem.json", rentals);
 
       res.status(200).json({
         message: "Car rented successfully",
@@ -304,7 +270,7 @@ const getUserRentals = async (req, res) => {
       res.status(200).json(rentalsWithCars);
     } else {
       // JSON fallback
-      const rentals = readRentals();
+      const rentals = readJsonFile("rentItem.json");
       const userRentals = rentals.filter(
         (r) => r.userEmail === currentUserEmail
       );
@@ -384,7 +350,7 @@ const cancelRental = async (req, res) => {
       res.status(200).json({ message: "Rental cancelled successfully" });
     } else {
       // JSON fallback
-      const rentals = readRentals();
+      const rentals = readJsonFile("rentItem.json");
       const rentalIndex = rentals.findIndex((r) => r.id == req.params.id);
       if (rentalIndex === -1) {
         return res.status(404).json({ error: "Rental not found" });
@@ -398,7 +364,7 @@ const cancelRental = async (req, res) => {
       }
 
       rental.status = "cancelled";
-      writeRentals(rentals);
+      writeJsonFile("rentItem.json", rentals);
 
       res.status(200).json({ message: "Rental cancelled successfully" });
     }
@@ -531,7 +497,7 @@ const getAllRentals = async (req, res) => {
     } else {
       // JSON fallback
       console.log("Using JSON fallback for rentals");
-      const rentals = readRentals();
+      const rentals = readJsonFile("rentItem.json");
       res.status(200).json(rentals);
     }
   } catch (error) {
@@ -610,7 +576,7 @@ const updateRental = async (req, res) => {
       res.status(200).json(rental);
     } else {
       // JSON fallback
-      const rentals = readRentals();
+      const rentals = readJsonFile("rentItem.json");
       const rentalIndex = rentals.findIndex((r) => r.id == req.params.id);
 
       if (rentalIndex === -1) {
@@ -634,7 +600,7 @@ const updateRental = async (req, res) => {
         rental.status = status;
       }
 
-      writeRentals(rentals);
+      writeJsonFile("rentItem.json", rentals);
       res.status(200).json(rental);
     }
   } catch (error) {

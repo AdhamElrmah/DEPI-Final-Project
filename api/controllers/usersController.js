@@ -8,21 +8,7 @@ const mongoose = require("mongoose");
 const User =
   process.env.USE_MONGODB === "true" ? require("../models/User") : null;
 
-// Helper functions for JSON fallback
-const usersPath = path.join(__dirname, "..", "users.json");
-
-function readUsers() {
-  if (!fs.existsSync(usersPath)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function writeUsers(users) {
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2), "utf8");
-}
+const { readJsonFile, writeJsonFile } = require("../utils/fileHelpers");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -39,7 +25,7 @@ exports.getAllUsers = async (req, res) => {
 
       res.status(200).json(usersWithIds);
     } else {
-      const users = readUsers().map((user) => {
+      const users = readJsonFile("users.json").map((user) => {
         const { passwordHash, ...publicUser } = user;
         return publicUser;
       });
@@ -107,7 +93,7 @@ exports.getUserById = async (req, res) => {
       });
     } else {
       // JSON fallback
-      const users = readUsers();
+      const users = readJsonFile("users.json");
       const user = users.find((u) => u.id == userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
@@ -155,7 +141,7 @@ exports.createUser = async (req, res) => {
       res.status(201).json(publicUser);
     } else {
       // JSON fallback
-      const users = readUsers();
+      const users = readJsonFile("users.json");
       const exists = users.find((u) => u.email === email);
       if (exists) {
         return res.status(409).json({ error: "User already exists" });
@@ -171,7 +157,7 @@ exports.createUser = async (req, res) => {
         role: role || "user",
       };
       users.push(newUser);
-      writeUsers(users);
+      writeJsonFile("users.json", users);
 
       const { passwordHash: _passwordHash, ...publicUser } = newUser;
       res.status(201).json(publicUser);
@@ -297,7 +283,7 @@ exports.updateUser = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     } else {
       // JSON fallback
-      const users = readUsers();
+      const users = readJsonFile("users.json");
       const userIndex = users.findIndex((u) => u.id == userId);
       if (userIndex === -1) {
         return res.status(404).json({ error: "User not found" });
@@ -317,7 +303,7 @@ exports.updateUser = async (req, res) => {
       }
 
       users[userIndex] = { ...currentUser, ...updates };
-      writeUsers(users);
+      writeJsonFile("users.json", users);
       const { passwordHash, ...publicUser } = users[userIndex];
       res.status(200).json(publicUser);
     }
@@ -380,13 +366,13 @@ exports.deleteUser = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     } else {
       // JSON fallback
-      const users = readUsers();
+      const users = readJsonFile("users.json");
       const userIndex = users.findIndex((u) => u.id == userId);
       if (userIndex === -1) {
         return res.status(404).json({ error: "User not found" });
       }
       users.splice(userIndex, 1);
-      writeUsers(users);
+      writeJsonFile("users.json", users);
       res.status(200).json({ message: "User deleted successfully" });
     }
   } catch (error) {

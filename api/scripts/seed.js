@@ -3,6 +3,7 @@ const path = require("path");
 const User = require("../models/User");
 const Car = require("../models/Car");
 const Rental = require("../models/Rental");
+const Review = require("../models/Review");
 
 const seedDatabase = async () => {
   try {
@@ -117,6 +118,80 @@ const seedDatabase = async () => {
         }
       }
       console.log(`📅 Seeded ${seededRentals} rentals`);
+    }
+
+    // Seed reviews
+    const reviewComments = [
+      "Amazing car! Had a great experience.",
+      "Very comfortable and well-maintained.",
+      "Excellent service, highly recommend!",
+      "Good car, but could be cleaner.",
+      "Perfect for my trip, will rent again.",
+      "The car exceeded my expectations!",
+      "Nice ride, smooth and reliable.",
+      "Great value for money.",
+      "Had some minor issues but overall good.",
+      "Absolutely loved this car!",
+      "Smooth driving experience.",
+      "The car was in excellent condition.",
+      "Would definitely recommend to friends.",
+      "A bit pricey but worth it.",
+      "Fantastic car for a road trip!",
+      "Very spacious and comfortable.",
+      "Clean and modern vehicle.",
+      "Had a wonderful experience.",
+      "The car performed brilliantly.",
+      "Great customer service too!",
+    ];
+
+    const allCars = await Car.find();
+    const allUsers = await User.find({ role: "user" }).limit(20);
+
+    if (allCars.length > 0 && allUsers.length > 0) {
+      let seededReviews = 0;
+
+      for (const car of allCars) {
+        // Create 3-5 reviews per car
+        const numReviews = Math.floor(Math.random() * 3) + 3; // 3-5 reviews
+
+        for (let i = 0; i < numReviews && i < allUsers.length; i++) {
+          try {
+            const user = allUsers[i];
+            const rating = Math.floor(Math.random() * 5) + 1; // 1-5 stars
+            const comment =
+              reviewComments[
+                Math.floor(Math.random() * reviewComments.length)
+              ];
+
+            // Random date within the last 6 months
+            const daysAgo = Math.floor(Math.random() * 180);
+            const createdAt = new Date();
+            createdAt.setDate(createdAt.getDate() - daysAgo);
+
+            const existingReview = await Review.findOne({
+              carId: car.id,
+              userId: user._id,
+            });
+
+            if (!existingReview) {
+              await Review.create({
+                carId: car.id, // Use car.id instead of car._id for compatibility
+                userId: user._id,
+                rentalId: `seed-rental-${car.id}-${user._id}-${i}`, // Dummy rental ID for seeded reviews
+                username: user.username,
+                rating,
+                comment,
+                createdAt,
+              });
+              seededReviews++;
+            }
+          } catch (error) {
+            console.error("Error seeding review:", error.message);
+          }
+        }
+      }
+
+      console.log(`⭐ Seeded ${seededReviews} reviews`);
     }
 
     console.log("🎉 Database seeding completed successfully!");

@@ -4,7 +4,6 @@ const Car = require("../models/Car");
 const mongoose = require("mongoose");
 
 // Helper function to check if user has completed rental for a car
-// Helper function to check if user has completed rental for a car
 const hasCompletedRental = async (userId, carId) => {
   try {
     const rental = await Rental.findOne({
@@ -220,16 +219,11 @@ const checkReviewEligibility = async (req, res) => {
     const { carId } = req.params;
     const userId = req.user.id || req.user._id;
 
-    console.log("===== CHECK REVIEW ELIGIBILITY =====");
-    console.log("Car ID:", carId);
-    console.log("User ID:", userId);
-
     // Check if has completed rental
     const hasRented = await hasCompletedRental(userId, carId);
 
     // Check if already reviewed
     const existingReview = await Review.findOne({ carId, userId });
-    console.log("Existing review:", existingReview ? "YES" : "NO");
 
     const response = {
       canReview: hasRented && !existingReview,
@@ -237,9 +231,6 @@ const checkReviewEligibility = async (req, res) => {
       hasReviewed: !!existingReview,
       existingReview: existingReview || null,
     };
-
-    console.log("Response:", response);
-    console.log("====================================");
 
     res.status(200).json(response);
   } catch (error) {

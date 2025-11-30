@@ -8,21 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const User =
   process.env.USE_MONGODB === "true" ? require("../models/User") : null;
-const usersPath = path.join(__dirname, "..", "users.json");
-
-// Helper functions for JSON fallback
-function readUsers() {
-  if (!fs.existsSync(usersPath)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(usersPath, "utf8") || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function writeUsers(users) {
-  fs.writeFileSync(usersPath, JSON.stringify(users, null, 2), "utf8");
-}
+const { readJsonFile, writeJsonFile } = require("../utils/fileHelpers");
 
 // Helper function to generate JWT token
 function generateToken(userId, email) {
@@ -78,7 +64,7 @@ exports.signup = async (req, res) => {
       res.status(201).json({ user: publicUser, token });
     } else {
       // JSON fallback
-      const users = readUsers();
+      const users = readJsonFile("users.json");
       const exists = users.find((u) => u.email === email);
       if (exists) {
         return res.status(409).json({ error: "User with this email already exists" });
@@ -103,7 +89,7 @@ exports.signup = async (req, res) => {
         role: role || "user",
       };
       users.push(newUser);
-      writeUsers(users);
+      writeJsonFile("users.json", users);
 
       const token = generateToken(newUser.id, newUser.email);
       const { passwordHash: _passwordHash, ...publicUser } = newUser;
@@ -148,7 +134,7 @@ exports.signin = async (req, res) => {
       res.status(200).json({ user: publicUser, token });
     } else {
       // JSON fallback
-      const users = readUsers();
+      const users = readJsonFile("users.json");
       const user = users.find(
         (u) => u.email === email || u.username === email
       );
