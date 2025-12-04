@@ -87,7 +87,8 @@ const rentItem = async (req, res) => {
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
     const currentUserEmail = verifyToken(token);
-    if (!currentUserEmail) return res.status(401).json({ error: "Unauthorized" });
+    if (!currentUserEmail)
+      return res.status(401).json({ error: "Unauthorized" });
     let currentUser;
 
     if (process.env.USE_MONGODB === "true" && User) {
@@ -230,7 +231,8 @@ const getUserRentals = async (req, res) => {
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
     const currentUserEmail = verifyToken(token);
-    if (!currentUserEmail) return res.status(401).json({ error: "Unauthorized" });
+    if (!currentUserEmail)
+      return res.status(401).json({ error: "Unauthorized" });
 
     if (process.env.USE_MONGODB === "true" && Rental && User && Car) {
       const user = await User.findOne({ email: currentUserEmail });
@@ -289,7 +291,8 @@ const cancelRental = async (req, res) => {
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
     const currentUserEmail = verifyToken(token);
-    if (!currentUserEmail) return res.status(401).json({ error: "Unauthorized" });
+    if (!currentUserEmail)
+      return res.status(401).json({ error: "Unauthorized" });
 
     if (process.env.USE_MONGODB === "true" && Rental && User) {
       const user = await User.findOne({ email: currentUserEmail });
@@ -609,6 +612,47 @@ const updateRental = async (req, res) => {
   }
 };
 
+// Public: get active bookings for a car (used by frontend availability calendar)
+const getBookingsForCar = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (process.env.USE_MONGODB === "true" && Rental) {
+      // Build flexible query to match different carId formats
+      const orClauses = [{ carId: id }];
+      if (!isNaN(parseInt(id))) orClauses.push({ carId: parseInt(id) });
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        orClauses.push({ carId: mongoose.Types.ObjectId(id) });
+      }
+
+      const rentals = await Rental.find({
+        status: "active",
+        $or: orClauses,
+      }).select("startDate endDate id");
+
+      const bookings = rentals.map((r) => ({
+        startDate: r.startDate,
+        endDate: r.endDate,
+      }));
+      return res.status(200).json({ bookings });
+    }
+
+    // JSON fallback
+    const rentals = readJsonFile("rentItem.json");
+    const filtered = rentals.filter(
+      (r) => r.carId == id && r.status === "active"
+    );
+    const bookings = filtered.map((r) => ({
+      startDate: r.startDate,
+      endDate: r.endDate,
+    }));
+    res.status(200).json({ bookings });
+  } catch (error) {
+    console.error("Get bookings error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   checkCarAvailability,
   rentItem,
@@ -616,4 +660,5 @@ module.exports = {
   cancelRental,
   getAllRentals,
   updateRental,
+  getBookingsForCar,
 };

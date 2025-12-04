@@ -5,13 +5,6 @@ import React from "react";
 import { Input } from "../../components/UI/input";
 import { Label } from "../../components/UI/label";
 import { Button } from "../../components/UI/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "../../components/UI/select";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");

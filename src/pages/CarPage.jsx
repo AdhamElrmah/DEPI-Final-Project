@@ -17,7 +17,7 @@ import {
 
 function CarPage() {
   const car = useLoaderData();
-  const { user } = useAuth(); // Token is inside user object
+  const { user } = useAuth();
   const token = user?.token; // Extract token from user
   const location = useLocation();
   const [reviews, setReviews] = useState([]);
@@ -78,7 +78,12 @@ function CarPage() {
   const handleSubmitReview = async ({ rating, comment }) => {
     try {
       if (existingReview) {
-        await updateReview(existingReview._id || existingReview.id, rating, comment, token);
+        await updateReview(
+          existingReview._id || existingReview.id,
+          rating,
+          comment,
+          token
+        );
       } else {
         await createReview(car.id, rating, comment, token);
       }
@@ -100,7 +105,7 @@ function CarPage() {
 
   const confirmDelete = async () => {
     if (!reviewToDelete) return;
-    
+
     try {
       await deleteReview(reviewToDelete, token);
       await loadReviews();
@@ -135,9 +140,9 @@ function CarPage() {
 
       {/* Reviews Section */}
       <section id="reviews" className="max-w-7xl mx-auto px-6 pb-12">
-        <h2 className="text-xl lg:text-2xl font-extrabold text-gray-900 pb-4">Customer Reviews</h2>
-
-
+        <h2 className="text-xl lg:text-2xl font-extrabold text-gray-900 pb-4">
+          Customer Reviews
+        </h2>
 
         {/* Review Form */}
         {user && (canReview || existingReview) && showReviewForm && (

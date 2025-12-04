@@ -209,7 +209,9 @@ export default function ReviewsManagement() {
                 variant="outline"
                 size="sm"
                 disabled={currentPage === pagination.pages}
-                onClick={() => setCurrentPage((p) => Math.min(pagination.pages, p + 1))}
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(pagination.pages, p + 1))
+                }
               >
                 Next
               </Button>

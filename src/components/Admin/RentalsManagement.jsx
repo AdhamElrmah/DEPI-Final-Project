@@ -114,6 +114,7 @@ export default function RentalsManagement() {
       setMessage({ type: "error", text: errorMessage });
     }
   };
+
   const handleCancelEdit = () => {
     setEditingRental(null);
     setEditForm({ startDate: "", endDate: "" });
@@ -215,149 +216,155 @@ export default function RentalsManagement() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredRentals
-                .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
                 .map((rental) => (
-                <tr key={rental.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-12 w-12">
-                        <img
-                          className="h-12 w-12 rounded-lg object-cover"
-                          src={
-                            rental.car?.images?.main ||
-                            rental.car?.logo ||
-                            "/placeholder-car.jpg" // Add a fallback image
-                          }
-                          alt={`${rental.car?.make || "Unknown"} ${
-                            rental.car?.model || "Car"
-                          }`}
-                        />{" "}
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
-                          {rental.car?.year} {rental.car?.make}{" "}
-                          {rental.car?.model}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          ${rental.pricePerDay}/day
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {rental.user?.name}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {rental.user?.email}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {editingRental === rental.id ? (
-                      <div className="space-y-2">
-                        <div>
-                          <Label htmlFor="edit-start-date" className="text-xs">
-                            Start Date
-                          </Label>
-                          <Input
-                            id="edit-start-date"
-                            type="date"
-                            value={editForm.startDate}
-                            onChange={(e) =>
-                              setEditForm({
-                                ...editForm,
-                                startDate: e.target.value,
-                              })
+                  <tr key={rental.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-12 w-12">
+                          <img
+                            className="h-12 w-12 rounded-lg object-cover"
+                            src={
+                              rental.car?.images?.main ||
+                              rental.car?.logo ||
+                              "/placeholder-car.jpg" // Add a fallback image
                             }
-                            className="text-xs"
-                          />
+                            alt={`${rental.car?.make || "Unknown"} ${
+                              rental.car?.model || "Car"
+                            }`}
+                          />{" "}
                         </div>
-                        <div>
-                          <Label htmlFor="edit-end-date" className="text-xs">
-                            End Date
-                          </Label>
-                          <Input
-                            id="edit-end-date"
-                            type="date"
-                            value={editForm.endDate}
-                            onChange={(e) =>
-                              setEditForm({
-                                ...editForm,
-                                endDate: e.target.value,
-                              })
-                            }
-                            className="text-xs"
-                          />
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">
+                            {rental.car?.year} {rental.car?.make}{" "}
+                            {rental.car?.model}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            ${rental.pricePerDay}/day
+                          </div>
                         </div>
                       </div>
-                    ) : (
-                      <div>
-                        <div>
-                          {new Date(rental.startDate).toLocaleDateString()}
-                        </div>
-                        <div className="text-gray-400">to</div>
-                        <div>
-                          {new Date(rental.endDate).toLocaleDateString()}
-                        </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">
+                        {rental.user?.name}
                       </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${rental.totalPrice}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                        rental.status
-                      )}`}
-                    >
-                      {rental.status.charAt(0).toUpperCase() +
-                        rental.status.slice(1)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    {editingRental === rental.id ? (
-                      <div className="space-x-1">
-                        <button
-                          onClick={handleSaveEdit}
-                          className="text-green-600 hover:text-green-900"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={handleCancelEdit}
-                          className="text-gray-600 hover:text-gray-900"
-                        >
-                          Cancel
-                        </button>
+                      <div className="text-sm text-gray-500">
+                        {rental.user?.email}
                       </div>
-                    ) : (
-                      <div className="space-x-1">
-                        {rental.status === "active" && (
-                          <>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEditRental(rental)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {editingRental === rental.id ? (
+                        <div className="space-y-2">
+                          <div>
+                            <Label
+                              htmlFor="edit-start-date"
                               className="text-xs"
                             >
-                              Edit
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => openCancelConfirm(rental.id)}
-                              className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
-                            >
-                              Cancel
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                              Start Date
+                            </Label>
+                            <Input
+                              id="edit-start-date"
+                              type="date"
+                              value={editForm.startDate}
+                              onChange={(e) =>
+                                setEditForm({
+                                  ...editForm,
+                                  startDate: e.target.value,
+                                })
+                              }
+                              className="text-xs"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="edit-end-date" className="text-xs">
+                              End Date
+                            </Label>
+                            <Input
+                              id="edit-end-date"
+                              type="date"
+                              value={editForm.endDate}
+                              onChange={(e) =>
+                                setEditForm({
+                                  ...editForm,
+                                  endDate: e.target.value,
+                                })
+                              }
+                              className="text-xs"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <div>
+                            {new Date(rental.startDate).toLocaleDateString()}
+                          </div>
+                          <div className="text-gray-400">to</div>
+                          <div>
+                            {new Date(rental.endDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      ${rental.totalPrice}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+                          rental.status
+                        )}`}
+                      >
+                        {rental.status.charAt(0).toUpperCase() +
+                          rental.status.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                      {editingRental === rental.id ? (
+                        <div className="space-x-1">
+                          <button
+                            onClick={handleSaveEdit}
+                            className="text-green-600 hover:text-green-900"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={handleCancelEdit}
+                            className="text-gray-600 hover:text-gray-900"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-x-1">
+                          {rental.status === "active" && (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleEditRental(rental)}
+                                className="text-xs"
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => openCancelConfirm(rental.id)}
+                                className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                              >
+                                Cancel
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -374,15 +381,21 @@ export default function RentalsManagement() {
               Previous
             </Button>
             <span className="px-4 py-2 text-sm text-gray-600">
-              Page {currentPage} of {Math.ceil(filteredRentals.length / itemsPerPage)}
+              Page {currentPage} of{" "}
+              {Math.ceil(filteredRentals.length / itemsPerPage)}
             </span>
             <Button
               variant="outline"
               size="sm"
-              disabled={currentPage === Math.ceil(filteredRentals.length / itemsPerPage)}
+              disabled={
+                currentPage === Math.ceil(filteredRentals.length / itemsPerPage)
+              }
               onClick={() =>
                 setCurrentPage((p) =>
-                  Math.min(Math.ceil(filteredRentals.length / itemsPerPage), p + 1)
+                  Math.min(
+                    Math.ceil(filteredRentals.length / itemsPerPage),
+                    p + 1
+                  )
                 )
               }
             >

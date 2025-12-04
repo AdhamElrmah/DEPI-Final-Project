@@ -11,10 +11,7 @@ export const rentCar = async (carId, rentalData, token) => {
 };
 
 export const getUserRentals = async (token) => {
-  const res = await baseApi.get(
-    "rentals/user",
-    buildConfig(undefined, token)
-  );
+  const res = await baseApi.get("rentals/user", buildConfig(undefined, token));
   return res.data;
 };
 
@@ -27,10 +24,7 @@ export const cancelRental = async (rentalId, token) => {
 };
 
 export const getAllRentals = async (token) => {
-  const res = await baseApi.get(
-    "rentals/all",
-    buildConfig(undefined, token)
-  );
+  const res = await baseApi.get("rentals/all", buildConfig(undefined, token));
   return res.data;
 };
 
@@ -50,6 +44,13 @@ export const checkCarAvailability = async (carId, startDate, endDate) => {
       startDate,
       endDate,
     }
+  );
+  return res.data;
+};
+
+export const getCarBookings = async (carId) => {
+  const res = await baseApi.get(
+    `rentals/${encodeURIComponent(carId)}/bookings`
   );
   return res.data;
 };

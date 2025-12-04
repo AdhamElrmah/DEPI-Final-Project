@@ -1,5 +1,5 @@
 /* eslint-env node */
-/* global require, exports, __dirname */
+/* global require, exports, __dirname, process */
 
 const fs = require("fs");
 const path = require("path");
@@ -20,8 +20,15 @@ function generateToken(userId, email) {
 
 exports.signup = async (req, res) => {
   try {
-    const { firstName, lastName, username, email, password, role, phoneNumber } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      role,
+      phoneNumber,
+    } = req.body;
     if (!email || !password || !firstName || !lastName || !username) {
       return res.status(400).json({
         error: "firstName, lastName, username, email and password required",
@@ -32,7 +39,9 @@ exports.signup = async (req, res) => {
       // MongoDB implementation
       const exists = await User.findOne({ email });
       if (exists) {
-        return res.status(409).json({ error: "User with this email already exists" });
+        return res
+          .status(409)
+          .json({ error: "User with this email already exists" });
       }
       const usernameExists = await User.findOne({ username });
       if (usernameExists) {
@@ -67,7 +76,9 @@ exports.signup = async (req, res) => {
       const users = readJsonFile("users.json");
       const exists = users.find((u) => u.email === email);
       if (exists) {
-        return res.status(409).json({ error: "User with this email already exists" });
+        return res
+          .status(409)
+          .json({ error: "User with this email already exists" });
       }
       const usernameExists = users.find((u) => u.username === username);
       if (usernameExists) {
@@ -105,7 +116,9 @@ exports.signin = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ error: "Email/Username and password required" });
+      return res
+        .status(400)
+        .json({ error: "Email/Username and password required" });
     }
 
     if (process.env.USE_MONGODB === "true" && User) {
@@ -135,9 +148,7 @@ exports.signin = async (req, res) => {
     } else {
       // JSON fallback
       const users = readJsonFile("users.json");
-      const user = users.find(
-        (u) => u.email === email || u.username === email
-      );
+      const user = users.find((u) => u.email === email || u.username === email);
       if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
       const ok = bcrypt.compareSync(password, user.passwordHash);

@@ -43,7 +43,7 @@ export default function RentalHistory() {
       await cancelRental(rentalId, user.token);
       setMessage({ type: "success", text: "Rental cancelled successfully!" });
       // Refresh rentals
-      await fetchUserRentals();
+      await fetchData();
     } catch (err) {
       console.error("Cancel rental error:", err);
       const errorMessage =
@@ -114,10 +114,7 @@ export default function RentalHistory() {
       ) : (
         <div className="space-y-4">
           {rentals.map((rental) => (
-            <div
-              key={rental.id}
-              className="bg-white rounded-lg shadow-md p-6"
-            >
+            <div key={rental.id} className="bg-white rounded-lg shadow-md p-6">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* Car Image */}
                 <div className="flex-shrink-0">
@@ -178,8 +175,9 @@ export default function RentalHistory() {
                             <div className="flex flex-col items-end">
                               <StarRating
                                 rating={
-                                  getReviewForCar(rental.car?.id || rental.carId)
-                                    .rating
+                                  getReviewForCar(
+                                    rental.car?.id || rental.carId
+                                  ).rating
                                 }
                                 readonly
                                 size="w-4 h-4"

@@ -92,7 +92,9 @@ const createReview = async (req, res) => {
   } catch (error) {
     console.error("Create review error:", error);
     if (error.code === 11000) {
-      return res.status(400).json({ error: "You have already reviewed this car" });
+      return res
+        .status(400)
+        .json({ error: "You have already reviewed this car" });
     }
     res.status(500).json({ error: "Server error" });
   }
@@ -159,7 +161,9 @@ const updateReview = async (req, res) => {
 
     // Check ownership
     if (review.userId.toString() !== userId.toString()) {
-      return res.status(403).json({ error: "You can only update your own reviews" });
+      return res
+        .status(403)
+        .json({ error: "You can only update your own reviews" });
     }
 
     // Validation
@@ -201,7 +205,9 @@ const deleteReview = async (req, res) => {
       review.userId.toString() !== userId.toString() &&
       userRole !== "admin"
     ) {
-      return res.status(403).json({ error: "Unauthorized to delete this review" });
+      return res
+        .status(403)
+        .json({ error: "Unauthorized to delete this review" });
     }
 
     await Review.findByIdAndDelete(id);

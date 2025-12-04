@@ -7,6 +7,7 @@ import { Button } from "../components/UI/button";
 import { Textarea } from "../components/UI/textarea";
 import { getCarById } from "../lib/getData";
 import { checkCarAvailability as carAvailability } from "../lib/getRent";
+import DateRangePicker from "@/components/Checkout/DateRangePicker";
 import LoaderSpinner from "../layouts/LoaderSpinner";
 
 export default function CheckoutPage() {
@@ -77,12 +78,10 @@ export default function CheckoutPage() {
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
-  // Check car availability for selected dates
   const checkCarAvailability = async (startDate, endDate) => {
     try {
       setAvailabilityLoading(true);
 
-      // Use the new availability check API
       const response = await carAvailability(carId, startDate, endDate);
 
       return {
@@ -156,9 +155,11 @@ export default function CheckoutPage() {
       },
     });
   };
+
   if (carLoading) {
     return <LoaderSpinner />;
   }
+
   if (!car) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -231,32 +232,18 @@ export default function CheckoutPage() {
           <h2 className="text-2xl font-semibold mb-4">Booking Information</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
               <div>
-                <Label htmlFor="startDate">Pickup Date *</Label>
-                <Input
-                  id="startDate"
-                  name="startDate"
-                  type="date"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                  min={new Date().toISOString().split("T")[0]}
-                  required
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="endDate">Return Date *</Label>
-                <Input
-                  id="endDate"
-                  name="endDate"
-                  type="date"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                  min={
-                    formData.startDate || new Date().toISOString().split("T")[0]
+                <Label>Choose Rental Dates *</Label>
+                <DateRangePicker
+                  carId={carId}
+                  value={{
+                    startDate: formData.startDate,
+                    endDate: formData.endDate,
+                  }}
+                  onChange={(dates) =>
+                    setFormData((prev) => ({ ...prev, ...dates }))
                   }
-                  required
                 />
               </div>
             </div>
