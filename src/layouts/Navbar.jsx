@@ -17,6 +17,7 @@ export default function Navbar({ allCars }) {
     { name: "All Cars", path: "/cars" },
     { name: "Contact Us", path: "/contact-us" },
     { name: "Services", path: "/Services" },
+    { name: "FAQ", path: "/faq" },
   ];
 
   const displayLinks = [...navLinks];

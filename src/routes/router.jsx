@@ -10,16 +10,29 @@ const CarsRentalPage = React.lazy(() => import("../pages/CarsRentalPage"));
 const HomePage = React.lazy(() => import("../pages/HomePage"));
 const ContactUsPage = React.lazy(() => import("../pages/ContactUsPage"));
 const ServicesPage = React.lazy(() => import("../pages/ServicesPage"));
+const FAQPage = React.lazy(() => import("../pages/FAQPage"));
 const SignIn = React.lazy(() => import("../pages/auth/SignIn"));
 const SignUp = React.lazy(() => import("../pages/auth/SignUp"));
 const AdminDashboard = React.lazy(() => import("../pages/AdminDashboard"));
-const CarsManagement = React.lazy(() => import("../components/Admin/CarsManagement"));
-const UsersManagement = React.lazy(() => import("../components/Admin/UsersManagement"));
-const RentalsManagement = React.lazy(() => import("../components/Admin/RentalsManagement"));
-const ReviewsManagement = React.lazy(() => import("../components/Admin/ReviewsManagement"));
+const CarsManagement = React.lazy(() =>
+  import("../components/Admin/CarsManagement")
+);
+const UsersManagement = React.lazy(() =>
+  import("../components/Admin/UsersManagement")
+);
+const RentalsManagement = React.lazy(() =>
+  import("../components/Admin/RentalsManagement")
+);
+const ReviewsManagement = React.lazy(() =>
+  import("../components/Admin/ReviewsManagement")
+);
 const ProfilePage = React.lazy(() => import("../pages/ProfilePage"));
-const ProfileSettings = React.lazy(() => import("../components/ProfilePage/ProfileSettings"));
-const RentalHistory = React.lazy(() => import("../components/ProfilePage/RentalHistory"));
+const ProfileSettings = React.lazy(() =>
+  import("../components/ProfilePage/ProfileSettings")
+);
+const RentalHistory = React.lazy(() =>
+  import("../components/ProfilePage/RentalHistory")
+);
 const CheckoutPage = React.lazy(() => import("../pages/CheckoutPage"));
 const PaymentPage = React.lazy(() => import("../pages/PaymentPage"));
 
@@ -41,9 +54,10 @@ export const router = createBrowserRouter([
       },
       { path: "/Services", element: <ServicesPage /> },
       { path: "/contact-us", element: <ContactUsPage /> },
+      { path: "/faq", element: <FAQPage /> },
       { path: "/signin", element: <SignIn /> },
       { path: "/signup", element: <SignUp /> },
-      { 
+      {
         path: "/admin",
         element: <AdminDashboard />,
         children: [
@@ -69,7 +83,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
-      { 
+      {
         path: "/profile",
         element: <ProfilePage />,
         children: [

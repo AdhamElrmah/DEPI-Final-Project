@@ -7,6 +7,7 @@ const navigation = {
     { name: "All Cars", path: "/cars" },
     { name: "Contact Us", path: "/contact-us" },
     { name: "Services", path: "/Services" },
+    { name: "FAQ", path: "/faq" },
   ],
   social: [
     {
@@ -77,24 +78,24 @@ function Footer() {
   const location = useLocation();
   return (
     <footer className="bg-black">
-      <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
+      <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 py-12 sm:py-16 lg:py-20 lg:px-8">
         {/* Centered logo above footer content */}
-        <div className="w-full flex justify-center mb-8">
+        <div className="w-full flex justify-center mb-6 sm:mb-8">
           <img
             src="https://framerusercontent.com/images/kNKxQDxCyQc75g1xPj8t9B7H4II.png"
             alt="ByDrive logo"
-            className="h-8 w-auto object-contain"
+            className="h-6 sm:h-8 w-auto object-contain"
           />
         </div>
         <nav
-          className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
+          className=" flex flex-wrap justify-center gap-4 sm:gap-8 lg:gap-12 "
           aria-label="Footer"
         >
           {navigation.main.map((item) => (
-            <div key={item.name} className="pb-6 text-center sm:text-left">
+            <div key={item.name} className="text-center">
               <Link
                 to={item.path}
-                className={`text-sm leading-6 text-white md:font-semibold hover:text-gray-300 transition relative py-1 ${
+                className={`text-xs sm:text-sm leading-6 text-white font-medium sm:font-semibold hover:text-gray-300 transition relative py-1 ${
                   location.pathname === item.path
                     ? "after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-white after:rounded-full"
                     : "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-0.5 after:w-0 after:bg-white after:rounded-full after:transition-all after:duration-200 hover:after:left-0 hover:after:w-full"
@@ -105,7 +106,7 @@ function Footer() {
             </div>
           ))}
         </nav>
-        <div className="mt-8 flex justify-center space-x-8">
+        <div className="mt-6 sm:mt-8 flex justify-center gap-6 sm:gap-8">
           {navigation.social.map((item) => (
             <a
               key={item.name}
@@ -113,11 +114,11 @@ function Footer() {
               className="text-gray-300 hover:text-white active:opacity-80 transition-colors"
             >
               <span className="sr-only">{item.name}</span>
-              <item.icon className="h-6 w-6" aria-hidden="true" />
+              <item.icon className="h-5 sm:h-6 w-5 sm:w-6" aria-hidden="true" />
             </a>
           ))}
         </div>
-        <p className="mt-8 text-center text-xs leading-5 text-gray-400">
+        <p className="mt-6 sm:mt-8 text-center text-xs sm:text-xs leading-5 text-gray-400">
           &copy; 2024 ByDrive, Inc. All rights reserved.
         </p>
       </div>
