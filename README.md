@@ -1,25 +1,59 @@
-# 🚗 Car Rental Management System (ByDrive)
+# 🚗 ByDrive - Car Rental Management System
+
+<div align="center">
 
 [![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](https://depi-final-project-frontend.netlify.app/)
+![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-7.x-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 
-[![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4.x-lightgrey.svg)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-7.x-green.svg)](https://mongodb.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-blue.svg)](https://tailwindcss.com/)
-[![JWT](https://img.shields.io/badge/JWT-Authentication-black.svg)](https://jwt.io/)
+A full-stack car rental platform that enables users to browse, book, and manage car rentals online. Built with modern technologies for a seamless experience for both customers and administrators.
 
-A full-stack web application for managing car rentals, built with modern technologies to provide a seamless experience for both customers and administrators.
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Installation](#-installation) • [API Reference](#-api-reference) • [Deployment](#-deployment)
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [Project Overview](#-project-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [API Reference](#-api-reference)
+  - [Authentication](#authentication)
+  - [Cars (Items)](#cars-items)
+  - [Rentals](#rentals)
+  - [Reviews](#reviews)
+  - [Users](#users)
+- [Database Design](#-database-design)
+- [Authentication & Authorization](#-authentication--authorization)
+- [Deployment](#-deployment)
+- [Usage Instructions](#-usage-instructions)
+- [Contributing](#-contributing)
+- [Authors & Credits](#-authors--credits)
+- [License](#-license)
+
+---
 
 ## 🧩 Project Overview
 
-The Car Rental Management System is a comprehensive platform that enables users to browse, book, and manage car rentals online. The system addresses the challenges of traditional car rental processes by providing a digital-first approach with real-time availability, secure payments, and intuitive user interfaces.
+The **ByDrive Car Rental Management System** is a comprehensive platform that enables users to browse, book, and manage car rentals online. The system addresses the challenges of traditional car rental processes by providing a digital-first approach with real-time availability, secure payments, and intuitive user interfaces.
 
 ### Key Benefits
 
-- **For Customers**: Easy car discovery, transparent pricing, secure booking, and rental history management
-- **For Administrators**: Complete inventory control, user management, rental oversight, and business analytics
-- **For Business**: Increased operational efficiency, reduced administrative overhead, and scalable growth
+| For Customers | For Administrators | For Business |
+|---------------|-------------------|--------------|
+| Easy car discovery | Complete inventory control | Increased operational efficiency |
+| Transparent pricing | User management | Reduced administrative overhead |
+| Secure booking | Rental oversight | Scalable growth |
+| Rental history management | Business analytics | Data-driven decisions |
 
 ### Target Users
 
@@ -27,59 +61,32 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - **Car Rental Companies**: Businesses managing fleet operations and customer bookings
 - **System Administrators**: Staff responsible for platform maintenance and customer support
 
-## ⚙️ Tech Stack
+---
 
-### Frontend
-
-- **React 18** - Modern JavaScript library for building user interfaces
-- **React Router** - Declarative routing for React applications
-- **Tailwind CSS** - Utility-first CSS framework for styling
-- **Framer Motion** - Library for smooth and interactive animations in React
-- **Headless UI** - Accessible UI components for React
-- **Axios** - HTTP client for API communication
-- **Lucide React** - Beautiful icon library
-- **Heroicons** - Icon components from Tailwind Labs
-- **Chatling.ai** - AI Chatbot integration
-
-### Backend
-
-- **Node.js** - JavaScript runtime for server-side development
-- **Express.js** - Fast, unopinionated web framework for Node.js
-- **JWT (JSON Web Tokens)** - Secure authentication mechanism
-- **bcrypt** - Password hashing library for security
-- **CORS** - Cross-origin resource sharing middleware
-
-### Database
-
-- **MongoDB Atlas** - Cloud-hosted NoSQL database for production
-- **Mongoose ODM** - Object Data Modeling for MongoDB
-- **JSON File Fallback** - Local file storage for development/testing
-
-### Development Tools
-
-- **ESLint** - Code linting and formatting
-- **Vite** - Fast build tool for React applications
-- **Nodemon** - Automatic server restart during development
-
-## 🚀 Features
+## ✨ Features
 
 ### Customer Features
 
-- 🔐 **Secure Authentication** - User registration and login with JWT tokens
-- 🚗 **Car Browsing** - Advanced search and filtering by category, price, and features
-- 📅 **Online Booking** - Real-time availability checking and reservation system
-- 💳 **Secure Checkout** - Comprehensive booking flow with payment integration
-- 👤 **Profile Management** - Account settings and rental history tracking
-- ⭐ **Reviews & Ratings** - Rate and review cars after completing rentals
-- 📱 **Responsive Design** - Mobile-first approach for all devices
+| Feature | Description |
+|---------|-------------|
+| 🔐 **Secure Authentication** | User registration and login with JWT tokens |
+| 🚗 **Car Browsing** | Advanced search and filtering by category, price, and features |
+| 📅 **Online Booking** | Real-time availability checking and reservation system |
+| 💳 **Secure Checkout** | Comprehensive booking flow with payment integration |
+| 👤 **Profile Management** | Account settings and rental history tracking |
+| ⭐ **Reviews & Ratings** | Rate and review cars after completing rentals |
+| 📱 **Responsive Design** | Mobile-first approach for all devices |
+| 🤖 **AI Chatbot** | Instant customer support powered by Chatling.ai |
 
 ### Administrator Features
 
-- 👥 **User Management** - Complete control over user accounts and permissions
-- 🚙 **Fleet Management** - Add, edit, and remove vehicles from inventory
-- 📊 **Rental Oversight** - View, modify, and cancel rental bookings
-- ⭐ **Review Management** - Monitor and moderate user reviews
-- ⚙️ **System Administration** - Platform configuration and maintenance
+| Feature | Description |
+|---------|-------------|
+| 👥 **User Management** | Complete control over user accounts and permissions |
+| 🚙 **Fleet Management** | Add, edit, and remove vehicles from inventory |
+| 📊 **Rental Oversight** | View, modify, and cancel rental bookings |
+| ⭐ **Review Management** | Monitor and moderate user reviews |
+| ⚙️ **System Administration** | Platform configuration and maintenance |
 
 ### Advanced Features
 
@@ -87,223 +94,800 @@ The Car Rental Management System is a comprehensive platform that enables users 
 - 🛡️ **Data Security** - Encrypted passwords and secure API endpoints
 - 🎨 **Modern UI/UX** - Clean, intuitive interface with smooth animations
 - ⚡ **Performance Optimized** - Fast loading times and efficient data handling
-- 📧 **Email Notifications** - Automated booking confirmations
 - 🗄️ **MongoDB Integration** - Scalable NoSQL database with automatic migration
-- 🤖 **AI Chatbot** - Instant customer support powered by Chatling.ai
 - 🔄 **Dual Database Support** - Seamless switching between MongoDB and JSON storage
 - 📊 **Data Validation** - Mongoose schemas ensure data integrity
+- 🎬 **Smooth Animations** - Framer Motion powered transitions and effects
 
-## 🗂️ Project Structure
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **React** | 19.1.1 | Modern JavaScript library for building user interfaces |
+| **React Router** | 7.9.4 | Declarative routing for React applications |
+| **Tailwind CSS** | 4.x | Utility-first CSS framework for styling |
+| **Framer Motion** | 12.x | Library for smooth and interactive animations |
+| **Headless UI** | 2.2.9 | Accessible UI components for React |
+| **Radix UI** | Latest | Primitive UI components (Select, Label, Separator) |
+| **Axios** | 1.12.2 | HTTP client for API communication |
+| **Lucide React** | 0.545.0 | Beautiful icon library |
+| **Heroicons** | 2.2.0 | Icon components from Tailwind Labs |
+| **Swiper** | 12.0.3 | Modern touch slider library |
+| **Embla Carousel** | 8.6.0 | Lightweight carousel library |
+| **React Day Picker** | 9.11.1 | Date picking component |
+| **Date-fns** | 4.1.0 | Date utility library |
+| **Vite** | 7.1.7 | Next generation frontend build tool |
+
+### Backend
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Node.js** | 18.x | JavaScript runtime for server-side development |
+| **Express.js** | 4.21.2 | Fast, unopinionated web framework |
+| **JWT** | 9.0.2 | Secure authentication tokens |
+| **bcryptjs** | 2.4.3 | Password hashing library |
+| **Mongoose** | 8.0.3 | MongoDB Object Data Modeling |
+| **MongoDB Driver** | 7.0.0 | Official MongoDB driver |
+| **CORS** | 2.8.5 | Cross-Origin Resource Sharing middleware |
+| **dotenv** | 16.3.1 | Environment variables management |
+| **Nodemon** | 3.0.2 | Development auto-reload |
+
+### Database
+
+| Technology | Purpose |
+|------------|---------|
+| **MongoDB Atlas** | Cloud-hosted NoSQL database for production |
+| **Mongoose ODM** | Object Data Modeling for MongoDB |
+| **JSON File Fallback** | Local file storage for development/testing |
+
+---
+
+## 📁 Project Structure
 
 ```
-car-rental-app/
-├── frontend/             # React application
-│ ├── src/
-│ │ ├── components/       # Reusable UI components
-│ │ │ ├── ui/                   # Core UI elements (Button, Input, etc.)
-│ │ │ ├── auth/                 # Authentication components
-│ │ │ └── admin/                # Admin-specific components
-│ │ ├── contexts/         # React contexts
-│ │ ├── layouts/          # Layout components (Navbar, Footer)
-│ │ ├── lib/              # API functions and utilities
-│ │ ├── pages/            # Page components
-│ │ ├── routes/           # Routing configuration
-│ │ └── utils/            # Helper functions
-│ ├── assets/             # Static assets
-│ └── package.json
-├── api/                    # Node.js API server
-│ ├── controllers/        # API controllers
-│ ├── models/             # MongoDB/Mongoose schemas
-│ ├── routes/             # API route definitions
-│ ├── scripts/            # Migration and seeding scripts
-│ ├── lib/                # Database utilities
-│ ├── utils/              # Shared utility functions
-│ ├── server.js           # Server startup file
-│ └── package.json
-└── README.md
+ByDrive/
+├── src/                        # React Frontend Application
+│   ├── assets/                     # Static assets (images, icons)
+│   ├── components/                 # Reusable UI components
+│   │   ├── Admin/                      # Admin dashboard components
+│   │   ├── CarPageComp/                # Car detail page components
+│   │   ├── CarsRentalPageComp/         # Car listing components
+│   │   ├── Checkout/                   # Checkout flow components
+│   │   ├── ContactUsPageComp/          # Contact page components
+│   │   ├── FAQPageComp/                # FAQ page components
+│   │   ├── HomePageComp/               # Homepage components
+│   │   ├── ProfilePage/                # User profile components
+│   │   ├── ServicesPageComp/           # Services page components
+│   │   └── UI/                         # Core UI elements
+│   │       ├── button.jsx                  # Button component
+│   │       ├── ConfirmDialog.jsx           # Confirmation dialog
+│   │       ├── StarRating.jsx              # Star rating component
+│   │       ├── SuccessDialog.jsx           # Success dialog
+│   │       ├── UserDropdown.jsx            # User dropdown menu
+│   │       └── ...                         # Other UI components
+│   ├── contexts/                   # React contexts
+│   │   └── AuthContext.jsx             # Authentication context
+│   ├── layouts/                    # Layout components
+│   │   ├── Navbar.jsx                  # Navigation bar
+│   │   └── Footer.jsx                  # Footer component
+│   ├── lib/                        # API functions and utilities
+│   ├── pages/                      # Page components
+│   │   ├── HomePage.jsx                # Homepage
+│   │   ├── CarsRentalPage.jsx          # Car listing page
+│   │   ├── CarPage.jsx                 # Car detail page
+│   │   ├── CheckoutPage.jsx            # Checkout page
+│   │   ├── PaymentPage.jsx             # Payment processing
+│   │   ├── ProfilePage.jsx             # User profile
+│   │   ├── AdminDashboard.jsx          # Admin dashboard
+│   │   ├── ContactUsPage.jsx           # Contact page
+│   │   ├── ServicesPage.jsx            # Services page
+│   │   ├── FAQPage.jsx                 # FAQ page
+│   │   ├── Error404.jsx                # 404 error page
+│   │   └── auth/                       # Authentication pages
+│   ├── routes/                     # Routing configuration
+│   ├── utils/                      # Helper functions
+│   ├── main.jsx                    # Application entry point
+│   └── index.css                   # Global styles
+├── api/                        # Node.js Backend API
+│   ├── controllers/                # Request handlers / Business logic
+│   │   ├── authController.js           # Authentication (signup/signin)
+│   │   ├── itemController.js           # Car CRUD operations
+│   │   ├── rentalsController.js        # Rental management
+│   │   ├── reviewController.js         # Review & rating system
+│   │   └── usersController.js          # User management
+│   ├── models/                     # Mongoose schemas
+│   │   ├── Car.js                      # Car model
+│   │   ├── Rental.js                   # Rental model
+│   │   ├── Review.js                   # Review model
+│   │   └── User.js                     # User model
+│   ├── routes/                     # API route definitions
+│   │   ├── auth.js                     # /auth routes
+│   │   ├── items.js                    # /items routes
+│   │   ├── rentals.js                  # /rentals routes
+│   │   ├── reviews.js                  # /reviews routes
+│   │   └── users.js                    # /users routes
+│   ├── middleware/                 # Express middleware
+│   │   └── authMiddleware.js           # JWT verification & role checks
+│   ├── lib/                        # Utility libraries
+│   │   └── database.js                 # Database connection
+│   ├── scripts/                    # Database utilities
+│   │   ├── migrate.js                  # Data migration script
+│   │   └── seed.js                     # Database seeding
+│   ├── docs/                       # Documentation
+│   ├── utils/                      # Helper functions
+│   ├── server.js                   # Application entry point
+│   ├── vercel.json                 # Vercel deployment config
+│   └── package.json                # Backend dependencies
+├── public/                     # Public static files
+├── index.html                  # HTML entry point
+├── vite.config.js              # Vite configuration
+├── package.json                # Frontend dependencies
+├── .env.development            # Development environment config
+└── README.md                   # This file
 ```
 
-## 🔌 API Documentation
+---
 
-### Authentication Endpoints
+## 🚀 Installation
 
-#### POST `/auth/signup`
+### Prerequisites
 
-Register a new user account.
+- **Node.js 18+** installed
+- **npm** or **yarn** package manager
+- **Git** for version control
+- **MongoDB Atlas** account (for production) or local MongoDB (optional)
 
+### Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/bydrive.git
+   cd bydrive
+   ```
+
+2. **Install Frontend Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Install Backend Dependencies**
+   ```bash
+   cd api
+   npm install
+   cd ..
+   ```
+
+4. **Configure Environment Variables**
+   
+   Create `.env` file in the `api` directory:
+   ```env
+   # Server Configuration
+   PORT=5000
+   NODE_ENV=development
+
+   # Database
+   USE_MONGODB=true
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bydrive?retryWrites=true&w=majority
+
+   # JWT Authentication
+   JWT_SECRET=your-super-secret-jwt-key-change-in-production
+   JWT_EXPIRES_IN=7d
+
+   # Optional: Seed database on startup
+   SEED_ON_STARTUP=false
+   ```
+
+   Create `.env.development` in the root directory:
+   ```env
+   VITE_API_URL=http://localhost:5000/
+   ```
+
+5. **Start the Development Servers**
+   
+   In one terminal (Backend):
+   ```bash
+   cd api
+   npm run dev
+   ```
+   
+   In another terminal (Frontend):
+   ```bash
+   npm run dev
+   ```
+
+6. **Access the Application**
+   - Frontend: `http://localhost:5173`
+   - Backend API: `http://localhost:5000`
+
+---
+
+## ⚙ Configuration
+
+### Environment Variables
+
+#### Backend (api/.env)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `5000` |
+| `NODE_ENV` | Environment (development/production) | `development` |
+| `USE_MONGODB` | Use MongoDB (`true`) or JSON files (`false`) | `false` |
+| `MONGODB_URI` | MongoDB connection string | - |
+| `JWT_SECRET` | Secret key for JWT signing | `fallback_secret_key` |
+| `JWT_EXPIRES_IN` | JWT token expiration | `7d` |
+| `SEED_ON_STARTUP` | Auto-seed database on start | `false` |
+
+#### Frontend (.env.development)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_URL` | Backend API URL | `http://localhost:5000/` |
+
+### CORS Configuration
+
+The API is pre-configured to accept requests from:
+- `http://localhost:3000` (React default)
+- `http://localhost:5173` (Vite default)
+- `http://localhost:3001` (Alternative)
+- Production Netlify URLs
+
+Modify `corsOptions` in `server.js` to add additional origins.
+
+---
+
+## 📚 API Reference
+
+Base URL: `http://localhost:5000`
+
+### Health Check
+
+```http
+GET /health
+```
+
+Returns server status, environment, database type, and timestamp.
+
+---
+
+### Authentication
+
+#### Register a new user
+
+```http
+POST /auth/signup
+```
+
+**Request Body:**
 ```json
-// Request
 {
-  "name": "John Doe",
+  "firstName": "John",
+  "lastName": "Doe",
+  "username": "johndoe",
   "email": "john@example.com",
-  "password": "securepassword123"
+  "password": "securepassword123",
+  "phoneNumber": "+1234567890"
 }
+```
 
-// Response
+**Response:** `201 Created`
+```json
 {
-  "success": true,
   "user": {
-    "id": 1,
-    "name": "John Doe",
+    "id": "64abc123...",
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe",
     "email": "john@example.com",
     "role": "user"
   },
-  "token": "jwt_token_here"
+  "token": "eyJhbGciOiJIUzI1NiIs..."
 }
 ```
 
-#### POST `/auth/signin`
+#### Login
 
-Authenticate and login user.
+```http
+POST /auth/signin
+```
 
+**Request Body:**
 ```json
-// Request
 {
   "email": "john@example.com",
   "password": "securepassword123"
 }
-
-// Response
-{
-  "success": true,
-  "user": {
-    "id": 1,
-    "name": "John Doe",
-    "email": "john@example.com",
-    "role": "user"
-  },
-  "token": "jwt_token_here"
-}
 ```
 
-### Car Management Endpoints
+> **Note:** You can use either email or username in the `email` field.
 
-#### GET `/items/allItems`
+---
 
-Retrieve all available cars.
+### Cars (Items)
 
+#### Get all cars
+
+```http
+GET /items/allItems
+```
+
+**Response:** Array of all cars
 ```json
-// Response
 [
   {
     "id": "2019-fiat-500",
     "make": "Fiat",
     "model": "500",
     "year": 2019,
+    "body_type": "Hatchback",
+    "seats": 4,
+    "transmission": "automatic",
+    "fuel_type": "Gasoline",
     "price_per_day": 19,
-    "rental_class": "Economy",
-    "images": { "main": "url" }
-    // ... other car details
+    "images": { "main": "url" },
+    "rental_class": "Economy"
   }
 ]
 ```
 
-#### GET `/items/:id`
+#### Get car by ID
 
-Get detailed information about a specific car.
+```http
+GET /items/:id
+```
 
-#### POST `/items`
+#### Add a new car (Admin only)
 
-Add a new car to inventory (Admin only).
+```http
+POST /items
+Authorization: Bearer <token>
+```
 
-#### PUT `/items/:id`
-
-Update car information (Admin only).
-
-#### DELETE `/items/:id`
-
-Remove a car from inventory (Admin only).
-
-### Rental Management Endpoints
-
-#### POST `/rentals/:id`
-
-Create a new rental booking.
-
+**Request Body:**
 ```json
-// Request
 {
-  "startDate": "2024-01-15",
-  "endDate": "2024-01-20",
-  "pickupLocation": "Airport Terminal",
-  "dropoffLocation": "Downtown",
-  "specialRequests": "GPS navigation required"
-}
-
-// Response
-{
-  "success": true,
-  "message": "Car rented successfully",
-  "rental": {
-    "id": "rental_123",
-    "userId": 1,
-    "carId": "2019-fiat-500",
-    "totalPrice": 95,
-    // ... rental details
+  "id": "car-001",
+  "make": "Toyota",
+  "model": "Camry",
+  "year": 2024,
+  "body_type": "Sedan",
+  "seats": 5,
+  "transmission": "automatic",
+  "fuel_type": "Gasoline",
+  "price_per_day": 75,
+  "images": {
+    "main": "https://example.com/car.jpg"
   }
 }
 ```
 
-#### GET `/rentals/user`
+#### Update a car (Admin only)
 
-Get all rentals for the authenticated user.
+```http
+PUT /items/:id
+Authorization: Bearer <token>
+```
 
-#### GET `/rentals/all`
+#### Delete a car (Admin only)
 
-Get all rentals in the system (Admin only).
+```http
+DELETE /items/:id
+Authorization: Bearer <token>
+```
 
-#### PUT `/rentals/:id`
+---
 
-Update rental details (Admin only).
+### Rentals
 
-#### DELETE `/rentals/:id`
+#### Check car availability
 
-Cancel a rental booking.
+```http
+POST /rentals/:carId/availability
+```
 
-### Review Management Endpoints
+**Request Body:**
+```json
+{
+  "startDate": "2024-01-15",
+  "endDate": "2024-01-20"
+}
+```
 
-#### GET `/reviews/car/:carId`
+#### Get bookings for a car
 
-Get all reviews for a specific car.
+```http
+GET /rentals/:carId/bookings
+```
 
-#### POST `/reviews`
+Returns active bookings for availability calendar display.
 
-Create a new review (Requires completed rental).
+#### Create a rental
 
-#### PUT `/reviews/:id`
+```http
+POST /rentals/:carId
+Authorization: Bearer <token>
+```
 
-Update an existing review.
+**Request Body:**
+```json
+{
+  "startDate": "2024-01-15",
+  "endDate": "2024-01-20",
+  "pickupLocation": "Airport Terminal",
+  "dropoffLocation": "Downtown Office",
+  "specialRequests": "Child seat needed",
+  "paymentInfo": {
+    "method": "credit_card",
+    "cardNumber": "****4242"
+  }
+}
+```
 
-#### DELETE `/reviews/:id`
+#### Get user's rentals
 
-Delete a review (User can delete own, Admin can delete any).
+```http
+GET /rentals/user
+Authorization: Bearer <token>
+```
 
-#### GET `/reviews/all`
+#### Cancel a rental
 
-Get all reviews in the system (Admin only).
+```http
+DELETE /rentals/:rentalId
+Authorization: Bearer <token>
+```
 
-### Authentication Requirements
+#### Get all rentals (Admin only)
 
-- **Bearer Token**: Include `Authorization: Bearer <jwt_token>` header for protected endpoints
-- **Admin Routes**: Require `role: "admin"` in user token
-- **Database Flexibility**: Supports both MongoDB and JSON storage modes
-- **Rate Limiting**: Implemented to prevent API abuse
+```http
+GET /rentals/all
+Authorization: Bearer <token>
+```
 
-# 🔄 Database Migration
+#### Update rental status (Admin only)
+
+```http
+PUT /rentals/:rentalId
+Authorization: Bearer <token>
+```
+
+**Request Body:**
+```json
+{
+  "status": "completed"
+}
+```
+
+---
+
+### Reviews
+
+#### Get reviews for a car
+
+```http
+GET /reviews/car/:carId
+```
+
+**Query Parameters:**
+- `page` - Page number (default: 1)
+- `limit` - Items per page (default: 10)
+
+**Response:**
+```json
+{
+  "reviews": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 25,
+    "pages": 3
+  },
+  "stats": {
+    "average": 4.5,
+    "count": 25
+  }
+}
+```
+
+#### Check review eligibility
+
+```http
+GET /reviews/eligibility/:carId
+Authorization: Bearer <token>
+```
+
+Returns whether user can review (must have completed rental).
+
+#### Create a review
+
+```http
+POST /reviews
+Authorization: Bearer <token>
+```
+
+**Request Body:**
+```json
+{
+  "carId": "car-001",
+  "rating": 5,
+  "comment": "Excellent car, very smooth ride!"
+}
+```
+
+> **Note:** User must have a completed rental for the car to leave a review.
+
+#### Get user's reviews
+
+```http
+GET /reviews/user
+Authorization: Bearer <token>
+```
+
+#### Update a review
+
+```http
+PUT /reviews/:reviewId
+Authorization: Bearer <token>
+```
+
+#### Delete a review
+
+```http
+DELETE /reviews/:reviewId
+Authorization: Bearer <token>
+```
+
+#### Get all reviews (Admin only)
+
+```http
+GET /reviews/all
+Authorization: Bearer <token>
+```
+
+---
+
+### Users
+
+#### Get all users (Admin only)
+
+```http
+GET /users
+Authorization: Bearer <token>
+```
+
+#### Get user by ID
+
+```http
+GET /users/:userId
+Authorization: Bearer <token>
+```
+
+#### Create a user
+
+```http
+POST /users
+```
+
+#### Update user profile
+
+```http
+PUT /users/:userId
+Authorization: Bearer <token>
+```
+
+#### Delete user (Admin only)
+
+```http
+DELETE /users/:userId
+Authorization: Bearer <token>
+```
+
+---
+
+## 📊 Database Design
+
+The application uses MongoDB with Mongoose schemas for data validation and structure.
+
+### Car Model
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | String | Unique car identifier |
+| `make` | String | Car manufacturer (e.g., Toyota) |
+| `model` | String | Car model (e.g., Camry) |
+| `year` | Number | Manufacturing year |
+| `body_type` | String | Body type (Sedan, SUV, etc.) |
+| `seats` | Number | Number of seats |
+| `transmission` | String | Transmission type |
+| `fuel_type` | String | Fuel type |
+| `engine` | Object | Engine specifications |
+| `colors` | Object | Exterior/interior colors |
+| `primary_features` | Array | Key features |
+| `additional_features` | Array | Extra features |
+| `images` | Object | Car images (main, sub1-4) |
+| `price_per_day` | Number | Daily rental price |
+| `available` | Boolean | Availability status |
+
+### User Model
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | Number | User ID |
+| `firstName` | String | First name |
+| `lastName` | String | Last name |
+| `username` | String | Unique username |
+| `email` | String | Unique email address |
+| `phoneNumber` | String | Contact number |
+| `passwordHash` | String | Hashed password (hidden) |
+| `role` | String | `user` or `admin` |
+| `createdAt` | Date | Registration date |
+
+### Rental Model
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `carId` | Mixed | Reference to car |
+| `userId` | Mixed | Reference to user |
+| `startDate` | String | Rental start date |
+| `endDate` | String | Rental end date |
+| `pickupLocation` | String | Pickup location |
+| `dropoffLocation` | String | Drop-off location |
+| `totalDays` | Number | Number of rental days |
+| `pricePerDay` | Number | Daily price |
+| `totalPrice` | Number | Total rental cost |
+| `status` | String | `active`, `completed`, `cancelled` |
+| `paymentInfo` | Object | Payment details |
+
+### Review Model
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `carId` | Mixed | Reference to car |
+| `userId` | Mixed | Reference to user |
+| `rentalId` | Mixed | Reference to rental |
+| `rating` | Number | 1-5 star rating |
+| `comment` | String | Review comment (max 500 chars) |
+| `username` | String | Reviewer's username |
+| `createdAt` | Date | Review date |
+
+### Entity Relationships
+
+```mermaid
+erDiagram
+    USERS ||--o{ RENTALS : "makes"
+    USERS ||--o{ REVIEWS : "writes"
+    CARS ||--o{ RENTALS : "has"
+    CARS ||--o{ REVIEWS : "receives"
+    RENTALS ||--o| REVIEWS : "enables"
+```
+
+---
+
+## 🔐 Authentication & Authorization
+
+### JWT Authentication
+
+All protected routes require a valid JWT token in the Authorization header:
+
+```http
+Authorization: Bearer <your-jwt-token>
+```
+
+### Role-Based Access Control
+
+| Role | Permissions |
+|------|-------------|
+| **User** | View cars, make/cancel own rentals, write reviews for rented cars, manage own profile |
+| **Admin** | All user permissions + manage cars, view all users/rentals/reviews, update rental status, delete users/reviews |
+
+### Protected Routes
+
+| Route | Access Level |
+|-------|--------------|
+| `POST /items` | Admin |
+| `PUT /items/:id` | Admin |
+| `DELETE /items/:id` | Admin |
+| `GET /users` | Admin |
+| `DELETE /users/:id` | Admin |
+| `GET /rentals/all` | Admin |
+| `PUT /rentals/:id` | Admin |
+| `POST /rentals/:id` | User (authenticated) |
+| `POST /reviews` | User (authenticated + completed rental) |
+
+---
+
+## ⚠ Error Handling
+
+The API returns consistent error responses:
+
+```json
+{
+  "error": "Error message description"
+}
+```
+
+### Common Status Codes
+
+| Code | Description |
+|------|-------------|
+| `200` | Success |
+| `201` | Created |
+| `400` | Bad Request - Invalid input |
+| `401` | Unauthorized - Invalid/missing token |
+| `403` | Forbidden - Insufficient permissions |
+| `404` | Not Found |
+| `409` | Conflict - Duplicate resource |
+| `500` | Server Error |
+
+---
+
+## 🌐 Deployment
+
+### Frontend Deployment (Netlify)
+
+1. **Build the production bundle**
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy to Netlify**
+   - Drag and drop the `dist` folder to [Netlify Drop](https://app.netlify.com/drop)
+   - OR connect your GitHub repository to Netlify for automatic deployments
+
+3. **Configure environment variables in Netlify dashboard**
+   ```
+   VITE_API_URL=https://your-api-domain.vercel.app/
+   ```
+
+### Backend Deployment (Vercel)
+
+1. **Install Vercel CLI**
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Deploy the API**
+   ```bash
+   cd api
+   vercel
+   ```
+
+3. **Set environment variables in Vercel dashboard:**
+   - `USE_MONGODB=true`
+   - `MONGODB_URI=your-mongodb-uri`
+   - `JWT_SECRET=your-secret`
+   - `JWT_EXPIRES_IN=7d`
+   - `NODE_ENV=production`
+
+### Production Checklist
+
+- [ ] Use strong, unique `JWT_SECRET`
+- [ ] Configure MongoDB Atlas IP whitelist
+- [ ] Set `NODE_ENV=production`
+- [ ] Update CORS origins for production domains
+- [ ] Enable MongoDB connection pooling
+- [ ] Set up monitoring and logging
+- [ ] Configure SSL/HTTPS
+- [ ] Set `SEED_ON_STARTUP=false`
+
+---
+
+## 🔄 Database Migration
 
 The application includes comprehensive migration tools:
 
-## Migration Scripts
+### Migration Scripts
 
-### Migrate existing JSON data to MongoDB
-
+#### Migrate existing JSON data to MongoDB
 ```bash
 cd api
 node scripts/migrate.js
 ```
 
-### Seed database with initial data
-
+#### Seed database with initial data
 ```bash
 node scripts/seed.js
 ```
@@ -315,257 +899,53 @@ node scripts/seed.js
 - **Rollback Support**: Can revert to JSON storage if needed
 - **Validation**: Ensures data integrity during migration
 
-## 🗄️ Database Design
-
-The application uses MongoDB with Mongoose schemas for data validation and structure.
-
-### Core Entities
-
-#### Users Collection
-
-```json
-{
-  "id": "number (optional - for legacy support)",
-  "_id": "ObjectId (MongoDB auto-generated)",
-  "name": "string (required)",
-  "email": "string (unique, required)",
-  "passwordHash": "string (bcrypt, select: false)",
-  "role": "enum: user|admin (default: user)",
-  "createdAt": "Date (auto-generated)"
-}
-```
-
-#### Cars Collection
-
-```json
-{
-  "id": "string (required, unique)",
-  "make": "string (required)",
-  "model": "string (required)",
-  "year": "number (required)",
-  "price_per_day": "number (required)",
-  "transmission": "string (enum with validation)",
-  "body_type": "string",
-  "seats": "number",
-  "engine": "object",
-  "images": "object",
-  "features": "array",
-  "available": "boolean (default: true)"
-}
-```
-
-#### Rentals Collection
-
-```json
-{
-  "id": "string (optional - for legacy support)",
-  "carId": "Mixed (string/ObjectId)",
-  "userId": "Mixed (string/ObjectId)",
-  "userEmail": "string",
-  "userName": "string",
-  "startDate": "string",
-  "endDate": "string",
-  "totalPrice": "number",
-  "status": "enum: active|completed|cancelled",
-  "paymentInfo": "object",
-  "createdAt": "Date (auto-generated)"
-}
-```
-
-#### Reviews Collection
-
-```json
-{
-  "carId": "Mixed (string/ObjectId)",
-  "userId": "Mixed (string/ObjectId)",
-  "rentalId": "Mixed (string/ObjectId)",
-  "username": "string",
-  "rating": "number (1-5)",
-  "comment": "string",
-  "createdAt": "Date (auto-generated)"
-}
-```
-
-### Relationships
-
-- **Users → Rentals**: One-to-many (user can have multiple rentals)
-- **Cars → Rentals**: One-to-many (car can have multiple rental bookings)
-- **Rentals → Reviews**: One-to-one (a completed rental can have one review)
-- **Cars → Reviews**: One-to-many (a car can have multiple reviews)
-- **Users → Reviews**: One-to-many (a user can write multiple reviews)
-- **Data Integrity**: Enforced through application-level validation and Mongoose schemas.
-
-## ⚡ Installation & Setup
-
-### Prerequisites
-
-- Node.js 18.x or higher
-- npm or yarn package manager
-- Git
-- MongoDB Atlas account (for production) or local MongoDB (optional)
-
-### Database Setup
-
-#### Option 1: MongoDB Atlas (Recommended)
-
-##### 1. Create account at [MongoDB Atlas](https://www.mongodb.com/atlas)
-
-##### 2. Create a new cluster
-
-##### 3. Set up database user and whitelist IP
-
-##### 4. Get connection string from Atlas dashboard
-
-#### Option 2: Local MongoDB
-
-##### 1. Install MongoDB locally
-
-##### 2. Start MongoDB service
-
-### Backend Setup
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd car-rental-app
-
-# Navigate to backend directory
-cd api
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-```
-
-### Frontend Setup
-
-```bash
-# Open new terminal and navigate to frontend
-cd /
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-```
-
-### Environment Configuration
-
-Create `.env` file in the backend directory:
-
-```env
-PORT=3000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/car_rental
-JWT_SECRET=your_super_secret_jwt_key_here
-NODE_ENV=development
-USE_MONGODB=true
-SEED_ON_STARTUP=true
-VITE_API_URL=http://localhost:3000/
-```
-
-### Database Initialization
-
-The application supports dual database modes:
-
-#### MongoDB Mode (Production)
-
-- Automatic seeding on first run if `SEED_ON_STARTUP=true`
-- Data migration scripts available in `api/scripts/`
-- Uses Mongoose schemas for data validation
-
-#### JSON Mode (Development)
-
-- Fallback to JSON files if MongoDB unavailable
-- Files: `api/cars.json`, `api/users.json`, `api/rentItem.json`
+---
 
 ## 💡 Usage Instructions
 
 ### For Customers
 
-- **Register/Login**: Create an account or sign in with existing credentials
-- **Browse Cars**: Use filters to find suitable vehicles by category, price, or features
-- **Book Rental**: Select dates, choose pickup/dropoff locations, and complete booking
-- **Manage Account**: View booking history and manage profile settings
+1. **Register/Login**: Create an account or sign in with existing credentials
+2. **Browse Cars**: Use filters to find suitable vehicles by category, price, or features
+3. **Book Rental**: Select dates, choose pickup/dropoff locations, and complete booking
+4. **Leave Reviews**: Rate and review cars after completing your rental
+5. **Manage Account**: View booking history and manage profile settings
 
 ### For Administrators
 
-- **Access Dashboard**: Login with admin credentials
-- **Manage Users**: View, edit, or deactivate user accounts
-- **Manage Fleet**: Add new cars, update pricing, or remove vehicles
-- **Oversee Rentals**: View all bookings, modify dates, or cancel reservations
+1. **Access Dashboard**: Login with admin credentials and navigate to Admin Dashboard
+2. **Manage Users**: View, edit, or deactivate user accounts
+3. **Manage Fleet**: Add new cars, update pricing, or remove vehicles
+4. **Oversee Rentals**: View all bookings, modify dates, or cancel reservations
+5. **Moderate Reviews**: Monitor and delete inappropriate reviews
 
-### Key Features Demo
+---
 
-- **Search & Filter**: Use the search bar and filters on the cars page
-- **Booking Flow**: Select a car → Choose dates → Enter details → Confirm booking
-- **Admin Controls**: Access admin dashboard to manage system data
+## 📜 Scripts
 
-## 🧪 Testing
+### Frontend Scripts
 
-The project includes comprehensive testing setup:
+| Script | Command | Description |
+|--------|---------|-------------|
+| **Dev** | `npm run dev` | Start Vite development server |
+| **Build** | `npm run build` | Build production bundle |
+| **Lint** | `npm run lint` | Run ESLint |
+| **Preview** | `npm run preview` | Preview production build |
 
-```bash
-# Run backend tests
-cd api
-npm test
+### Backend Scripts
 
-# Run frontend tests
-cd /
-npm test
+| Script | Command | Description |
+|--------|---------|-------------|
+| **Start** | `npm start` | Start production server |
+| **Dev** | `npm run dev` | Start with auto-reload (nodemon) |
+| **Migrate** | `npm run migrate` | Run database migrations |
+| **Seed** | `npm run seed` | Seed database with sample data |
 
-# Run end-to-end tests (if configured)
-npm run test:e2e
-```
-
-### Test Coverage
-
-- **Unit Tests**: Component and utility function testing
-- **Integration Tests**: API endpoint testing
-- **UI Tests**: User interface interaction testing
-
-## 🌐 Deployment
-
-### Frontend Deployment (Netlify)
-
-```bash
-# Build for production
-cd /
-npm run build
-
-# Deploy to Netlify
-# Drag and drop the 'dist' folder to Netlify Drop
-# OR connect your GitHub repository to Netlify
-```
-
-### Backend Deployment (Vercel)
-
-```bash
-# Build for production
-cd api
-npm run build
-
-# Deploy to Vercel
-# Import the 'api' directory as a project in Vercel
-# Set environment variables in Vercel dashboard
-```
-
-### Environment Variables for Production
-
-```env
-NODE_ENV=production
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/car_rental
-JWT_SECRET=your_production_secret_key
-API_URL=https://your-api-domain.com
-USE_MONGODB=true
-SEED_ON_STARTUP=false
-```
+---
 
 ## 🤝 Contributing
 
-We welcome contributions to improve the Car Rental Management System!
+We welcome contributions to improve the ByDrive Car Rental Management System!
 
 ### How to Contribute
 
@@ -581,25 +961,41 @@ We welcome contributions to improve the Car Rental Management System!
 - Write clear, concise commit messages
 - Add tests for new features
 - Update documentation as needed
-- Ensure responsive design for all changes
+- Ensure responsive design for all UI changes
 
 ### Code Standards
 
 - Use functional components with React Hooks
 - Follow Tailwind CSS utility-first approach
 - Implement proper error handling
-- Use TypeScript for type safety (future enhancement)
+- Use descriptive variable and function names
+
+---
 
 ## 👤 Authors & Credits
 
 ### Development Team
 
-- **Adham Ahmed** - Team Leader & Frontend Developer
-- **Salma Medhat** - Frontend Developer
-- **Mahitab Hesham** - Frontend Developer
-- **Ahmed Ashraf** - Frontend Developer
+| Name | Role |
+|------|------|
+| **Adham Ahmed** | Team Leader & Frontend Developer |
+| **Salma Medhat** | Frontend Developer |
+| **Mahitab Hesham** | Frontend Developer |
+| **Ahmed Ashraf** | Frontend Developer |
 
 ---
 
-**Last Updated**: November 2025
+## 📄 License
+
+This project is licensed under the ISC License.
+
+---
+
+<div align="center">
+
+**Last Updated**: December 2025
 **Version**: 1.0.0
+
+[⬆ Back to Top](#-bydrive---car-rental-management-system)
+
+</div>
