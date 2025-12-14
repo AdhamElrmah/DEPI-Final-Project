@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { ChevronDown } from "lucide-react";
 
 const navigation = {
-  main: [
+  company: [
     { name: "Home", path: "/" },
     { name: "All Cars", path: "/cars" },
-    { name: "Contact Us", path: "/contact-us" },
     { name: "Services", path: "/Services" },
+    { name: "Contact Us", path: "/contact-us" },
+  ],
+  support: [
     { name: "FAQ", path: "/faq" },
+    { name: "Guides", path: "/guides" },
+    { name: "Help Center", path: "/contact-us" },
+  ],
+  legal: [
+    { name: "Terms & Conditions", path: "/terms" },
+    { name: "Privacy Policy", path: "/privacy" },
+    { name: "Cookie Policy", path: "/cookies" },
   ],
   social: [
     {
@@ -74,53 +84,214 @@ const navigation = {
   ],
 };
 
+// Accordion Section Component for Mobile
+function AccordionSection({ title, children, isOpen, onToggle }) {
+  return (
+    <div className="border-b border-gray-800">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between py-4 text-left"
+      >
+        <span className="text-white font-semibold text-sm">{title}</span>
+        <ChevronDown
+          className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96 pb-4" : "max-h-0"
+        }`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Footer() {
   const location = useLocation();
+  const [openSection, setOpenSection] = useState(null);
+
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  const LinkItem = ({ item }) => (
+    <Link
+      to={item.path}
+      className={`text-sm text-gray-300 hover:text-white transition-colors block py-1 ${
+        location.pathname === item.path ? "text-white font-medium" : ""
+      }`}
+    >
+      {item.name}
+    </Link>
+  );
+
   return (
     <footer className="bg-black">
-      <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 py-12 sm:py-16 lg:py-20 lg:px-8">
-        {/* Centered logo above footer content */}
-        <div className="w-full flex justify-center mb-6 sm:mb-8">
-          <img
-            src="https://framerusercontent.com/images/kNKxQDxCyQc75g1xPj8t9B7H4II.png"
-            alt="ByDrive logo"
-            className="h-6 sm:h-8 w-auto object-contain"
-          />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Main Footer Content */}
+        <div className="py-12 sm:py-16 lg:py-20">
+          {/* Logo */}
+          <div className="flex justify-center mb-10">
+            <Link to="/">
+              <img
+                src="https://framerusercontent.com/images/kNKxQDxCyQc75g1xPj8t9B7H4II.png"
+                alt="ByDrive logo"
+                className="h-8 w-auto object-contain"
+              />
+            </Link>
+          </div>
+
+          {/* Mobile Accordion Layout */}
+          <div className="md:hidden px-2">
+            <AccordionSection
+              title="Company"
+              isOpen={openSection === "company"}
+              onToggle={() => toggleSection("company")}
+            >
+              <ul className="space-y-2 pl-2">
+                {navigation.company.map((item) => (
+                  <li key={item.name}>
+                    <LinkItem item={item} />
+                  </li>
+                ))}
+              </ul>
+            </AccordionSection>
+
+            <AccordionSection
+              title="Support"
+              isOpen={openSection === "support"}
+              onToggle={() => toggleSection("support")}
+            >
+              <ul className="space-y-2 pl-2">
+                {navigation.support.map((item) => (
+                  <li key={item.name}>
+                    <LinkItem item={item} />
+                  </li>
+                ))}
+              </ul>
+            </AccordionSection>
+
+            <AccordionSection
+              title="Legal"
+              isOpen={openSection === "legal"}
+              onToggle={() => toggleSection("legal")}
+            >
+              <ul className="space-y-2 pl-2">
+                {navigation.legal.map((item) => (
+                  <li key={item.name}>
+                    <LinkItem item={item} />
+                  </li>
+                ))}
+              </ul>
+            </AccordionSection>
+
+            {/* Social Links for Mobile */}
+            <div className="pt-6 flex justify-center gap-6">
+              {navigation.social.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-400 hover:text-white transition-colors"
+                  aria-label={item.name}
+                >
+                  <item.icon className="h-5 w-5" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Grid Layout */}
+          <div className="hidden md:grid md:grid-cols-4 gap-8 md:gap-12 max-w-4xl mx-auto">
+            {/* Company */}
+            <div>
+              <h3 className="text-white font-semibold text-sm mb-4">Company</h3>
+              <ul className="space-y-3">
+                {navigation.company.map((item) => (
+                  <li key={item.name}>
+                    <LinkItem item={item} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div>
+              <h3 className="text-white font-semibold text-sm mb-4">Support</h3>
+              <ul className="space-y-3">
+                {navigation.support.map((item) => (
+                  <li key={item.name}>
+                    <LinkItem item={item} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3 className="text-white font-semibold text-sm mb-4">Legal</h3>
+              <ul className="space-y-3">
+                {navigation.legal.map((item) => (
+                  <li key={item.name}>
+                    <LinkItem item={item} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Connect */}
+            <div>
+              <h3 className="text-white font-semibold text-sm mb-4">Connect</h3>
+              <div className="flex flex-wrap gap-4">
+                {navigation.social.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-gray-400 hover:text-white transition-colors"
+                    aria-label={item.name}
+                  >
+                    <item.icon className="h-5 w-5" aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
+              <p className="text-gray-400 text-sm mt-4">
+                Follow us on social media for updates and exclusive offers.
+              </p>
+            </div>
+          </div>
         </div>
-        <nav
-          className=" flex flex-wrap justify-center gap-4 sm:gap-8 lg:gap-12 "
-          aria-label="Footer"
-        >
-          {navigation.main.map((item) => (
-            <div key={item.name} className="text-center">
+
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-800 py-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-sm text-center sm:text-left">
+              &copy; {new Date().getFullYear()} All rights reserved
+            </p>
+            <div className="flex items-center gap-6">
               <Link
-                to={item.path}
-                className={`text-xs sm:text-sm leading-6 text-white font-medium sm:font-semibold hover:text-gray-300 transition relative py-1 ${
-                  location.pathname === item.path
-                    ? "after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:bg-white after:rounded-full"
-                    : "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-0.5 after:w-0 after:bg-white after:rounded-full after:transition-all after:duration-200 hover:after:left-0 hover:after:w-full"
-                }`}
+                to="/terms"
+                className="text-gray-400 text-sm hover:text-white transition-colors"
               >
-                {item.name}
+                Terms
+              </Link>
+              <Link
+                to="/privacy"
+                className="text-gray-400 text-sm hover:text-white transition-colors"
+              >
+                Privacy
+              </Link>
+              <Link
+                to="/cookies"
+                className="text-gray-400 text-sm hover:text-white transition-colors"
+              >
+                Cookies
               </Link>
             </div>
-          ))}
-        </nav>
-        <div className="mt-6 sm:mt-8 flex justify-center gap-6 sm:gap-8">
-          {navigation.social.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-gray-300 hover:text-white active:opacity-80 transition-colors"
-            >
-              <span className="sr-only">{item.name}</span>
-              <item.icon className="h-5 sm:h-6 w-5 sm:w-6" aria-hidden="true" />
-            </a>
-          ))}
+          </div>
         </div>
-        <p className="mt-6 sm:mt-8 text-center text-xs sm:text-xs leading-5 text-gray-400">
-          &copy; 2024 ByDrive, Inc. All rights reserved.
-        </p>
       </div>
     </footer>
   );

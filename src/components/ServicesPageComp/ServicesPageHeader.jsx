@@ -14,7 +14,7 @@ function ServicesPageHeader() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="max-w-3xl px-6 pt-20 pb-3"
+            className="max-w-3xl px-6 pt-20 "
           >
             <h1 className="text-5xl md:text-[56px] lg:text-6xl font-extrabold text-black mb-6 ">
               Our Services

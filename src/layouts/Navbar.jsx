@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, Search, User } from "lucide-react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import React from "react";
 import SearchOverlay from "./SearchOverlay";
 import { useAuth } from "../contexts/AuthContext";
@@ -11,13 +11,13 @@ export default function Navbar({ allCars }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const { user, signout } = useAuth();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "All Cars", path: "/cars" },
     { name: "Contact Us", path: "/contact-us" },
     { name: "Services", path: "/Services" },
-    { name: "FAQ", path: "/faq" },
   ];
 
   const displayLinks = [...navLinks];
@@ -99,6 +99,7 @@ export default function Navbar({ allCars }) {
                 onClose={() => {}}
                 onSignOut={() => {
                   signout();
+                  navigate("/signin");
                 }}
               />
             ) : (

@@ -34,7 +34,8 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (!user) {
-      navigate("/signin");
+      // Redirect to signin with return URL so user comes back here after login
+      navigate(`/signin?redirect=${encodeURIComponent(location.pathname)}`);
       return;
     }
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
 import { Input } from "../../components/UI/input";
@@ -12,6 +12,10 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const { signin } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Get redirect URL from query params, default to home
+  const redirectUrl = searchParams.get("redirect") || "/";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +24,8 @@ export default function SignIn() {
     (async () => {
       try {
         await signin(identifier, password);
-        navigate("/");
+        // Navigate to the redirect URL (could be the car checkout page)
+        navigate(redirectUrl);
       } catch (err) {
         setError(err.message || "Failed to sign in");
       }
@@ -29,7 +34,7 @@ export default function SignIn() {
 
   return (
     <>
-      <div className="flex min-h-full flex-1 max-w-[1500px] mx-auto">
+      <div className="flex min-h-[calc(100vh-64px)] flex-1 max-w-[1500px] mx-auto">
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>

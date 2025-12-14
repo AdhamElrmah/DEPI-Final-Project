@@ -10,7 +10,17 @@ const CarsRentalPage = React.lazy(() => import("../pages/CarsRentalPage"));
 const HomePage = React.lazy(() => import("../pages/HomePage"));
 const ContactUsPage = React.lazy(() => import("../pages/ContactUsPage"));
 const ServicesPage = React.lazy(() => import("../pages/ServicesPage"));
-const FAQPage = React.lazy(() => import("../pages/FAQPage"));
+const FAQPage = React.lazy(() =>
+  import("../components/Footer/FAQPageComp/FAQPage")
+);
+const TermsPage = React.lazy(() => import("../components/Footer/TermsPage"));
+const PrivacyPage = React.lazy(() =>
+  import("../components/Footer/PrivacyPage")
+);
+const CookiePolicyPage = React.lazy(() =>
+  import("../components/Footer/CookiePolicyPage")
+);
+const GuidesPage = React.lazy(() => import("../components/Footer/GuidesPage"));
 const SignIn = React.lazy(() => import("../pages/auth/SignIn"));
 const SignUp = React.lazy(() => import("../pages/auth/SignUp"));
 const AdminDashboard = React.lazy(() => import("../pages/AdminDashboard"));
@@ -55,6 +65,10 @@ export const router = createBrowserRouter([
       { path: "/Services", element: <ServicesPage /> },
       { path: "/contact-us", element: <ContactUsPage /> },
       { path: "/faq", element: <FAQPage /> },
+      { path: "/terms", element: <TermsPage /> },
+      { path: "/privacy", element: <PrivacyPage /> },
+      { path: "/cookies", element: <CookiePolicyPage /> },
+      { path: "/guides", element: <GuidesPage /> },
       { path: "/signin", element: <SignIn /> },
       { path: "/signup", element: <SignUp /> },
       {

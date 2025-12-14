@@ -1,6 +1,6 @@
 import React from "react";
-import FAQSection from "@/components/FAQPageComp/FAQSection";
-import FAQHeader from "@/components/FAQPageComp/FAQHeader";
+import FAQSection from "@/components/Footer/FAQPageComp/FAQSection";
+import FAQHeader from "@/components/Footer/FAQPageComp/FAQHeader";
 
 function FAQPage() {
   return (

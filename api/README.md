@@ -696,12 +696,6 @@ The project includes `vercel.json` for seamless Vercel deployment:
 
 ---
 
-## 📄 License
-
-This project is licensed under the ISC License.
-
----
-
 <div align="center">
 
 [⬆ Back to Top](#bydrive---car-rental-platform-backend)

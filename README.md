@@ -159,6 +159,12 @@ ByDrive/
 │   │   ├── Checkout/                   # Checkout flow components
 │   │   ├── ContactUsPageComp/          # Contact page components
 │   │   ├── FAQPageComp/                # FAQ page components
+│   │   ├── Footer/                     # Footer pages & components
+│   │   │   ├── FAQPageComp/                # FAQ specific components
+│   │   │   ├── TermsPage.jsx               # Terms & Conditions page
+│   │   │   ├── PrivacyPage.jsx             # Privacy Policy page
+│   │   │   ├── CookiePolicyPage.jsx        # Cookie Policy page
+│   │   │   └── GuidesPage.jsx              # Guides page
 │   │   ├── HomePageComp/               # Homepage components
 │   │   ├── ProfilePage/                # User profile components
 │   │   ├── ServicesPageComp/           # Services page components
@@ -185,7 +191,6 @@ ByDrive/
 │   │   ├── AdminDashboard.jsx          # Admin dashboard
 │   │   ├── ContactUsPage.jsx           # Contact page
 │   │   ├── ServicesPage.jsx            # Services page
-│   │   ├── FAQPage.jsx                 # FAQ page
 │   │   ├── Error404.jsx                # 404 error page
 │   │   └── auth/                       # Authentication pages
 │   ├── routes/                     # Routing configuration
@@ -982,12 +987,6 @@ We welcome contributions to improve the ByDrive Car Rental Management System!
 | **Salma Medhat** | Frontend Developer |
 | **Mahitab Hesham** | Frontend Developer |
 | **Ahmed Ashraf** | Frontend Developer |
-
----
-
-## 📄 License
-
-This project is licensed under the ISC License.
 
 ---
 
