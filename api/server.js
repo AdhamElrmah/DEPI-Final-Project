@@ -27,6 +27,7 @@ const corsOptions = {
     "http://localhost:3001", // Alternative
     "https://depi-final-project-frontend.netlify.app",
     "https://www.depi-final-project-frontend.netlify.app"
+    "https://depi-final-project-production-27cf.up.railway.app"
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
