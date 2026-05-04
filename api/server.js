@@ -26,16 +26,18 @@ const corsOptions = {
     "http://localhost:5173", // Vite default
     "http://localhost:3001", // Alternative
     "https://depi-final-project-frontend.netlify.app",
-    "https://www.depi-final-project-frontend.netlify.app"
+    "https://www.depi-final-project-frontend.netlify.app",
+    "https://bejewelled-donut-610ab5.netlify.app",
+    "https://www.bejewelled-donut-610ab5.netlify.app",
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
+app.options("*", cors(corsOptions)); // Enable pre-flight for all routes
 app.use(express.json());
 
 // Routes
@@ -74,12 +76,12 @@ if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(
-      `CORS enabled for: http://localhost:3000, http://localhost:5173, http://localhost:3001`
+      `CORS enabled for: http://localhost:3000, http://localhost:5173, http://localhost:3001`,
     );
     console.log(
       `Database: ${
         process.env.USE_MONGODB === "true" ? "MongoDB" : "JSON Files"
-      }`
+      }`,
     );
   });
 }
